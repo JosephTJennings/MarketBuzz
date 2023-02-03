@@ -13,7 +13,6 @@ public class CounterActivity extends AppCompatActivity {
 
     Button backBtn;
     TextView purchaseHistory;
-    Bundle extras = getIntent().getExtras();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +20,8 @@ public class CounterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_counter);
         backBtn = findViewById(R.id.backBtn);
         purchaseHistory = findViewById(R.id.purchaseHistory);
+        Bundle extras = getIntent().getExtras();
+
         if(extras != null) {
             String ticker = extras.getString("ticker");
             int numBought = extras.getInt("numShares");
