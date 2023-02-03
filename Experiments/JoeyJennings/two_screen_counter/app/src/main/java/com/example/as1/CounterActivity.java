@@ -25,7 +25,7 @@ public class CounterActivity extends AppCompatActivity {
         if(extras != null) {
             String ticker = extras.getString("ticker");
             int numBought = extras.getInt("numShares");
-            String purchaseStatement = String.format("You purchased %d shares of %s", numBought, ticker);
+            String purchaseStatement = String.format("You purchased %d shares of %s!", numBought, ticker);
             purchaseHistory.setText(purchaseStatement);
         }
         backBtn.setOnClickListener(new View.OnClickListener() {

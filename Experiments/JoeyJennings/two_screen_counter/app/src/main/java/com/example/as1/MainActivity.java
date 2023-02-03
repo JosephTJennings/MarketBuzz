@@ -22,7 +22,8 @@ public class MainActivity extends AppCompatActivity {
         button = findViewById(R.id.toCounterBtn);
         inputTicker = findViewById(R.id.tickerInput);
         numBought = findViewById(R.id.numShareInput);
-
+        numBought.setText("");
+        inputTicker.setText("");
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
