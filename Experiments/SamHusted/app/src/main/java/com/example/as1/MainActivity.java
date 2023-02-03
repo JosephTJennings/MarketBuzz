@@ -9,16 +9,18 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button button;
+    Button button1;
+    // Button button2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        button = findViewById(R.id.toCounterBtn);
+        button1 = findViewById(R.id.toCounterBtn);
+        // button2 = findViewById(R.id.toQuickSortBtn);
 
-        button.setOnClickListener(new View.OnClickListener() {
+        button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
@@ -26,6 +28,16 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        // button2.setOnClickListener(new View.OnClickListener() {
+        //     @Override
+        //     public void onClick(View v)
+        //     {
+        //         Intent intent = new Intent(MainActivity.this, QuickSortActivity.class);
+        //         startActivity(intent);
+        //     }
+        // });
+
 
 
     }
