@@ -1,7 +1,6 @@
 package com.example.stockproject.Activities;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,19 +10,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.example.stockproject.R;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-
-import java.io.IOException;
 
 import app.AppController;
 import app.User;
 import app.UserController;
-import app.utils.Const;
+import app.server.Const;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
     private String TAG = RegisterActivity.class.getSimpleName();
@@ -78,7 +73,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
     public int checkUser(String name) {
         int pos = -1;
-        StringRequest strReq = new StringRequest(Request.Method.GET, Const.URL_JSON_REQUEST, new Response.Listener<String>() {
+        StringRequest strReq = new StringRequest(Request.Method.GET, Const.URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 System.out.print(response);
