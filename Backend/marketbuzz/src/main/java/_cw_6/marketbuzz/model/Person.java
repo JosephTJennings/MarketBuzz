@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.util.ArrayList;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Person {
@@ -15,6 +17,9 @@ public class Person {
     private String firstName;
     private String lastName;
     private String password;
+
+    @OneToMany(mappedBy = "following")
+    private ArrayList<Following> followingList;
 
     public Person() {
     }
