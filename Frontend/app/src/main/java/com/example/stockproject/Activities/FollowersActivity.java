@@ -1,12 +1,10 @@
 package com.example.stockproject.Activities;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,9 +12,10 @@ import com.example.stockproject.R;
 
 import java.util.ArrayList;
 
-public class FollowersActivity  extends AppCompatActivity implements SearchView.OnQueryTextListener{
-    SearchView followSearch;
+public class FollowersActivity  extends AppCompatActivity{
+    SearchView search_bar;
     ArrayList<FollowersModel> availableUsers = new ArrayList<FollowersModel>();
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,21 +23,35 @@ public class FollowersActivity  extends AppCompatActivity implements SearchView.
         setContentView(R.layout.activity_followers);
         setFollowersModels();
 
-        Button followersButton = (Button) findViewById(R.id.home_button);
-        followersButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                setContentView(R.layout.activity_home);
-            }
-        });
-
-        RecyclerView recyclerView = findViewById(R.id.recycle_followers);
+        recyclerView = findViewById(R.id.recycle_followers);
         fol_recyclerView_adapter adapter = new fol_recyclerView_adapter(this, availableUsers);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        search_bar = findViewById(R.id.searchBar);
+        search_bar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                int success = addFollowers(s);
+                if(success == 0) {
+                    Toast followerAble = Toast.makeText(getApplicationContext(), "Successful follow!", Toast.LENGTH_SHORT + 1);
+                    followerAble.show();
+                } else if(success == 1) {
+                    Toast error = Toast.makeText(getApplicationContext(), "Requested user does not exist.", Toast.LENGTH_SHORT + 1);
+                    error.show();
+                } else if(success == 2) {
+                    Toast error = Toast.makeText(getApplicationContext(), "Already following user.", Toast.LENGTH_SHORT + 1);
+                    error.show();
+                }
+                System.out.println(success);
+                return success == 0;
+            }
 
-        //followSearch = (SearchView) findViewById(R.id.searchbar_request_follow);
-        //followSearch.clearFocus();
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+
     }
     public void setFollowersModels() {
         // THIS IS WHERE A GET HTTP REQUEST WILL BE
@@ -57,15 +70,11 @@ public class FollowersActivity  extends AppCompatActivity implements SearchView.
             availableUsers.add(f6);
         }
     }
+    public int addFollowers(String usernameToFollow) {
+        // returns 0 if successful, 1 if the requested user does not exist, and 2 if user already follows them
 
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
+        return 0; // return successful
     }
 
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        return false;
-    }
 
 }
