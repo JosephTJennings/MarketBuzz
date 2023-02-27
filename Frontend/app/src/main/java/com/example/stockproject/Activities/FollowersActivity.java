@@ -1,5 +1,7 @@
 package com.example.stockproject.Activities;
 
+import android.app.SearchManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -22,8 +24,12 @@ public class FollowersActivity  extends AppCompatActivity implements SearchView.
         availableUsers.add("Joey");
         availableUsers.add("Sam");
         followSearch = (SearchView) findViewById(R.id.searchbar_request_follow);
-        followSearch.setOnQueryTextListener(this);
 
+        Intent intent = getIntent();
+        if(Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+
+        }
     }
 
     @Override
