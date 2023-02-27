@@ -1,6 +1,9 @@
 package com.example.stockproject.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -16,12 +19,25 @@ public class FollowersActivity  extends AppCompatActivity{
     SearchView search_bar;
     ArrayList<FollowersModel> availableUsers = new ArrayList<FollowersModel>();
     RecyclerView recyclerView;
+    String currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_followers);
         setFollowersModels();
+
+        currentUser = getIntent().getStringExtra("username");
+
+        Button homeButton = findViewById(R.id.home_button);
+        homeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                intent.putExtra("username", currentUser);
+                startActivity(intent);
+            }
+        });
 
         recyclerView = findViewById(R.id.recycle_followers);
         fol_recyclerView_adapter adapter = new fol_recyclerView_adapter(this, availableUsers);

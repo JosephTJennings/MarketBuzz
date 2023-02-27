@@ -10,15 +10,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.stockproject.R;
 
 public class HomeActivity  extends AppCompatActivity {
+    String currentUser;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        //currentUser = getIntent().getStringExtra("username");
+        currentUser = "TestUser123";
 
         Button followersButton = (Button) findViewById(R.id.followers_page);
         followersButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(HomeActivity.this, FollowersActivity.class));
+                Intent intent = new Intent(getApplicationContext(), FollowersActivity.class);
+                intent.putExtra("username", currentUser);
+                //System.out.println("received and passing back: " + currentUser);
+                startActivity(intent);
             }
         });
 
