@@ -27,13 +27,12 @@ public class LoginActivity extends AppCompatActivity {
     private String type, user, password;
     private Button regButton, loginButton;
     private TextView registerText, usernameText, passwordText, errorText;
-    private EditText username, pswd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Intent i = getIntent();
-        type = i.getStringExtra("type");
+//        type = i.getStringExtra("type");
         regButton = (Button) findViewById(R.id.RegisterButton);
         registerText = (TextView) findViewById(R.id.RegisterText);
         loginButton = (Button) findViewById(R.id.LoginButton);
@@ -52,24 +51,11 @@ public class LoginActivity extends AppCompatActivity {
                         RegisterActivity.class));
             }
         });
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-
-                boolean foundUser = findUser(user, password);
-                if (foundUser) {
-                    startActivity(new Intent(LoginActivity.this,
-                            MainActivity.class));
-                }
-                else {
-
-                }
-
-            }
-        });
     }
     private void attemptLogin(View v) {
+//        Intent main = new Intent(this, MainActivity.class);
+//        startActivity(main);
+//        System.out.print(type);
         user = String.valueOf(usernameText.getText());
         password = String.valueOf(passwordText.getText());
         ArrayList<String> credentials = new ArrayList<String>();
@@ -80,11 +66,11 @@ public class LoginActivity extends AppCompatActivity {
         map.put("username", user);
         map.put("password", password);
         JSONObject obj = new JSONObject(map);
-        Request.post(type + "s-authenticate", obj, this::login, null);
+        Request.post("/authenticate", obj, this::login, null);
     }
 
     private void login(JSONObject response) {
-        String resp;
+            String resp;
         try {
             resp = (String) response.get("message");
             if (resp.equals("failure")) {
@@ -95,6 +81,7 @@ public class LoginActivity extends AppCompatActivity {
             Intent main = new Intent(this, MainActivity.class);
             main.putExtra("username", user);
             main.putExtra("password", password);
+            main = new Intent(this, MainActivity.class);
             startActivity(main);
         }
         catch (Exception e) {
