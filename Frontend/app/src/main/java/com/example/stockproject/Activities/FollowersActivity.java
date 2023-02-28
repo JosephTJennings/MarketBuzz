@@ -28,20 +28,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class FollowersActivity  extends AppCompatActivity{
-    SearchView search_bar;
-    ArrayList<FollowersModel> availableUsers = new ArrayList<FollowersModel>();
-    RecyclerView recyclerView;
-    String currentUser;
+    private SearchView search_bar;
+    private ArrayList<FollowersModel> availableUsers = new ArrayList<FollowersModel>();
+    private  RecyclerView recyclerView;
+    private String currentUser;
+    private RequestQueue volleyQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_followers);
-        setFollowersModels();
 
         currentUser = getIntent().getStringExtra("username");
+        recyclerView = findViewById(R.id.recycle_followers);
 
         Button homeButton = findViewById(R.id.home_button);
+        Button refreshButton = findViewById(R.id.refresh_button);
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -51,17 +53,14 @@ public class FollowersActivity  extends AppCompatActivity{
             }
         });
 
-        recyclerView = findViewById(R.id.recycle_followers);
-        fol_recyclerView_adapter adapter = new fol_recyclerView_adapter(this, availableUsers);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         search_bar = findViewById(R.id.searchBar);
         search_bar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
                 int success = addFollowers(s);
                 if(success == 0) {
-                    Toast followerAble = Toast.makeText(getApplicationContext(), "Successful follow!", Toast.LENGTH_SHORT + 1);
+                    String followMessage = "Successfully followed " + s + "!";
+                    Toast followerAble = Toast.makeText(getApplicationContext(), followMessage, Toast.LENGTH_SHORT + 1);
                     followerAble.show();
                 } else if(success == 1) {
                     Toast error = Toast.makeText(getApplicationContext(), "Requested user does not exist.", Toast.LENGTH_SHORT + 1);
@@ -70,7 +69,8 @@ public class FollowersActivity  extends AppCompatActivity{
                     Toast error = Toast.makeText(getApplicationContext(), "Already following user.", Toast.LENGTH_SHORT + 1);
                     error.show();
                 }
-                System.out.println(success);
+                search_bar.clearFocus();
+                search_bar.setQuery("", false);
                 return success == 0;
             }
 
@@ -80,20 +80,35 @@ public class FollowersActivity  extends AppCompatActivity{
             }
         });
 
+        setFollowersModels();
+
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fol_recyclerView_adapter adapter = new fol_recyclerView_adapter(FollowersActivity.this, availableUsers);
+                recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(FollowersActivity.this));
+            }
+        });
+
+        fol_recyclerView_adapter adapter = new fol_recyclerView_adapter(this, availableUsers);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
     public void setFollowersModels() {
-        // THIS IS WHERE A GET HTTP REQUEST WILL BE
-        RequestQueue volleyQueue = Volley.newRequestQueue(FollowersActivity.this);
-        String url = "http://localhost:8080/following";
-
-        JsonArrayRequest getArray = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+        volleyQueue = Volley.newRequestQueue(FollowersActivity.this);
+        String url = "https://414ff111-04c7-445e-a169-652f4de6f117.mock.pstmn.io/following";
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+        new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                for (int i = 0; i < response.length(); i++) {
+                for(int i = 0; i < response.length(); i++) {
                     try {
-                        JSONObject responseObj = response.getJSONObject(i);
-                        FollowersModel following = new FollowersModel(responseObj.getString("username"), R.drawable.user_follow);
-                        availableUsers.add(following);
+                        JSONObject following = response.getJSONObject(i);
+                        String followingUsername = following.getString("username");
+                        FollowersModel follower = new FollowersModel(followingUsername, R.drawable.user_follow);
+                        availableUsers.add(follower);
+                        System.out.println("success: " + availableUsers.get(i).followerName);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -102,14 +117,13 @@ public class FollowersActivity  extends AppCompatActivity{
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(FollowersActivity.this, "Fail to get the data..", Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
             }
         });
-        volleyQueue.add(getArray);
+        volleyQueue.add(request);
     }
     public int addFollowers(String usernameToFollow) {
         // returns 0 if successful, 1 if the requested user does not exist, and 2 if user already follows them
-
         return 0; // return successful
     }
 
