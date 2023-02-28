@@ -11,9 +11,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.stockproject.R;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class FollowersActivity  extends AppCompatActivity{
     SearchView search_bar;
@@ -71,20 +83,29 @@ public class FollowersActivity  extends AppCompatActivity{
     }
     public void setFollowersModels() {
         // THIS IS WHERE A GET HTTP REQUEST WILL BE
-        FollowersModel f1 = new FollowersModel("Ben", R.drawable.user_follow);
-        FollowersModel f2 = new FollowersModel("Joey", R.drawable.user_follow);
-        FollowersModel f3 = new FollowersModel("Sam", R.drawable.user_follow);
-        FollowersModel f4 = new FollowersModel("Adam", R.drawable.user_follow);
-        FollowersModel f5 = new FollowersModel("Samantha", R.drawable.user_follow);
-        FollowersModel f6 = new FollowersModel("Jodie", R.drawable.user_follow);
-        for(int i = 0; i < 2; i++) {
-            availableUsers.add(f1);
-            availableUsers.add(f2);
-            availableUsers.add(f3);
-            availableUsers.add(f4);
-            availableUsers.add(f5);
-            availableUsers.add(f6);
-        }
+        RequestQueue volleyQueue = Volley.newRequestQueue(FollowersActivity.this);
+        String url = "http://localhost:8080/following";
+
+        JsonArrayRequest getArray = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        JSONObject responseObj = response.getJSONObject(i);
+                        FollowersModel following = new FollowersModel(responseObj.getString("username"), R.drawable.user_follow);
+                        availableUsers.add(following);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(FollowersActivity.this, "Fail to get the data..", Toast.LENGTH_SHORT).show();
+            }
+        });
+        volleyQueue.add(getArray);
     }
     public int addFollowers(String usernameToFollow) {
         // returns 0 if successful, 1 if the requested user does not exist, and 2 if user already follows them

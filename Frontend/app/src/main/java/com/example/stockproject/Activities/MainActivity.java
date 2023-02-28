@@ -16,18 +16,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        regButton = (Button) findViewById(R.id.RegisterButton);
-        regText = (TextView) findViewById(R.id.RegisterText);
-
-        //button click listeners
-        regButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                startActivity(new Intent(MainActivity.this,
-                        RegisterActivity.class));
-            }
-        });
+        setContentView(R.layout.activity_home);
     }
 }
