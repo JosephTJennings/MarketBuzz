@@ -1,92 +1,94 @@
 package com.example.stockproject.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.android.volley.Request;
+import app.server.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.stockproject.R;
 
 import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import app.AppController;
 import app.User;
 import app.UserController;
 import app.server.Const;
+import app.utils.BasicUtils;
 
-public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
+public class RegisterActivity extends AppCompatActivity {
     private String TAG = RegisterActivity.class.getSimpleName();
     private Button rButton;
-    private EditText usernameInput;
-    private EditText passwordInput;
-    private EditText passwordCheckInput;
+    private EditText usernameInput, passwordInput, passwordCheckInput, firstNameInput, lastNameInput;
     private TextView errorRegister;
-    private UserController usrCtrl;
+    private String user, password, checkPassword, firstName, lastName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
         rButton = (Button) findViewById(R.id.registerButton);
+        rButton.setOnClickListener(this::attemptCreateUser);
         usernameInput = (EditText) findViewById(R.id.usernameInput);
         passwordInput = (EditText) findViewById(R.id.passwordInput);
+        firstNameInput = (EditText) findViewById(R.id.firstNameInput);
+        lastNameInput = (EditText) findViewById(R.id.lastNameInput);
         passwordCheckInput = (EditText) findViewById(R.id.passwordCheckInput);
         errorRegister = (TextView) findViewById(R.id.RegisterError);
-
-        //button click listeners
-        rButton.setOnClickListener(this);
-    }
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.registerButton) {
-            System.out.println("Button has been pressed.");
-            try {
-                makeJsonUsrReq();
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
-        }
     }
 
-    private void makeJsonUsrReq() throws JSONException {
-        String username = String.valueOf(usernameInput.getText());
-        String password = String.valueOf(passwordInput.getText());
-        String confirm = String.valueOf(passwordCheckInput.getText());
-
-        if (password.equals(confirm)) {
-            errorRegister.setText("User passwords are the same. Adding account...");
-            //Check if the user has not been a user before
-            int id = checkUser(username);
-            User u = new User(id, username, password, "User");
-            usrCtrl.addUser(u);
-
-        }
-        else {
-            errorRegister.setText("Both Passwords are not the same.");
-        }
+    private void attemptCreateUser(View v) {
+        user = String.valueOf(usernameInput.getText());
+        password = String.valueOf(passwordInput.getText());
+        checkPassword = String.valueOf(passwordCheckInput.getText());
+        firstName = String.valueOf(firstNameInput.getText());
+        lastName = String.valueOf(lastNameInput.getText());
+        if (!password.equals(checkPassword)) {}
+        ArrayList<String> credentials = new ArrayList<String>();
+        credentials.add(user);
+        credentials.add(password);
+        if (BasicUtils.isValidField(credentials)) return;
+        Map<String, String> map = new HashMap<>();
+        map.put("username", user);
+        map.put("password", password);
+        map.put("firstName", firstName);
+        map.put("lastName", lastName);
+        JSONObject obj = new JSONObject(map);
+        Request.post("/people/post", obj, this::login, null);
     }
-    public int checkUser(String name) {
-        int pos = -1;
-        StringRequest strReq = new StringRequest(Request.Method.GET, Const.URL, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                System.out.print(response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println("Error: " + error.getMessage());
-            }
-        });
 
-        // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(strReq, "string_req");
-        return pos;
+    private void login(JSONObject response) {
+        String resp;
+        try {
+            resp = (String) response.get("message");
+            if (resp.equals("failure")) {
+                Toast.makeText(getApplicationContext(), (String)response.get("error"), Toast.LENGTH_SHORT).show();
+                return;
+            }
+            //TODO: Add a switch case for all the different types of users
+            Intent main = new Intent(this, MainActivity.class);
+            main.putExtra("username", user);
+            main.putExtra("password", password);
+            main = new Intent(this, MainActivity.class);
+            startActivity(main);
+        }
+        catch (Exception e) {
+            Log.d("debug", e.toString());
+            return;
+        }
     }
 }

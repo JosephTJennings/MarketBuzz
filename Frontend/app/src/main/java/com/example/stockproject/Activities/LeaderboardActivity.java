@@ -15,6 +15,9 @@ import com.example.stockproject.R;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import app.server.Request;
 
 public class LeaderboardActivity extends AppCompatActivity {
@@ -24,6 +27,11 @@ public class LeaderboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_leaderboard);
         stats = (TextView) findViewById(R.id.Leaderboard);
         Request.get("/people", this::addStats, null);
+//        Map<String, String> map = new HashMap<>();
+//        map.put("username", user);
+//        map.put("password", password);
+//        JSONObject obj = new JSONObject(map);
+
     }
     //Add the json file to textView stats
     private void addStats(JSONArray response) {
