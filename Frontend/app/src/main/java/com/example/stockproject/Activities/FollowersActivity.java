@@ -16,6 +16,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.stockproject.R;
 
@@ -29,7 +30,7 @@ import org.json.JSONObject;
 
 public class FollowersActivity  extends AppCompatActivity{
     private SearchView search_bar;
-    private ArrayList<FollowersModel> availableUsers = new ArrayList<FollowersModel>();
+    private ArrayList<FollowersModel> availableUsers = new ArrayList<>();
     private  RecyclerView recyclerView;
     private String currentUser;
     private RequestQueue volleyQueue;
@@ -62,12 +63,6 @@ public class FollowersActivity  extends AppCompatActivity{
                     String followMessage = "Successfully followed " + s + "!";
                     Toast followerAble = Toast.makeText(getApplicationContext(), followMessage, Toast.LENGTH_SHORT + 1);
                     followerAble.show();
-                } else if(success == 1) {
-                    Toast error = Toast.makeText(getApplicationContext(), "Requested user does not exist.", Toast.LENGTH_SHORT + 1);
-                    error.show();
-                } else if(success == 2) {
-                    Toast error = Toast.makeText(getApplicationContext(), "Already following user.", Toast.LENGTH_SHORT + 1);
-                    error.show();
                 }
                 search_bar.clearFocus();
                 search_bar.setQuery("", false);
@@ -85,15 +80,10 @@ public class FollowersActivity  extends AppCompatActivity{
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fol_recyclerView_adapter adapter = new fol_recyclerView_adapter(FollowersActivity.this, availableUsers);
-                recyclerView.setAdapter(adapter);
-                recyclerView.setLayoutManager(new LinearLayoutManager(FollowersActivity.this));
+                refreshRecyclerView();
             }
         });
-
-        fol_recyclerView_adapter adapter = new fol_recyclerView_adapter(this, availableUsers);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        refreshRecyclerView();
     }
     public void setFollowersModels() {
         volleyQueue = Volley.newRequestQueue(FollowersActivity.this);
@@ -108,7 +98,6 @@ public class FollowersActivity  extends AppCompatActivity{
                         String followingUsername = following.getString("username");
                         FollowersModel follower = new FollowersModel(followingUsername, R.drawable.user_follow);
                         availableUsers.add(follower);
-                        System.out.println("success: " + availableUsers.get(i).followerName);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -122,8 +111,38 @@ public class FollowersActivity  extends AppCompatActivity{
         });
         volleyQueue.add(request);
     }
+
+    public void refreshRecyclerView() {
+        fol_recyclerView_adapter adapter = new fol_recyclerView_adapter(FollowersActivity.this, availableUsers);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(FollowersActivity.this));
+    }
     public int addFollowers(String usernameToFollow) {
         // returns 0 if successful, 1 if the requested user does not exist, and 2 if user already follows them
+        String url = "https://414ff111-04c7-445e-a169-652f4de6f117.mock.pstmn.io/followingRequest";
+        StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                String successMessage = "Followed user " + usernameToFollow + "!";
+                Toast.makeText(FollowersActivity.this, successMessage, Toast.LENGTH_SHORT + 1).show();
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(FollowersActivity.this, "Error, unable to follow user.", Toast.LENGTH_SHORT + 1).show();
+            }
+        }) {
+            @Override
+            protected HashMap<String, String> getParams() {
+                HashMap<String, String> params = new HashMap<>();
+                System.out.println(currentUser + " -> " + usernameToFollow);
+                params.put("username", currentUser);
+                params.put("following", usernameToFollow);
+                return params;
+            }
+        };
+
+        volleyQueue.add(request);
         return 0; // return successful
     }
 
