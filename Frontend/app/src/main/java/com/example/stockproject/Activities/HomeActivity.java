@@ -13,7 +13,7 @@ public class HomeActivity  extends AppCompatActivity {
     String currentUser;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_main);
 
         //currentUser = getIntent().getStringExtra("username");
         currentUser = "TestUser123";
