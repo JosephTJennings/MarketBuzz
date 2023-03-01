@@ -8,9 +8,8 @@ import android.widget.TextView;
 import com.example.stockproject.R;
 
 public class MainActivity extends AppCompatActivity {
-    private Button regButton;
-    private TextView regText;
-    @Override
+
+    private Button leaderboard;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

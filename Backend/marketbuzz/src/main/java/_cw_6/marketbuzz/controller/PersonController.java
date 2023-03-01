@@ -57,6 +57,6 @@ public class PersonController {
     @PostMapping("people/post")
     Person PostUserByBody(@RequestBody Person newPerson){
         personRepository.save(newPerson);
-        return newPerson;
+        return Response("success");
     }
 }
