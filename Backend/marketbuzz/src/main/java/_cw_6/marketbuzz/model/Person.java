@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import java.util.ArrayList;
 import jakarta.persistence.OneToMany;
 
+
 @Entity
 public class Person {
 
@@ -18,7 +19,7 @@ public class Person {
     private String lastName;
     private String password;
 
-    @OneToMany(mappedBy = "following")
+    @OneToMany(mappedBy = "followingUsername")
     private ArrayList<Following> followingList;
 
     public Person() {
@@ -62,5 +63,9 @@ public class Person {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    public void addFollowing(String userToFollow) {
+        Following newFollowing = new Following(this, userToFollow);
+        this.followingList.add(newFollowing);
     }
 }
