@@ -81,7 +81,6 @@ public class LoginActivity extends AppCompatActivity {
             Intent main = new Intent(this, MainActivity.class);
             main.putExtra("username", user);
             main.putExtra("password", password);
-            main = new Intent(this, MainActivity.class);
             startActivity(main);
         }
         catch (Exception e) {

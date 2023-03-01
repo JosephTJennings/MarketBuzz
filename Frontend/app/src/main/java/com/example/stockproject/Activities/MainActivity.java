@@ -11,13 +11,13 @@ import com.example.stockproject.R;
 public class MainActivity extends AppCompatActivity {
 
     private Button leaderboard;
+    private String currentUser;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        String currentUser;
 
-        //currentUser = getIntent().getStringExtra("username");
-        currentUser = "TestUser123";
+        currentUser = getIntent().getStringExtra("username");
+        System.out.println(currentUser);
 
         Button followersButton = (Button) findViewById(R.id.followers_page);
         followersButton.setOnClickListener(new View.OnClickListener(){
