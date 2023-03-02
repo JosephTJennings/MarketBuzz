@@ -10,13 +10,12 @@
         android:id="@+id/passwordInput"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_marginStart="98dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="104dp"
+        android:layout_marginTop="30dp"
         android:ems="10"
         android:hint="Input Password Here:"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/usernameInput" />
 
@@ -24,14 +23,38 @@
         android:id="@+id/usernameInput"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_marginStart="98dp"
-        android:layout_marginTop="108dp"
-        android:layout_marginEnd="104dp"
+        android:layout_marginTop="30dp"
         android:ems="10"
         android:hint="Input Username Here:"
         android:inputType="none"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lastNameInput" />
+
+    <EditText
+        android:id="@+id/lastNameInput"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:ems="10"
+        android:hint="Input Last Name Here:"
+        android:inputType="none"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/firstNameInput" />
+
+    <EditText
+        android:id="@+id/firstNameInput"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginTop="75dp"
+        android:ems="10"
+        android:hint="Input First Name Here:"
+        android:inputType="none"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -39,13 +62,12 @@
         android:id="@+id/passwordCheckInput"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_marginStart="98dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="104dp"
+        android:layout_marginTop="30dp"
         android:ems="10"
         android:hint="Input Password Again:"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordInput" />
 
@@ -53,9 +75,9 @@
         android:id="@+id/registerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="158dp"
-        android:layout_marginEnd="159dp"
-        android:layout_marginBottom="66dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="65dp"
+        android:backgroundTint="#89CAB0"
         android:text="Register"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -66,12 +88,10 @@
         android:id="@+id/RegisterError"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="176dp"
-        android:layout_marginTop="72dp"
-        android:layout_marginEnd="177dp"
+        android:layout_marginBottom="5dp"
         app:layout_constraintBottom_toTopOf="@+id/registerButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordCheckInput"
-        app:layout_constraintVertical_bias="0.463" />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
