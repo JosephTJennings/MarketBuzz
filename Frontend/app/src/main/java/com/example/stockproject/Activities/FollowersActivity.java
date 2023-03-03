@@ -15,6 +15,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -43,6 +44,7 @@ public class FollowersActivity  extends AppCompatActivity{
         //currentUser = getIntent().getStringExtra("username");
         currentUser = "Tst";
         recyclerView = findViewById(R.id.recycle_followers);
+        volleyQueue = Volley.newRequestQueue(FollowersActivity.this);
 
         Button homeButton = findViewById(R.id.home_button);
         Button refreshButton = findViewById(R.id.refresh_button);
@@ -87,8 +89,8 @@ public class FollowersActivity  extends AppCompatActivity{
         refreshRecyclerView();
     }
     public void setFollowersModels() {
-        volleyQueue = Volley.newRequestQueue(FollowersActivity.this);
-        String url = "http://coms-309-019.class.las.iastate.edu/following";
+        //volleyQueue = Volley.newRequestQueue(FollowersActivity.this);
+        String url = "http://coms-309-019.class.las.iastate.edu:8080/following";
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
         new Response.Listener<JSONArray>() {
             @Override
@@ -96,6 +98,7 @@ public class FollowersActivity  extends AppCompatActivity{
                 for(int i = 0; i < response.length(); i++) {
                     try {
                         JSONObject following = response.getJSONObject(i);
+                        System.out.println("JSON object received");
                         String followingUsername = following.getString("username");
                         FollowersModel follower = new FollowersModel(followingUsername, R.drawable.user_follow);
                         availableUsers.add(follower);
@@ -120,11 +123,16 @@ public class FollowersActivity  extends AppCompatActivity{
     }
     public int addFollowers(String usernameToFollow) {
         // returns 0 if successful, 1 if the requested user does not exist, and 2 if user already follows them
-        String url = "http://coms-309-019.class.las.iastate.edu/following/post";
-        volleyQueue = Volley.newRequestQueue(FollowersActivity.this);
-        StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
+        String url = "http://coms-309-019.class.las.iastate.edu:8080/following/post";
+        HashMap<String, String> params = new HashMap<>();
+        System.out.println(currentUser + " -> " + usernameToFollow);
+        params.put("username", currentUser);
+        params.put("following", usernameToFollow);
+        JSONObject obj = new JSONObject(params);
+        //volleyQueue = Volley.newRequestQueue(FollowersActivity.this);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, obj, new com.android.volley.Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(String response) {
+            public void onResponse(JSONObject response) {
                 String successMessage = "Followed user " + usernameToFollow + "!";
                 Toast.makeText(FollowersActivity.this, successMessage, Toast.LENGTH_SHORT + 1).show();
             }
@@ -133,17 +141,7 @@ public class FollowersActivity  extends AppCompatActivity{
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(FollowersActivity.this, "Error, unable to follow user.", Toast.LENGTH_SHORT + 1).show();
             }
-        }) {
-            @Override
-            protected HashMap<String, String> getParams() {
-                HashMap<String, String> params = new HashMap<>();
-
-                System.out.println(currentUser + " -> " + usernameToFollow);
-                params.put("username", currentUser);
-                params.put("following", usernameToFollow);
-                return params;
-            }
-        };
+        });
 
         volleyQueue.add(request);
         return 0; // return successful
