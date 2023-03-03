@@ -87,7 +87,7 @@ public class FollowersActivity  extends AppCompatActivity{
     }
     public void setFollowersModels() {
         volleyQueue = Volley.newRequestQueue(FollowersActivity.this);
-        String url = "https://414ff111-04c7-445e-a169-652f4de6f117.mock.pstmn.io/following";
+        String url = "https://localhost:8080/following";
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
         new Response.Listener<JSONArray>() {
             @Override
@@ -119,7 +119,7 @@ public class FollowersActivity  extends AppCompatActivity{
     }
     public int addFollowers(String usernameToFollow) {
         // returns 0 if successful, 1 if the requested user does not exist, and 2 if user already follows them
-        String url = "https://414ff111-04c7-445e-a169-652f4de6f117.mock.pstmn.io/followingRequest";
+        String url = "localhost:8080/following/post";
         StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

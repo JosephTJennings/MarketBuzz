@@ -15,26 +15,28 @@ public class Following {
     private int fid;
 
     @Column
-    private String followingUsername;
+    private String following;
 
     @ManyToOne
     @JoinColumn(name = "pid")
-    private Person currentUsername;
+    private Person username;
 
     public Following(Person currUser, String followUser){
-        this.currentUsername = currUser;
-        this.followingUsername = followUser;
+        this.username = currUser;
+        this.following = followUser;
     }
 
+    public Following(){}
+
     public void setUser(Person user) {
-        this.currentUsername = user;
+        this.username = user;
     }
 
     public void setFollowingUsername(String userToFollow) {
-        this.followingUsername = userToFollow;
+        this.following = userToFollow;
     }
 
     public String getFollowing() {
-        return followingUsername;
+        return following;
     }
 }

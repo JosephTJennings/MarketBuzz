@@ -4,7 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import java.util.ArrayList;
+import java.util.List;
 import jakarta.persistence.OneToMany;
 
 
@@ -15,12 +15,17 @@ public class Person {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int pid;
     private String username;
-    private String firstName;
-    private String lastName;
     private String password;
+    @OneToMany(mappedBy = "following")
+    private List<Following> followingList;
 
-    @OneToMany(mappedBy = "followingUsername")
-    private ArrayList<Following> followingList;
+    public List<Following> getFollowingList() {
+        return followingList;
+    }
+
+    public void setFollowingList(List<Following> followingList) {
+        this.followingList = followingList;
+    }
 
     public Person() {
     }
@@ -41,21 +46,6 @@ public class Person {
         this.username = username;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
 
     public String getPassword() {
         return password;
@@ -64,6 +54,7 @@ public class Person {
     public void setPassword(String password) {
         this.password = password;
     }
+
     public void addFollowing(String userToFollow) {
         Following newFollowing = new Following(this, userToFollow);
         this.followingList.add(newFollowing);

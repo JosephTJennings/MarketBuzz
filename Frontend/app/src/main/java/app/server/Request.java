@@ -3,6 +3,7 @@ package app.server;
 import static com.android.volley.Request.Method.GET;
 import static com.android.volley.Request.Method.POST;
 
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
@@ -52,7 +53,7 @@ public class Request {
 
     //JSONObject outputs a JSONObject
     public static void post(String route, JSONObject obj, ObjResponse success, ErrorResponse error) {
-        JsonObjectRequest request = new JsonObjectRequest(POST, Const.URL + route, obj, success::respond,
+        JsonObjectRequest request = new JsonObjectRequest(POST, "http://localhost:8080/people/authenticate", obj, success::respond,
                 response -> {
                     if (error == null) ErrorResponse.getBasic().respond(response);
                     else error.respond(response);
@@ -64,6 +65,8 @@ public class Request {
             }};
         AppController.getInstance().addToRequestQueue(request, "json_obj_req");
     }
+
+
     //JSONObject outputs a JSONArray
     public static void post(String route, JSONObject obj, ArrayResponse success, ErrorResponse error) {
         String str = obj.toString();
