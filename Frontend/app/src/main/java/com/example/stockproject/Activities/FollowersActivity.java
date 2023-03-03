@@ -40,7 +40,8 @@ public class FollowersActivity  extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_followers);
 
-        currentUser = getIntent().getStringExtra("username");
+        //currentUser = getIntent().getStringExtra("username");
+        currentUser = "Tst";
         recyclerView = findViewById(R.id.recycle_followers);
 
         Button homeButton = findViewById(R.id.home_button);
@@ -87,7 +88,7 @@ public class FollowersActivity  extends AppCompatActivity{
     }
     public void setFollowersModels() {
         volleyQueue = Volley.newRequestQueue(FollowersActivity.this);
-        String url = "https://localhost:8080/following";
+        String url = "http://coms-309-019.class.las.iastate.edu/following";
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
         new Response.Listener<JSONArray>() {
             @Override
@@ -119,7 +120,8 @@ public class FollowersActivity  extends AppCompatActivity{
     }
     public int addFollowers(String usernameToFollow) {
         // returns 0 if successful, 1 if the requested user does not exist, and 2 if user already follows them
-        String url = "localhost:8080/following/post";
+        String url = "http://coms-309-019.class.las.iastate.edu/following/post";
+        volleyQueue = Volley.newRequestQueue(FollowersActivity.this);
         StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -135,6 +137,7 @@ public class FollowersActivity  extends AppCompatActivity{
             @Override
             protected HashMap<String, String> getParams() {
                 HashMap<String, String> params = new HashMap<>();
+
                 System.out.println(currentUser + " -> " + usernameToFollow);
                 params.put("username", currentUser);
                 params.put("following", usernameToFollow);
