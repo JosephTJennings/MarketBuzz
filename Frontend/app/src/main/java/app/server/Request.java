@@ -53,7 +53,7 @@ public class Request {
 
     //JSONObject outputs a JSONObject
     public static void post(String route, JSONObject obj, ObjResponse success, ErrorResponse error) {
-        JsonObjectRequest request = new JsonObjectRequest(POST, "http://localhost:8080/people/authenticate", obj, success::respond,
+        JsonObjectRequest request = new JsonObjectRequest(POST, Const.URL + route, obj, success::respond,
                 response -> {
                     if (error == null) ErrorResponse.getBasic().respond(response);
                     else error.respond(response);

@@ -11,8 +11,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.stockproject.R;
@@ -24,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import app.server.Const;
 import app.server.Request;
 import app.utils.BasicUtils;
 
@@ -58,72 +61,67 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
     private void attemptLogin(View v) {
-        volleyQueue = Volley.newRequestQueue(this);
-        volleyQueue.start();
+//        Intent main = new Intent(this, MainActivity.class);
+//        startActivity(main);
+//        System.out.print(type);
+        volleyQueue = Volley.newRequestQueue(LoginActivity.this);
         user = String.valueOf(usernameText.getText());
         password = String.valueOf(passwordText.getText());
         ArrayList<String> credentials = new ArrayList<String>();
         credentials.add(user);
         credentials.add(password);
         if (BasicUtils.isValidField(credentials)) return;
-        String url = "http://localhost:8080/people/authenticate";
-        StringRequest request = new StringRequest(com.android.volley.Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
+        Map<String, String> map = new HashMap<>();
+        map.put("username", user);
+        map.put("password", password);
+        JSONObject obj = new JSONObject(map);
+//        Request.post("/people/authenticate", obj, this::login, null);
+        JsonObjectRequest request = new JsonObjectRequest(com.android.volley.Request.Method.POST, Const.URL + "/people/authenticate", obj, new com.android.volley.Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(String response) {
-                System.out.println(response + " FUCK");
-                Toast.makeText(LoginActivity.this, "User was able to login.", Toast.LENGTH_SHORT + 1).show();
+            public void onResponse(JSONObject response) {
+                String successMessage = "User " + user + " has logged in!";
+                Toast.makeText(LoginActivity.this, successMessage, Toast.LENGTH_SHORT + 1).show();
                 login(response);
             }
         }, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                System.out.print("FUCKING SHITBALLSS");
-                Toast.makeText(LoginActivity.this, "Error, unable to login.", Toast.LENGTH_SHORT + 1).show();
-                return;
+                Toast.makeText(LoginActivity.this, "Error, unable to follow user.", Toast.LENGTH_SHORT + 1).show();
             }
         }) {
+             /**
+             * Passing some request headers
+             */
             @Override
-            protected HashMap<String, String> getParams() {
-                HashMap<String, String> params = new HashMap<>();
-//                    System.out.println(currentUser + " -> " + usernameToFollow);
-                params.put("username", user);
-                params.put("password", password);
-                return params;
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
             }
         };
-        volleyQueue.add(request);
-//        Intent main = new Intent(this, MainActivity.class);
-//        startActivity(main);
-//        System.out.print(type);
-//        Map<String, String> map = new HashMap<>();
-//        map.put("username", user);
-//        map.put("password", password);
-//        JSONObject obj = new JSONObject(map);
-//        System.out.print("attempt to hit db");
-//        Request.post("/person/authenticate", obj, this::login, null);
 
+        volleyQueue.add(request);
+
+//        Request.post("/people/authenticate", obj, this::login, null);
     }
 
-    private void login(String response) {
-//        System.out.print(response.toString());
+    private void login(JSONObject response) {
+            String resp;
         try {
-//            resp = (String) response.get("message");
-            if (response.equals("failure")) {
-//                Toast.makeText(getApplicationContext(), (String)response.get("error"), Toast.LENGTH_SHORT).show();
+            resp = (String) response.get("message");
+            if (resp.equals("failure")) {
+                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                 return;
             }
             //TODO: Add a switch case for all the different types of users
             Intent main = new Intent(this, MainActivity.class);
             main.putExtra("username", user);
-            main.putExtra("password", password);
+//            main.putExtra("password", password);
             startActivity(main);
         }
         catch (Exception e) {
             Log.d("debug", e.toString());
             return;
         }
-    }
-    private boolean findUser(String user, String password) {
-        return true;
     }
 }

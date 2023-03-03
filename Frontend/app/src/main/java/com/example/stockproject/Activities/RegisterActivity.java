@@ -12,8 +12,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import app.server.Request;
+
+import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.example.stockproject.R;
 
@@ -68,6 +71,34 @@ public class RegisterActivity extends AppCompatActivity {
         map.put("firstName", firstName);
         map.put("lastName", lastName);
         JSONObject obj = new JSONObject(map);
+//        JsonObjectRequest request = new JsonObjectRequest(com.android.volley.Request.Method.POST, Const.URL + "/people/post", obj, new com.android.volley.Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                String successMessage = "User " + user + " has logged in!";
+//                Toast.makeText(RegisterActivity.this, successMessage, Toast.LENGTH_SHORT + 1).show();
+//                login(response);
+//            }
+//        }, new com.android.volley.Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Toast.makeText(LoginActivity.this, "Error, unable to follow user.", Toast.LENGTH_SHORT + 1).show();
+//            }
+//        }) {
+//            /**
+//             * Passing some request headers
+//             */
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                HashMap<String, String> headers = new HashMap<String, String>();
+//                headers.put("Content-Type", "application/json; charset=utf-8");
+//                return headers;
+//            }
+//        };
+//
+//        volleyQueue.add(request);
+
+//        Request.post("/people/authenticate", obj, this::login, null);
+//    }
         Request.post("/people/post", obj, this::login, null);
     }
 

@@ -58,7 +58,7 @@ public class PersonController {
         return newPerson; //Response("success");
     }
     @PostMapping("people/authenticate")
-    String AuthenticateLogin(@RequestBody Person p){
+    public Message AuthenticateLogin(@RequestBody Person p){
         //find if the user exists in the server
         List<Person> currentUsers = personRepository.findAll();
         //check if the password in the user is equal
@@ -66,12 +66,12 @@ public class PersonController {
             if (t.getUsername().equals(p.getUsername()) && t.getPassword().equals(p.getPassword())){
 //                Map<String, String> map = new HashMap<>();
 //                map.put("message", "success");
-                return "success";
+                return new Message("success");
             }
         }
 //        Map<String, String> map = new HashMap<>();
 //        map.put("message", "failure");
 //        System.out.print(map.toString());
-        return "failure";
+        return new Message("failure");
     }
 }
