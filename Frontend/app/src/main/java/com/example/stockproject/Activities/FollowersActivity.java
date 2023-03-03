@@ -99,7 +99,7 @@ public class FollowersActivity  extends AppCompatActivity{
                     try {
                         JSONObject following = response.getJSONObject(i);
                         System.out.println("JSON object received");
-                        String followingUsername = following.getString("username");
+                        String followingUsername = following.getString("following");
                         FollowersModel follower = new FollowersModel(followingUsername, R.drawable.user_follow);
                         availableUsers.add(follower);
                     } catch (JSONException e) {
