@@ -23,13 +23,13 @@ public class PersonController {
         return personRepository.findAll();
     }
     @GetMapping("following")
-    List<String> getAllTypeFollowers() {
+    List<Following> getAllTypeFollowers() {
         List<Following> currentlyFollowing = followingRepository.findAll();
         List<String> followingString = new ArrayList<>();
         for(int i = 0; i < currentlyFollowing.size(); i++) {
             followingString.add(currentlyFollowing.get(i).getFollowing());
         }
-        return followingString;
+        return currentlyFollowing;
     }
     @PostMapping("following/post")
     Following PostFollowingByBody(@RequestBody Following newFollowing) {
