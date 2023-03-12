@@ -3,8 +3,6 @@ package _cw_6.marketbuzz.controller;
 import _cw_6.marketbuzz.model.Person;
 import _cw_6.marketbuzz.model.Following;
 import _cw_6.marketbuzz.repository.PersonRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.TypedQuery;
 import _cw_6.marketbuzz.repository.FollowingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
