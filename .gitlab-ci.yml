@@ -29,7 +29,7 @@ maven-build:   			#this is a JOB
   tags:
    - springboot_tag  	# this is LINK to the shell runner on the remote-server 
   before_script:
-   - export JAVA_HOME="17"	# if your project involves with JDK 11 or above
+   - export JAVA_HOME="/"	# if your project involves with JDK 11 or above
   script:
    - cd Backend/marketbuzz	# to where you have the pom.xml
    - mvn package
@@ -39,7 +39,7 @@ maven-test:
   tags:
     - springboot_tag
   before_script:
-    - export JAVA_HOME="17"	# if your project involves with JDK 11 or above
+    - export JAVA_HOME="/"	# if your project involves with JDK 11 or above
   script:
     - cd Backend/marketbuzz
     - mvn test
