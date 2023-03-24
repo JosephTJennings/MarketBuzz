@@ -27,7 +27,7 @@ stages:
 maven-build:   			#this is a JOB
   stage: mavenbuild
   tags:
-   - playground-springboot  	# this is LINK to the shell runner on the remote-server 
+   - springboot_tag  	# this is LINK to the shell runner on the remote-server 
   before_script:
    - export JAVA_HOME="17"	# if your project involves with JDK 11 or above
   script:
@@ -37,7 +37,7 @@ maven-build:   			#this is a JOB
 maven-test:
   stage: maventest
   tags:
-    - playground-springboot
+    - springboot_tag
   before_script:
     - export JAVA_HOME="17"	# if your project involves with JDK 11 or above
   script:
@@ -52,7 +52,7 @@ android-build:
   image: gjandres/android-ci:latest
   stage: androidbuild
   tags:
-   - playground-android
+   - android_tag
   before_script:
     - export GRADLE_USER_HOME=`pwd`/.gradle
     - chmod +x ./Frontend		
@@ -69,7 +69,7 @@ android-test:
    image: gjandres/android-ci:latest
    stage: androidtest
    tags:
-    - playground-android
+    - android_tag
    before_script:
      - export GRADLE_USER_HOME=`pwd`/.gradle
      - chmod +x ./Frontend
@@ -82,7 +82,7 @@ android-test:
 autoDeploy:
    stage: mavenDeploy  #do make a stage with same name!
    tags:
-    - playground-springboot
+    - springboot_tag
    script:
      - cd Backend/marketbuzz
      - mvn package
