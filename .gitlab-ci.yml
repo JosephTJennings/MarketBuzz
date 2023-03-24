@@ -25,27 +25,27 @@ stages:
   - mavenDeploy
 
 maven-build:   			#this is a JOB
-   stage: mavenbuild
-   tags:
-     - playground-springboot  	# this is LINK to the shell runner on the remote-server 
-   before_script:
-     - export JAVA_HOME="/"	# if your project involves with JDK 11 or above
-   script:
-     - cd Backend/SB3/demo	# to where you have the pom.xml
-     - mvn package
+  stage: mavenbuild
+  tags:
+   - playground-springboot  	# this is LINK to the shell runner on the remote-server 
+  before_script:
+   - export JAVA_HOME="17"	# if your project involves with JDK 11 or above
+  script:
+   - cd Backend/marketbuzz	# to where you have the pom.xml
+   - mvn package
 
- maven-test:
-   stage: maventest
-   tags:
-     - playground-springboot
-   before_script:
-     - export JAVA_HOME="/"	# if your project involves with JDK 11 or above
-   script:
-     - cd Backend/SB3/demo
-     - mvn test
-   artifacts:
-     paths:
-       - Backend/target/*.jar
+maven-test:
+  stage: maventest
+  tags:
+    - playground-springboot
+  before_script:
+    - export JAVA_HOME="17"	# if your project involves with JDK 11 or above
+  script:
+    - cd Backend/marketbuzz
+    - mvn test
+  artifacts:
+    paths:
+      - Backend/target/*.jar
 
 
 android-build:
@@ -55,36 +55,36 @@ android-build:
    - playground-android
   before_script:
     - export GRADLE_USER_HOME=`pwd`/.gradle
-    - chmod +x ./Frontend/AS3/gradlew		
+    - chmod +x ./Frontend		
   script:
-    - cd Frontend/AS3			# to where you have ‘gradlew’
+    - cd Frontend		# to where you have ‘gradlew’
     - ./gradlew build
   artifacts:
     paths:
-    - Frontend/AS3/app/build/outputs/
+      - Frontend/app/build/outputs/
 
 
 
- android-test:
+android-test:
    image: gjandres/android-ci:latest
    stage: androidtest
    tags:
     - playground-android
    before_script:
      - export GRADLE_USER_HOME=`pwd`/.gradle
-     - chmod +x ./Frontend/AS3/gradlew
+     - chmod +x ./Frontend
    script:
-     - cd Frontend/AS3
+     - cd Frontend
      - ./gradlew test
 
 
 # Below job builds, deploys, executes jar as service.
- autoDeploy:
+autoDeploy:
    stage: mavenDeploy  #do make a stage with same name!
    tags:
     - playground-springboot
    script:
-     - cd Backend/SB3/demo
+     - cd Backend/marketbuzz
      - mvn package
      - sudo mv target/*.jar /target/web-demo.jar 
      - sudo systemctl stop system-web-demo
