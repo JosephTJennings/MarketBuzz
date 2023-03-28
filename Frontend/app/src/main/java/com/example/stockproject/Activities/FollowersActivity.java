@@ -32,7 +32,7 @@ import org.json.JSONObject;
 public class FollowersActivity  extends AppCompatActivity{
     private SearchView search_bar;
     private ArrayList<FollowersModel> availableUsers = new ArrayList<>();
-    private  RecyclerView recyclerView;
+    private RecyclerView recyclerView;
     private String currentUser;
     private RequestQueue volleyQueue;
 
