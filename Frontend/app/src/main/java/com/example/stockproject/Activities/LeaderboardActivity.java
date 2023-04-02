@@ -39,7 +39,7 @@ public class LeaderboardActivity extends AppCompatActivity {
 //        Request.get("/people", this::addStats, null);
         HomeButton = (Button) findViewById(R.id.home_button6);
         RefreshButton = (ImageButton) findViewById(R.id.refresh_leaderboard);
-        recyclerView = (RecyclerView) findViewById(R.id.leaderboardRecycler);
+        recyclerView = (RecyclerView) findViewById(R.id.stocksRecycler);
         Leaderboard = (TextView) findViewById(R.id.LeaderboardText);
         volleyQueue = Volley.newRequestQueue(LeaderboardActivity.this);
         HomeButton.setOnClickListener(new View.OnClickListener(){

@@ -51,7 +51,7 @@ public class usr_recyclerView_adapter extends RecyclerView.Adapter<usr_recyclerV
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.valuationImage);
+            imageView = itemView.findViewById(R.id.valuationImage2);
             userName = itemView.findViewById(R.id.userName);
             position = itemView.findViewById(R.id.position);
             valuation = itemView.findViewById(R.id.valuation);
