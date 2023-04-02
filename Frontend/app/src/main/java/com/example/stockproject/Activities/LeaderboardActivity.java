@@ -27,7 +27,7 @@ import java.util.ArrayList;
 
 public class LeaderboardActivity extends AppCompatActivity {
     private TextView stats;
-    private ArrayList<UsersModel> users = new ArrayList<>();
+    ArrayList<UsersModel> users = new ArrayList<>();
     private Button HomeButton;
     private RecyclerView recyclerView;
     private TextView Leaderboard;
@@ -63,7 +63,7 @@ public class LeaderboardActivity extends AppCompatActivity {
 
     public void setUsersModels() {
         //volleyQueue = Volley.newRequestQueue(FollowersActivity.this);
-        String url = "http://coms-309-019.class.las.iastate.edu:8080/people";
+        String url = "https://0589b6d4-7542-4459-abc5-12f5174f55ee.mock.pstmn.io/people"; //"http://coms-309-019.class.las.iastate.edu:8080/people";
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -98,9 +98,5 @@ public class LeaderboardActivity extends AppCompatActivity {
         usr_recyclerView_adapter adapter = new usr_recyclerView_adapter(LeaderboardActivity.this, users);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(LeaderboardActivity.this));
-    }
-
-    private void setUpLeaderboard() {
-
     }
 }
