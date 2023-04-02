@@ -58,7 +58,7 @@ android-build:
     - chmod +x ./Frontend		
   script:
     - cd Frontend		# to where you have ‘gradlew’
-    - ./gradlew build
+    - sudo ./gradlew build
   artifacts:
     paths:
       - Frontend/app/build/outputs/
