@@ -55,7 +55,7 @@ android-build:
    - android_tag
   before_script:
     - export GRADLE_USER_HOME=`pwd`/.gradle
-    - chmod +x ./Frontend		
+    - chmod +x ./Frontend/gradlew	
   script:
     - cd Frontend		# to where you have ‘gradlew’
     - ./gradlew build
@@ -72,7 +72,7 @@ android-test:
     - android_tag
    before_script:
      - export GRADLE_USER_HOME=`pwd`/.gradle
-     - chmod +x ./Frontend
+     - chmod +x ./Frontend/gradlew
    script:
      - cd Frontend
      - ./gradlew test
