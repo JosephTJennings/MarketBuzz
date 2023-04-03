@@ -15,12 +15,14 @@ import com.example.stockproject.R;
 import java.util.ArrayList;
 
 public class stk_recyclerView_adapter extends RecyclerView.Adapter<stk_recyclerView_adapter.MyViewHolder> {
+    private final recyclerView_interface stkRecViewInterface;
     Context context;
     ArrayList<StocksModel> stocks;
 
-    public stk_recyclerView_adapter(Context context, ArrayList<StocksModel> stocks) {
+    public stk_recyclerView_adapter(Context context, ArrayList<StocksModel> stocks, recyclerView_interface stkRecViewInterface) {
         this.context = context;
         this.stocks = stocks;
+        this.stkRecViewInterface = stkRecViewInterface;
     }
 
     @NonNull
@@ -28,14 +30,14 @@ public class stk_recyclerView_adapter extends RecyclerView.Adapter<stk_recyclerV
     public stk_recyclerView_adapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.stock_row, parent, false);
-        return new stk_recyclerView_adapter.MyViewHolder(view);
+        return new stk_recyclerView_adapter.MyViewHolder(view, stkRecViewInterface);
     }
 
     @Override
     public void onBindViewHolder(@NonNull stk_recyclerView_adapter.MyViewHolder holder, int position) {
         holder.stockName.setText(stocks.get(position).getStockName());
         holder.value.setText(stocks.get(position).getValue());
-        holder.imageView.setImageResource(stocks.get(position).getImage());
+        holder.changeImage.setImageResource(stocks.get(position).getChange());
     }
 
     @Override
@@ -44,13 +46,25 @@ public class stk_recyclerView_adapter extends RecyclerView.Adapter<stk_recyclerV
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageView;
         TextView stockName, value;
-        public MyViewHolder(@NonNull View itemView) {
+        ImageView changeImage;
+        public MyViewHolder(@NonNull View itemView, recyclerView_interface stkRecyclerViewInterface) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.imageView);
-            stockName = itemView.findViewById(R.id.stockName);
             value = itemView.findViewById(R.id.value);
+            stockName = itemView.findViewById(R.id.stockName);
+            changeImage = itemView.findViewById(R.id.valuationImage);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (stkRecyclerViewInterface != null) {
+                        int pos = getAdapterPosition();
+                        if (pos != RecyclerView.NO_POSITION) {
+                            stkRecyclerViewInterface.onItemClick(pos);
+                        }
+                    }
+                }
+            });
         }
     }
 }

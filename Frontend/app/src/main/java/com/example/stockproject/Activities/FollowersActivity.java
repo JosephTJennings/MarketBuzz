@@ -41,8 +41,7 @@ public class FollowersActivity  extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_followers);
 
-        //currentUser = getIntent().getStringExtra("username");
-        currentUser = "Tst";
+        currentUser = getIntent().getStringExtra("username");
         recyclerView = findViewById(R.id.recycle_followers);
         volleyQueue = Volley.newRequestQueue(FollowersActivity.this);
 

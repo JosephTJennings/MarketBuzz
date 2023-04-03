@@ -25,7 +25,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class LeaderboardActivity extends AppCompatActivity {
+public class LeaderboardActivity extends AppCompatActivity implements recyclerView_interface {
     private TextView stats;
     ArrayList<UsersModel> users = new ArrayList<>();
     private Button HomeButton;
@@ -33,6 +33,7 @@ public class LeaderboardActivity extends AppCompatActivity {
     private TextView Leaderboard;
     private RequestQueue volleyQueue;
     private ImageButton RefreshButton;
+    private String currentUser;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaderboard);
@@ -42,11 +43,14 @@ public class LeaderboardActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.stocksRecycler);
         Leaderboard = (TextView) findViewById(R.id.LeaderboardText);
         volleyQueue = Volley.newRequestQueue(LeaderboardActivity.this);
+        currentUser = getIntent().getStringExtra("username");
+        if (currentUser == null) currentUser = "srhusted";
         HomeButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 //System.out.println("received and passing back: " + currentUser);
+                intent.putExtra("username", currentUser);
                 startActivity(intent);
             }
         });
@@ -55,13 +59,13 @@ public class LeaderboardActivity extends AppCompatActivity {
         RefreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                refreshRecyclerView();
+                setUsersModels();
             }
         });
-        refreshRecyclerView();
     }
 
     public void setUsersModels() {
+        users.clear();
         //volleyQueue = Volley.newRequestQueue(FollowersActivity.this);
         String url = "https://0589b6d4-7542-4459-abc5-12f5174f55ee.mock.pstmn.io/people"; //"http://coms-309-019.class.las.iastate.edu:8080/people";
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
@@ -71,20 +75,24 @@ public class LeaderboardActivity extends AppCompatActivity {
                         for(int i = 0; i < response.length(); i++) {
                             try {
                                 JSONObject user = response.getJSONObject(i);
-                                System.out.println("JSON object received");
-                                int position = i;
-                                String username = user.getString("username");
-                                int valuation = 0;
-                                int change = 0;
-                                UsersModel userMod;
-                                if (change > 1) userMod = new UsersModel(username, position, valuation, change, R.drawable.baseline_arrow_upward_24);
-                                else if (change < -1) userMod = new UsersModel(username, position, valuation, change, R.drawable.baseline_arrow_downward_24);
-                                else userMod = new UsersModel(username, position, valuation, change, R.drawable.baseline_neutral_24);
-                                users.add(userMod);
+                                String type = user.getString("type");
+                                if (!(type.compareTo("Guest") == 0)) {
+                                    System.out.println("JSON object received");
+                                    String pos = Integer.toString(i);
+                                    String username = user.getString("username");
+                                    String valuation = String.format("$%.2f", user.getDouble("valuation"));
+                                    double change = user.getDouble("change");
+                                    UsersModel userMod;
+                                    if (change > 0) userMod = new UsersModel(username, pos, valuation, R.drawable.baseline_arrow_upward_24);
+                                    else if (change < 0) userMod = new UsersModel(username, pos, valuation, R.drawable.baseline_arrow_downward_24);
+                                    else userMod = new UsersModel(username, pos, valuation, R.drawable.baseline_neutral_24);
+                                    users.add(userMod);
+                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         }
+                        refreshRecyclerView();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -95,8 +103,22 @@ public class LeaderboardActivity extends AppCompatActivity {
         volleyQueue.add(request);
     }
     public void refreshRecyclerView() {
-        usr_recyclerView_adapter adapter = new usr_recyclerView_adapter(LeaderboardActivity.this, users);
+        usr_recyclerView_adapter adapter = new usr_recyclerView_adapter(LeaderboardActivity.this, users, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(LeaderboardActivity.this));
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        Intent user;
+        if (users.get(position).getUsername().compareTo(currentUser) == 0) {
+            user = new Intent(getApplicationContext(), ProfileActivity.class);
+        }
+        else {
+            user = new Intent(getApplicationContext(), ViewedUserActivity.class);
+            user.putExtra("viewedUsername", users.get(position).getUsername());
+        }
+        user.putExtra("username", currentUser);
+        startActivity(user);
     }
 }

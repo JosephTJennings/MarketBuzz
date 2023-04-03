@@ -24,12 +24,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class StocksActivity extends AppCompatActivity {
+public class StocksActivity extends AppCompatActivity implements recyclerView_interface {
     private Button HomeButton;
     private ImageButton RefreshButton;
     ArrayList<StocksModel> stocks = new ArrayList<>();
     private RecyclerView recyclerView;
     private RequestQueue volleyQueue;
+    private String currentUser;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stocks);
@@ -38,10 +39,12 @@ public class StocksActivity extends AppCompatActivity {
         RefreshButton = (ImageButton) findViewById(R.id.refresh_stocks);
         recyclerView = (RecyclerView) findViewById(R.id.stocksRecycler);
         volleyQueue = Volley.newRequestQueue(StocksActivity.this);
+        currentUser = getIntent().getStringExtra("username");
         HomeButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.putExtra("username", currentUser);
                 //System.out.println("received and passing back: " + currentUser);
                 startActivity(intent);
             }
@@ -51,14 +54,13 @@ public class StocksActivity extends AppCompatActivity {
         RefreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                refreshRecyclerView();
+                setStocksModels();
             }
         });
-        refreshRecyclerView();
     }
 
     public void setStocksModels() {
-        //volleyQueue = Volley.newRequestQueue(FollowersActivity.this);
+        stocks.clear();
         String url = "https://0589b6d4-7542-4459-abc5-12f5174f55ee.mock.pstmn.io/stocks"; //"http://coms-309-019.class.las.iastate.edu:8080/people";
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
@@ -68,19 +70,20 @@ public class StocksActivity extends AppCompatActivity {
                             try {
                                 JSONObject user = response.getJSONObject(i);
                                 System.out.println("JSON object received");
-                                int position = i;
                                 String stockName = user.getString("Name");
-                                String value = "$" + user.getString("Value");
+                                double value = user.getDouble("Value");
                                 int difference = user.getInt("Difference");
-                                StocksModel stockMod;
-                                if (difference > 0) stockMod = new StocksModel(stockName, value, R.drawable.baseline_arrow_upward_24);
-                                else if (difference < 0) stockMod = new StocksModel(stockName, value, R.drawable.baseline_arrow_downward_24);
-                                else stockMod = new StocksModel(stockName, value, R.drawable.baseline_neutral_24);
+                                StocksModel stockMod; //= new StocksModel(stockName, String.format("$%.2f", value));
+                                //TODO: Add the symbols to indicate level of change...
+                                if (difference > 0) stockMod = new StocksModel(stockName, String.format("$%.2f", value), R.drawable.baseline_arrow_upward_24);
+                                else if (difference < 0) stockMod = new StocksModel(stockName, String.format("$%.2f", value), R.drawable.baseline_arrow_downward_24);
+                                else stockMod = new StocksModel(stockName, String.format("$%.2f", value), R.drawable.baseline_neutral_24);
                                 stocks.add(stockMod);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         }
+                        refreshRecyclerView();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -91,8 +94,18 @@ public class StocksActivity extends AppCompatActivity {
         volleyQueue.add(request);
     }
     public void refreshRecyclerView() {
-        stk_recyclerView_adapter adapter = new stk_recyclerView_adapter(StocksActivity.this, stocks);
+        stk_recyclerView_adapter adapter = new stk_recyclerView_adapter(StocksActivity.this, stocks, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(StocksActivity.this));
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        Intent stock = new Intent(getApplicationContext(), ManageStockActivity.class);
+        stock.putExtra("stockName", stocks.get(position).getStockName());
+        stock.putExtra("value", stocks.get(position).getValue());
+        stock.putExtra("username", currentUser);
+        stock.putExtra("change", stocks.get(position).getChange());
+        startActivity(stock);
     }
 }
