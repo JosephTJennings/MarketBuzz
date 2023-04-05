@@ -1,7 +1,9 @@
 package _cw_6.marketbuzz.controller;
 
+import _cw_6.marketbuzz.model.Owns;
 import _cw_6.marketbuzz.model.Person;
 import _cw_6.marketbuzz.model.Following;
+import _cw_6.marketbuzz.repository.OwnsRepository;
 import _cw_6.marketbuzz.repository.PersonRepository;
 import _cw_6.marketbuzz.repository.FollowingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,9 @@ public class PersonController {
 
     @Autowired
     FollowingRepository followingRepository;
+
+    @Autowired
+    OwnsRepository ownsRepository;
 
     @GetMapping("people")
     List<Person> GetAllPeople(){
@@ -36,6 +41,13 @@ public class PersonController {
 
         followingRepository.save(newFollowing);
         return newFollowing;
+    }
+
+    @PostMapping("buying/post")
+    Owns PostBuyingStockByBody(@RequestBody Owns stock){
+        ownsRepository.save(stock);
+
+        return null;
     }
 
     @PostMapping("people/post")
