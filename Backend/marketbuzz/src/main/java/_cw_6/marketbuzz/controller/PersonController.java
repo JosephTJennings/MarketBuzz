@@ -46,8 +46,7 @@ public class PersonController {
     @PostMapping("buying/post")
     Owns PostBuyingStockByBody(@RequestBody Owns stock){
         ownsRepository.save(stock);
-
-        return null;
+        return stock;
     }
 
     @PostMapping("people/post")

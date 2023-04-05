@@ -13,6 +13,13 @@ public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int pid;
+
+    private int stockValue;     // might not need
+
+    private int cashValue;
+
+    private int totalValue;
+
     private String username;
     private String password;
     @OneToMany(mappedBy = "following")
