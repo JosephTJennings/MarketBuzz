@@ -14,8 +14,6 @@ public class Person {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int pid;
 
-    private int stockValue;     // might not need
-
     private int cashValue;
 
     private int totalValue;
@@ -25,6 +23,11 @@ public class Person {
     @OneToMany(mappedBy = "following")
     private List<Following> followingList;
 
+    @ManyToMany
+    @JoinTable(name = "sid")
+    private Set<Stock> stocks = new HashSet<Stock>();
+
+
     public List<Following> getFollowingList() {
         return followingList;
     }
@@ -32,10 +35,6 @@ public class Person {
     public void setFollowingList(List<Following> followingList) {
         this.followingList = followingList;
     }
-
-    @ManyToMany
-    @JoinTable(name = "sid")
-    private Set<Stock> stocks = new HashSet<Stock>();
 
     public Person() {
     }

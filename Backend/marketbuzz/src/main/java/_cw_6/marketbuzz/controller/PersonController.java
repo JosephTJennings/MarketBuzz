@@ -36,6 +36,18 @@ public class PersonController {
         }
         return currentlyFollowing;
     }
+
+    @GetMapping("personInfo")
+    Person getPersonInformation(@RequestBody String username){
+        List<Person> currentUsers = personRepository.findAll();
+        for (Person t: currentUsers){
+            if (t.getUsername().equals(username) && t.getPassword().equals(username)){
+                return t;
+            }
+        }
+        return null;
+    }
+
     @PostMapping("following/post")
     Following PostFollowingByBody(@RequestBody Following newFollowing) {
 
@@ -72,5 +84,18 @@ public class PersonController {
 //        map.put("message", "failure");
 //        System.out.print(map.toString());
         return new Message("failure");
+    }
+
+    @PostMapping("people/authenticate/register")
+    public Message AuthenticateRegistration(@RequestBody String username){
+        //find if the user exists in the server
+        List<Person> currentUsers = personRepository.findAll();
+        //check if the password in the user is equal
+        for (Person t: currentUsers){
+            if (t.getUsername().equals(username) && t.getPassword().equals(username)){
+                return new Message("failure");
+            }
+        }
+        return new Message("success");
     }
 }

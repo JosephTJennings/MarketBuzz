@@ -12,9 +12,17 @@ public class Stock {
     private String ticker;
     private int currVal;
 
-
+    private int diff;
 
     public Stock() {
+    }
+
+    public int getDiff() {
+        return diff;
+    }
+
+    public void setDiff(int newVal) {
+        this.diff = newVal - this.currVal;
     }
 
     public int getSid() {
