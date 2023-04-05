@@ -1,11 +1,10 @@
 package _cw_6.marketbuzz.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.HashSet;
 import java.util.List;
-import jakarta.persistence.OneToMany;
+import java.util.Set;
 
 
 @Entity
@@ -27,7 +26,24 @@ public class Person {
         this.followingList = followingList;
     }
 
+    @ManyToMany
+    @JoinTable(name = "sid")
+    private Set<Stock> stocks = new HashSet<Stock>();
+
     public Person() {
+    }
+
+    public void addStock(Stock stock){
+        this.stocks.add(stock);
+        //stock.getSid().add();
+    }
+
+    public void removeStock(int sid){
+        Stock stock = this.stocks.stream().filter(i -> i.getSid() == sid).findFirst().orElse(null);
+        if (stock != null){
+            this.stocks.remove(stock);
+            //stock.getSid().remove(this);
+        }
     }
 
     public int getPid() {

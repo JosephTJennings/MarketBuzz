@@ -38,18 +38,6 @@ public class PersonController {
         return newFollowing;
     }
 
-//    @PostMapping("people/post/{un}/{ln}/{fn}/{p}")
-//    Person PostPersonByPath(@PathVariable String un, @PathVariable String ln, @PathVariable String fn, @PathVariable String p){
-//        Person newPerson = new Person();
-//        newPerson.setUsername(un);
-//        newPerson.setLastName(ln);
-//        newPerson.setFirstName(fn);
-//        newPerson.setPassword(p);
-//        //newPerson.setFollowingList(p);
-//        personRepository.save(newPerson);
-//        return newPerson;
-//    }
-
     @PostMapping("people/post")
     Person PostUserByBody(@RequestBody Person newPerson){
         List<Following> list = new ArrayList<Following>();

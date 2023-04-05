@@ -1,9 +1,6 @@
 package _cw_6.marketbuzz.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 
 @Entity
@@ -14,6 +11,8 @@ public class Stock {
     private int sid;
     private String ticker;
     private int currVal;
+
+
 
     public Stock() {
     }
