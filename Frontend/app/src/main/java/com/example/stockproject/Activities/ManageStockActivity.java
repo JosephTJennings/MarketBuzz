@@ -4,12 +4,28 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.stockproject.R;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import app.server.Const;
+import app.utils.BasicUtils;
 
 public class ManageStockActivity extends AppCompatActivity {
     private Button homeButton, stocksButton, buyStocks, sellStocks;
@@ -17,10 +33,13 @@ public class ManageStockActivity extends AppCompatActivity {
     private ImageView change;
     private String currentUser, currentStock, value;
     private int currentChange;
+    private EditText numStks;
+    private RequestQueue volleyQueue;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_managestock);
-
+        getPersonInformation();
+        volleyQueue = Volley.newRequestQueue(ManageStockActivity.this);
         currentUser = getIntent().getStringExtra("username");
         value = getIntent().getStringExtra("value");
         currentStock = getIntent().getStringExtra("stockName");
@@ -30,6 +49,7 @@ public class ManageStockActivity extends AppCompatActivity {
         buyStocks = (Button) findViewById(R.id.buyStocks);
         sellStocks = (Button) findViewById(R.id.sellStocks);
         stockName = (TextView) findViewById(R.id.stkName);
+        numStks = (EditText) findViewById(R.id.numStocks);
         stockPrice = (TextView) findViewById(R.id.price);
         change = (ImageView) findViewById(R.id.changeInPrice);
 
@@ -57,15 +77,124 @@ public class ManageStockActivity extends AppCompatActivity {
         buyStocks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: Make a POST Request using userID, numStocks, and typeStock
+                attemptBuyStocks();
             }
         });
 
         sellStocks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: Make a POST Request using userID, numStocks, and typeStock
+                attemptSellStocks();
             }
         });
+    }
+
+    private void getPersonInformation() {
+        Map<String, String> map = new HashMap<>();
+        map.put("username", currentUser);
+        JSONObject obj = new JSONObject(map);
+        JsonObjectRequest request = new JsonObjectRequest(com.android.volley.Request.Method.POST, Const.URL + "/personInfo", obj, new com.android.volley.Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                String successMessage = "User " + currentUser + " has bought ";
+                Toast.makeText(ManageStockActivity.this, successMessage, Toast.LENGTH_SHORT + 1).show();
+                getPersonInformation();
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(ManageStockActivity.this, "Error, unable to add .", Toast.LENGTH_SHORT + 1).show();
+            }
+        }) {
+            /**
+             * Passing some request headers
+             */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
+    }
+    private void attemptBuyStocks() {
+        ArrayList<String> person = new ArrayList<String>();
+//        .add();
+        Map<String, String> map = new HashMap<>();
+        int quantity = Integer.parseInt(numStks.getText().toString());
+        if (quantity > 0) {
+            map.put("username", currentUser);
+            map.put("ticker", currentStock);
+            map.put("quantity", String.valueOf(quantity));
+            JSONObject obj = new JSONObject(map);
+            JsonObjectRequest request = new JsonObjectRequest(com.android.volley.Request.Method.POST, Const.URL + "/people/stocks/buy", obj, new com.android.volley.Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    String successMessage = "User " + currentUser + " has bought ";
+                    Toast.makeText(ManageStockActivity.this, successMessage, Toast.LENGTH_SHORT + 1).show();
+                    getPersonInformation();
+                }
+            }, new com.android.volley.Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(ManageStockActivity.this, "Error, unable to add .", Toast.LENGTH_SHORT + 1).show();
+                }
+            }) {
+                /**
+                 * Passing some request headers
+                 */
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<String, String>();
+                    headers.put("Content-Type", "application/json; charset=utf-8");
+                    return headers;
+                }
+            };
+
+            volleyQueue.add(request);
+        }
+        else {
+            //TODO: Add an error message for value being less than 0...
+        }
+    }
+    private void attemptSellStocks() {
+        ArrayList<String> person = new ArrayList<String>();
+//        .add();
+        Map<String, String> map = new HashMap<>();
+        int quantity = Integer.parseInt(numStks.getText().toString());
+        if (quantity > 0) {
+            map.put("username", currentUser);
+            map.put("ticker", currentStock);
+            map.put("quantity", String.valueOf(quantity));
+            JSONObject obj = new JSONObject(map);
+            JsonObjectRequest request = new JsonObjectRequest(com.android.volley.Request.Method.POST, Const.URL + "/people/stocks/sell", obj, new com.android.volley.Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    String successMessage = "User " + currentUser + " has bought ";
+                    Toast.makeText(ManageStockActivity.this, successMessage, Toast.LENGTH_SHORT + 1).show();
+                    getPersonInformation();
+                }
+            }, new com.android.volley.Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(ManageStockActivity.this, "Error, unable to add .", Toast.LENGTH_SHORT + 1).show();
+                }
+            }) {
+                /**
+                 * Passing some request headers
+                 */
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<String, String>();
+                    headers.put("Content-Type", "application/json; charset=utf-8");
+                    return headers;
+                }
+            };
+
+            volleyQueue.add(request);
+        }
+        else {
+            //TODO: Add an error message for value being less than 0...
+        }
     }
 }
