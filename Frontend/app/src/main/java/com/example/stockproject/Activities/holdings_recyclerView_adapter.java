@@ -32,11 +32,11 @@ public class holdings_recyclerView_adapter extends RecyclerView.Adapter<holdings
 
     @Override
     public void onBindViewHolder(@NonNull holdings_recyclerView_adapter.MyViewHolder holder, int position) {
-        holder.price.setText(holdings.get(position).getPrice());
-        holder.ticker.setText(holdings.get(position).getTicker());
-        holder.quantity.setText(holdings.get(position).getQuantity());
-        holder.rank.setText(holdings.get(position).getRank());
-        holder.total.setText(holdings.get(position).getTotal());
+        holder.price.setText(String.valueOf(holdings.get(position).getPrice()));
+        holder.ticker.setText(String.valueOf(holdings.get(position).getTicker()));
+        holder.quantity.setText(String.valueOf(holdings.get(position).getQuantity()));
+        holder.rank.setText(String.valueOf(holdings.get(position).getRank()));
+        holder.total.setText(String.valueOf(holdings.get(position).getTotal()));
     }
 
     @Override
