@@ -45,9 +45,12 @@ public class ManageStockActivity extends AppCompatActivity {
         if (currentUser == null) {
             currentUser = "srhusted";
         }
+        //TODO: get value and change by using POST Request for stock
         value = getIntent().getStringExtra("value");
+        currentChange = getIntent().getIntExtra("change", R.drawable.baseline_neutral_24);
+
+
         currentStock = getIntent().getStringExtra("stockName");
-        currentChange = getIntent().getIntExtra("change", 0);
         homeButton = (Button) findViewById(R.id.home_button7);
         stocksButton = (Button) findViewById(R.id.stocks_button);
         buyStocks = (Button) findViewById(R.id.buyStocks);

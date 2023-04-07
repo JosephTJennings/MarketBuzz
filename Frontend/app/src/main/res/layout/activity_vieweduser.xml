@@ -7,6 +7,7 @@
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
@@ -21,7 +22,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/stock_labels"
             android:layout_width="373dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="#626161"
             android:textAlignment="center"
             app:layout_constraintBottom_toTopOf="@+id/holdingRecycler"
@@ -42,6 +43,7 @@
                 android:paddingRight="5px"
                 android:text="Rank"
                 android:textAlignment="center"
+                android:textColor="#000000"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/label_stockTicker"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -58,6 +60,7 @@
                 android:paddingRight="5px"
                 android:text="Ticker"
                 android:textAlignment="center"
+                android:textColor="#000000"
                 app:layout_constraintBottom_toBottomOf="@+id/text_stockRank"
                 app:layout_constraintEnd_toStartOf="@+id/label_stockPrice"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -74,6 +77,7 @@
                 android:paddingRight="5px"
                 android:text="Price"
                 android:textAlignment="center"
+                android:textColor="#000000"
                 app:layout_constraintBottom_toBottomOf="@+id/label_stockTicker"
                 app:layout_constraintEnd_toStartOf="@+id/label_stockQuantity"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -90,6 +94,7 @@
                 android:paddingRight="5px"
                 android:text="Quantity"
                 android:textAlignment="center"
+                android:textColor="#000000"
                 app:layout_constraintBottom_toBottomOf="@+id/label_stockPrice"
                 app:layout_constraintEnd_toStartOf="@+id/label_stockTotal"
                 app:layout_constraintStart_toEndOf="@+id/label_stockPrice"
@@ -105,6 +110,7 @@
                 android:paddingRight="5px"
                 android:text="Total"
                 android:textAlignment="center"
+                android:textColor="#000000"
                 app:layout_constraintBottom_toBottomOf="@+id/label_stockPrice"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/label_stockPrice" />
@@ -113,11 +119,10 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/holdingRecycler"
             android:layout_width="375dp"
-            android:layout_height="390dp"
+            android:layout_height="370dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/stock_labels" />
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
@@ -135,20 +140,26 @@
         android:id="@+id/text_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="171dp"
         android:text="User"
+        android:textColor="#545353"
         android:textSize="34sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/text_valuation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginStart="173dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="171dp"
+        android:layout_marginBottom="82dp"
         android:text="$1000"
+        android:textColor="#545353"
         android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_username" />
@@ -158,9 +169,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="243dp"
         android:text="Current holdings:"
+        android:textColor="#545353"
         android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_valuation" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

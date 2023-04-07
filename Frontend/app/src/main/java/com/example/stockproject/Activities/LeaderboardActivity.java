@@ -116,7 +116,7 @@ public class LeaderboardActivity extends AppCompatActivity implements recyclerVi
         }
         else {
             user = new Intent(getApplicationContext(), ViewedUserActivity.class);
-            user.putExtra("viewedUsername", users.get(position).getUsername());
+            user.putExtra("viewedUser", users.get(position).getUsername());
         }
         user.putExtra("username", currentUser);
         startActivity(user);
