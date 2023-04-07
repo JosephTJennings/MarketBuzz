@@ -23,10 +23,6 @@ public class Person {
         return followingList;
     }
 
-    public List<Stock> getStockList() {
-        return stockList;
-    }
-
     public void setFollowingList(List<Following> followingList) {
         this.followingList = followingList;
     }
