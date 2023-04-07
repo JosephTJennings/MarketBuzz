@@ -78,10 +78,6 @@ public class Person {
         this.username = username;
     }
 
-    public Person(String name){
-        this.username = name;
-    }
-
 
     public int getPid() {
         return pid;
