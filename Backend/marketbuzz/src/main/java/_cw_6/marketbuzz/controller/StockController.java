@@ -25,6 +25,7 @@ public class StockController {
         Stock newStock = new Stock();
         newStock.setTicker(ticker);
         newStock.setCurrVal(currVal);
+        stockRepository.save(newStock);
         return newStock;
     }
 
