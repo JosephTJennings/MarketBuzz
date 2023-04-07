@@ -60,6 +60,18 @@ public class PersonController {
         return currentlyFollowing;
     }
 
+    @PostMapping("person/stocks")
+    public List<Owns> getOwnedStocks(@RequestBody Person person) {
+        List<Owns> currentOwns = ownsRepository.findAll();
+        List<Owns> ownedStocks = new ArrayList<>();
+        for(Owns curPerson: currentOwns) {
+            if(curPerson.getOwner().getUsername().equals(person.getUsername())) {
+                ownedStocks.add(curPerson);
+            }
+        }
+        return ownedStocks;
+    }
+
     @PostMapping("person/data")
     public Person getPersonInformation(@RequestBody Person person){
         List<Person> currentUsers = personRepository.findAll();

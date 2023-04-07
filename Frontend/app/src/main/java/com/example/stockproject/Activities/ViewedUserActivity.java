@@ -62,7 +62,7 @@ public class ViewedUserActivity extends AppCompatActivity implements recyclerVie
         JSONObject obj = new JSONObject(map);
         JSONArray arr = new JSONArray();
         arr.put(obj);
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, Const.TEMP_URL + "/people/stocks", arr,
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, Const.URL + "/people/stocks", arr,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
