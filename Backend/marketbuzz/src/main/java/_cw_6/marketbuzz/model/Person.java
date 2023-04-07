@@ -16,8 +16,6 @@ public class Person {
     private int pid;
     private String username;
     private String password;
-    @OneToMany(mappedBy = "stock")
-    private List<Stock> stockList;
     @OneToMany(mappedBy = "following")
     private List<Following> followingList;
 
