@@ -14,7 +14,6 @@ public class Stock {
     private int sid;
     private String ticker;
     private int currVal;
-    private int change;
 
     public Stock() {
     }
@@ -43,12 +42,5 @@ public class Stock {
         this.currVal = currVal;
     }
 
-    public int getChange() {
-        return change;
-    }
-
-    public void setChange(int change) {
-        this.change = change;
-    }
 
 }
