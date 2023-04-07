@@ -42,4 +42,5 @@ public class Stock {
         this.currVal = currVal;
     }
 
+
 }

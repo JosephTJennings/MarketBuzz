@@ -26,3 +26,4 @@ public class ViewedUserActivity extends AppCompatActivity {
         });
     }
 }
+
