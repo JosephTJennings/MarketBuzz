@@ -38,6 +38,18 @@ public class PersonController {
     @GetMapping("owns")
     List<Owns> GetAllOwns(){return ownsRepository.findAll();}
 
+    @PostMapping("following/people")
+    List<Following> getCurrentFollowing(@RequestBody Person person) {
+        List<Following> activeFollowing = new ArrayList<>();
+        List<Following> allFollowing = followingRepository.findAll();
+        for(Following follower : allFollowing) {
+            if(person.getUsername().equals(follower.getUsername().getUsername())) {
+                activeFollowing.add(follower);
+            }
+        }
+        return activeFollowing;
+    }
+
     @GetMapping("following")
     List<Following> getAllTypeFollowers() {
         List<Following> currentlyFollowing = followingRepository.findAll();
@@ -88,7 +100,7 @@ public class PersonController {
         for(Person people : allPeople) {
             if(people.getUsername().equals(newFollowing.getUsername().getUsername())) {
                 Following tmp = new Following(people, newFollowing.getFollowingUser());
-                people.addFollowing(newFollowing);
+                people.addFollowing(tmp);
                 followingRepository.save(tmp);
                 return tmp;
             }

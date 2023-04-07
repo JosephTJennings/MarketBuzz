@@ -19,6 +19,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.stockproject.R;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -114,16 +115,16 @@ public class ManageStockActivity extends AppCompatActivity {
                     String nm = "You currently have $" + Integer.toString(response.getInt("cashValue")) + ".";
                     currentMoney.setText(nm);
                     String ns = "";
-                    JSONArray stocks = (JSONArray) response.get("stocks");
+                    JSONArray stocks = (JSONArray) response.get("ownsList");
                     for (int i = 0; i < stocks.length(); i++) {
                         JSONObject stock = stocks.getJSONObject(i);
-                        String ticker = stock.getString("ticker");
+                        String ticker = stock.getString("stockTicker");
                         if (ticker.equals(currentStock)) {
-                            ns = "You currently have " + stock.getInt("quantity") + " Stocks in this Company.";
+                            ns = "You currently have " + stock.getInt("quantity") + " shares of this Company.";
                             break;
                         }
                     }
-                    if (ns.equals("")) ns = "You currently have 0 Stocks in this Company.";
+                    if (ns.equals("")) ns = "You currently have 0 shares of this Company.";
                     currentNumStock.setText(ns);
                 }
                 catch (Exception e) {
@@ -154,16 +155,23 @@ public class ManageStockActivity extends AppCompatActivity {
         Map<String, String> map = new HashMap<>();
         int quantity = Integer.parseInt(numStks.getText().toString());
         if (quantity > 0) {
-            map.put("username", currentUser);
-            map.put("ticker", currentStock);
+            map.put("owner", currentUser);
+            map.put("stock", currentStock);
             map.put("quantity", String.valueOf(quantity));
             JSONObject obj = new JSONObject(map);
-            JsonObjectRequest request = new JsonObjectRequest(com.android.volley.Request.Method.POST, Const.TEMP_URL + "/people/stocks/buy", obj, new com.android.volley.Response.Listener<JSONObject>() {
+            JsonObjectRequest request = new JsonObjectRequest(com.android.volley.Request.Method.POST, Const.URL + "/people/stocks/buy", obj, new com.android.volley.Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    String successMessage = "User " + currentUser + " has bought ";
+                    String successMessage = null;
+                    String ns = "";
+                    try {
+                        successMessage = "User " + currentUser + " has bought " + response.getInt("quantity") + " shares!";
+                        ns = "You currently have " + response.getInt("quantity") + " shares of this Company.";
+                        currentNumStock.setText(ns);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
                     Toast.makeText(ManageStockActivity.this, successMessage, Toast.LENGTH_SHORT + 1).show();
-                    getPersonInformation();
                 }
             }, new com.android.volley.Response.ErrorListener() {
                 @Override
@@ -194,24 +202,25 @@ public class ManageStockActivity extends AppCompatActivity {
         Map<String, String> map = new HashMap<>();
         int quantity = Integer.parseInt(numStks.getText().toString());
         if (quantity > 0) {
-            map.put("username", currentUser);
-            map.put("ticker", currentStock);
+            map.put("owner", currentUser);
+            map.put("stock", currentStock);
             map.put("quantity", String.valueOf(quantity));
             JSONObject obj = new JSONObject(map);
-            JsonObjectRequest request = new JsonObjectRequest(com.android.volley.Request.Method.POST, Const.TEMP_URL + "/people/stocks/sell", obj, new com.android.volley.Response.Listener<JSONObject>() {
+            System.out.println("sell attempt");
+            JsonObjectRequest request = new JsonObjectRequest(com.android.volley.Request.Method.POST, Const.URL + "/people/stocks/sell", obj, new com.android.volley.Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    if (response.has("my_object_name") && !response.isNull("my_object_name")) {
-                        String successMessage = "";
-                        try {
-                            successMessage = "User " + currentUser + " has bought " + Integer.toString(response.getInt("quantity")) + " stocks!";
-                        }
-                        catch (Exception e){
-                            successMessage = "Yay, the message didn't return correctly! Whoopee!";
-                        }
-                        Toast.makeText(ManageStockActivity.this, successMessage, Toast.LENGTH_SHORT + 1).show();
-                        getPersonInformation();
+                    String successMessage = "";
+                    String ns = "";
+                    try {
+                        successMessage = "User " + currentUser + " has sold " + response.getInt("quantity") + " shares!";
+                        ns = "You currently have " + response.getInt("quantity") + " shares of this Company.";
+                        currentNumStock.setText(ns);
                     }
+                    catch (Exception e){
+                        successMessage = "Yay, the message didn't return correctly! Whoopee!";
+                    }
+                    Toast.makeText(ManageStockActivity.this, successMessage, Toast.LENGTH_SHORT + 1).show();
                 }
             }, new com.android.volley.Response.ErrorListener() {
                 @Override

@@ -48,6 +48,7 @@ public class ViewedUserActivity extends AppCompatActivity implements recyclerVie
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.putExtra("username", currentUser);
                 //System.out.println("received and passing back: " + currentUser);
                 startActivity(intent);
             }

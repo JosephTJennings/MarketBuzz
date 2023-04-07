@@ -21,12 +21,14 @@ import com.example.stockproject.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import app.server.Const;
+import app.server.CustomRequest;
 
 public class ProfileActivity extends AppCompatActivity implements recyclerView_interface{
     private Button HomeButton;
@@ -38,19 +40,44 @@ public class ProfileActivity extends AppCompatActivity implements recyclerView_i
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         TextView userName = findViewById(R.id.text_username);
+        TextView valuation = findViewById(R.id.text_valuation);
         recyclerView = findViewById(R.id.holdingRecycler);
         currentUser = getIntent().getStringExtra("username");
         userName.setText(currentUser);
+        valuation.setText("$10000");
         volleyQueue = Volley.newRequestQueue(ProfileActivity.this);
+
+        Button options = findViewById(R.id.button_options);
+        Button following = findViewById(R.id.button_following);
         HomeButton = (Button) findViewById(R.id.home_button01);
         HomeButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.putExtra("username", currentUser);
                 //System.out.println("received and passing back: " + currentUser);
                 startActivity(intent);
             }
         });
+        options.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), OptionsActivity.class);
+                intent.putExtra("username", currentUser);
+                //System.out.println("received and passing back: " + currentUser);
+                startActivity(intent);
+            }
+        });
+        following.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), FollowersActivity.class);
+                intent.putExtra("username", currentUser);
+                //System.out.println("received and passing back: " + currentUser);
+                startActivity(intent);
+            }
+        });
+
         setCurrentHoldings();
     }
 
@@ -58,9 +85,7 @@ public class ProfileActivity extends AppCompatActivity implements recyclerView_i
         Map<String, String> map = new HashMap<>();
         map.put("username", currentUser);
         JSONObject obj = new JSONObject(map);
-        JSONArray arr = new JSONArray();
-        arr.put(obj);
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, Const.URL + "/peo", arr,
+        CustomRequest request = new CustomRequest(Request.Method.POST, Const.URL + "/person/stocks", obj,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -70,10 +95,13 @@ public class ProfileActivity extends AppCompatActivity implements recyclerView_i
                                 System.out.println("JSON object received");
 
                                 int rank = i + 1;
-                                String ticker = holding.getString("ticker");
-                                int price = holding.getInt("price");
+                                String ticker = holding.getString("stockTicker");
+                                int price = holding.getJSONObject("stock").getInt("currVal");
                                 int quantity = holding.getInt("quantity");
                                 int total = quantity * price;
+                                TextView valuation = findViewById(R.id.text_valuation);
+                                int currentCash = Integer.valueOf(valuation.getText().toString().substring(1));
+                                valuation.setText("$" + String.valueOf(currentCash - total));
 
                                 HoldingsModel newHolding = new HoldingsModel(rank, ticker, price, quantity, total);
                                 currentHoldings.add(newHolding);

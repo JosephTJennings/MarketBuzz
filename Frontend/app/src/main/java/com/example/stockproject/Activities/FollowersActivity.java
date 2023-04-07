@@ -29,6 +29,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import app.server.CustomRequest;
+
 public class FollowersActivity  extends AppCompatActivity{
     private SearchView search_bar;
     private ArrayList<FollowersModel> availableUsers = new ArrayList<>();
@@ -89,8 +91,11 @@ public class FollowersActivity  extends AppCompatActivity{
     }
     public void setFollowersModels() {
         //volleyQueue = Volley.newRequestQueue(FollowersActivity.this);
-        String url = "http://coms-309-019.class.las.iastate.edu:8080/following";
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+        String url = "http://coms-309-019.class.las.iastate.edu:8080/following/people";
+        HashMap<String, String> params = new HashMap<>();
+        params.put("username", currentUser);
+        JSONObject obj = new JSONObject(params);
+        CustomRequest request = new CustomRequest(Request.Method.POST, url, obj,
         new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -98,13 +103,14 @@ public class FollowersActivity  extends AppCompatActivity{
                     try {
                         JSONObject following = response.getJSONObject(i);
                         System.out.println("JSON object received");
-                        String followingUsername = following.getString("following");
+                        String followingUsername = following.getString("followingUser");
                         FollowersModel follower = new FollowersModel(followingUsername, R.drawable.user_follow);
                         availableUsers.add(follower);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
+                refreshRecyclerView();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -124,9 +130,8 @@ public class FollowersActivity  extends AppCompatActivity{
         // returns 0 if successful, 1 if the requested user does not exist, and 2 if user already follows them
         String url = "http://coms-309-019.class.las.iastate.edu:8080/following/post";
         HashMap<String, String> params = new HashMap<>();
-        System.out.println(currentUser + " -> " + usernameToFollow);
         params.put("username", currentUser);
-        params.put("following", usernameToFollow);
+        params.put("followingUser", usernameToFollow);
         JSONObject obj = new JSONObject(params);
         //volleyQueue = Volley.newRequestQueue(FollowersActivity.this);
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, obj, new com.android.volley.Response.Listener<JSONObject>() {
