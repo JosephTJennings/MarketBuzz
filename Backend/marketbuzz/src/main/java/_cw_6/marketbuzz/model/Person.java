@@ -1,21 +1,9 @@
 package _cw_6.marketbuzz.model;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import _cw_6.marketbuzz.repository.PersonRepository;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.OneToMany;
-import java.util.ArrayList;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.FetchType;
 
 
 @Entity

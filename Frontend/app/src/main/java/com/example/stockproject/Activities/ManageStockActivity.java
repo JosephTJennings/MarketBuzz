@@ -105,7 +105,7 @@ public class ManageStockActivity extends AppCompatActivity {
         JSONObject obj = new JSONObject(map);
 //        JSONArray obj = new JSONArray();
 //        obj.put(currentUser);
-        JsonObjectRequest request = new JsonObjectRequest(com.android.volley.Request.Method.POST, Const.TEMP_URL + "/person/data", obj, new com.android.volley.Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(com.android.volley.Request.Method.POST, Const.URL + "/person/data", obj, new com.android.volley.Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 String successMessage = "Received " + currentUser + "'s information!";

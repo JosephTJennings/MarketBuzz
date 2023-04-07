@@ -24,6 +24,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import app.server.Const;
+
 public class StocksActivity extends AppCompatActivity implements recyclerView_interface {
     private Button HomeButton;
     private ImageButton RefreshButton;
@@ -61,7 +63,7 @@ public class StocksActivity extends AppCompatActivity implements recyclerView_in
 
     public void setStocksModels() {
         stocks.clear();
-        String url = "https://0589b6d4-7542-4459-abc5-12f5174f55ee.mock.pstmn.io/stocks"; //"http://coms-309-019.class.las.iastate.edu:8080/people";
+        String url = Const.URL +"/stocks"; //"http://coms-309-019.class.las.iastate.edu:8080/people";
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
                     @Override

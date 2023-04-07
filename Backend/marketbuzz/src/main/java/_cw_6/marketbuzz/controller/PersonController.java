@@ -9,15 +9,9 @@ import _cw_6.marketbuzz.repository.PersonRepository;
 import _cw_6.marketbuzz.repository.FollowingRepository;
 import _cw_6.marketbuzz.repository.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.query.FluentQuery;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.function.Function;
 
 @RestController
 public class PersonController {
@@ -38,7 +32,6 @@ public class PersonController {
     @GetMapping("people")
     List<Person> GetAllPeople(){
         List<Person> pi = personRepository.findAll();
-        System.out.println("yo");
         return pi;
     }
 
@@ -53,6 +46,18 @@ public class PersonController {
             followingString.add(currentlyFollowing.get(i).getFollowingUser());
         }
         return currentlyFollowing;
+    }
+
+    @PostMapping("person/stocks")
+    public List<Owns> getOwnedStocks(@RequestBody Person person) {
+        List<Owns> currentOwns = ownsRepository.findAll();
+        List<Owns> ownedStocks = new ArrayList<>();
+        for(Owns curPerson: currentOwns) {
+            if(curPerson.getOwner().getUsername().equals(person.getUsername())) {
+                ownedStocks.add(curPerson);
+            }
+        }
+        return ownedStocks;
     }
 
     @PostMapping("person/data")

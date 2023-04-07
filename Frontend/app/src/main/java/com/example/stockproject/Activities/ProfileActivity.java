@@ -55,22 +55,12 @@ public class ProfileActivity extends AppCompatActivity implements recyclerView_i
     }
 
     public void setCurrentHoldings() {
-//        for(int i = 0; i < 10; i++) {
-//            int rank = i;
-//            String ticker = "MSFT";
-//            int price = 300;
-//            int quantity = 15;
-//            int total = quantity * price;
-//
-//            HoldingsModel newHolding = new HoldingsModel(rank, ticker, price, quantity, total);
-//            currentHoldings.add(newHolding);
-//        }
         Map<String, String> map = new HashMap<>();
         map.put("username", currentUser);
         JSONObject obj = new JSONObject(map);
         JSONArray arr = new JSONArray();
         arr.put(obj);
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, Const.TEMP_URL + "/people/stocks", arr,
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, Const.URL + "/peo", arr,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
