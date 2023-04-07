@@ -56,8 +56,53 @@ public class RegisterActivity extends AppCompatActivity {
         lastNameInput = (EditText) findViewById(R.id.lastNameInput);
         passwordCheckInput = (EditText) findViewById(R.id.passwordCheckInput);
         errorRegister = (TextView) findViewById(R.id.RegisterError);
+
     }
 
+    private void attemptCheckUsername(View v) {
+        user = String.valueOf(usernameInput.getText());
+        Map<String, String> map = new HashMap<>();
+        map.put("username", user);
+        JSONObject obj = new JSONObject(map);
+        JsonObjectRequest request = new JsonObjectRequest(com.android.volley.Request.Method.POST, Const.URL + "people/authenticate/register", obj, new com.android.volley.Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                String resp;
+                try {
+                    resp = (String) response.get("message");
+                    if (resp.equals("failure")) {
+                        Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    String successMessage = "There are no users named " + user + "!";
+                    Toast.makeText(RegisterActivity.this, successMessage, Toast.LENGTH_SHORT + 1).show();
+                    attemptCreateUser(v);
+                }
+                catch (Exception e) {
+                    Log.d("debug", e.toString());
+                    return;
+                }
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(RegisterActivity.this, "Error, user already exists.", Toast.LENGTH_SHORT + 1).show();
+            }
+        }) {
+            /**
+             * Passing some request headers
+             */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
+
+        volleyQueue.add(request);
+
+    }
     private void attemptCreateUser(View v) {
         user = String.valueOf(usernameInput.getText());
         password = String.valueOf(passwordInput.getText());

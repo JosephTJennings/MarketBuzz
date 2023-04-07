@@ -50,7 +50,7 @@ public class PersonController {
         List<Following> currentlyFollowing = followingRepository.findAll();
         List<String> followingString = new ArrayList<>();
         for(int i = 0; i < currentlyFollowing.size(); i++) {
-            followingString.add(currentlyFollowing.get(i).getFollowing());
+            followingString.add(currentlyFollowing.get(i).getFollowingUser());
         }
         return currentlyFollowing;
     }
@@ -79,9 +79,16 @@ public class PersonController {
 
     @PostMapping("following/post")
     Following PostFollowingByBody(@RequestBody Following newFollowing) {
-
-        followingRepository.save(newFollowing);
-        return newFollowing;
+        List<Person> allPeople = personRepository.findAll();
+        for(Person people : allPeople) {
+            if(people.getUsername().equals(newFollowing.getUsername().getUsername())) {
+                Following tmp = new Following(people, newFollowing.getFollowingUser());
+                people.addFollowing(newFollowing);
+                followingRepository.save(tmp);
+                return tmp;
+            }
+        }
+        return null;
     }
 
 //    @PostMapping("people/stocks/buy")
