@@ -75,19 +75,16 @@ public class LeaderboardActivity extends AppCompatActivity implements recyclerVi
                         for(int i = 0; i < response.length(); i++) {
                             try {
                                 JSONObject user = response.getJSONObject(i);
-                                String type = user.getString("type");
-                                if (!(type.compareTo("Guest") == 0)) {
-                                    System.out.println("JSON object received");
-                                    String pos = Integer.toString(i);
-                                    String username = user.getString("username");
-                                    String valuation = String.format("$%.2f", user.getDouble("valuation"));
-                                    double change = user.getDouble("change");
-                                    UsersModel userMod;
-                                    if (change > 0) userMod = new UsersModel(username, pos, valuation, R.drawable.baseline_arrow_upward_24);
-                                    else if (change < 0) userMod = new UsersModel(username, pos, valuation, R.drawable.baseline_arrow_downward_24);
-                                    else userMod = new UsersModel(username, pos, valuation, R.drawable.baseline_neutral_24);
-                                    users.add(userMod);
-                                }
+                                System.out.println("JSON object received");
+                                String pos = Integer.toString(i);
+                                String username = user.getString("username");
+                                String valuation = String.format("$%.2f", user.getDouble("totalValue"));
+                                double change = 0;
+                                UsersModel userMod;
+                                if (change > 0) userMod = new UsersModel(username, pos, valuation, R.drawable.baseline_arrow_upward_24);
+                                else if (change < 0) userMod = new UsersModel(username, pos, valuation, R.drawable.baseline_arrow_downward_24);
+                                else userMod = new UsersModel(username, pos, valuation, R.drawable.baseline_neutral_24);
+                                users.add(userMod);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
