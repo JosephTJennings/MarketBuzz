@@ -1,6 +1,9 @@
 package _cw_6.marketbuzz.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 
 @Entity
@@ -14,7 +17,14 @@ public class Stock {
 
     private int diff;
 
+    @OneToMany(mappedBy = "stock")
+    private List<Owns> stocksOwnedList;
+
     public Stock() {
+    }
+
+    public Stock(String s){
+        this.ticker = s;
     }
 
     public int getDiff() {

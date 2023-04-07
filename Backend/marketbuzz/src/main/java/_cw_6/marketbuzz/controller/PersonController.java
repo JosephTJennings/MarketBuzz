@@ -3,13 +3,21 @@ package _cw_6.marketbuzz.controller;
 import _cw_6.marketbuzz.model.Owns;
 import _cw_6.marketbuzz.model.Person;
 import _cw_6.marketbuzz.model.Following;
+import _cw_6.marketbuzz.model.Stock;
 import _cw_6.marketbuzz.repository.OwnsRepository;
 import _cw_6.marketbuzz.repository.PersonRepository;
 import _cw_6.marketbuzz.repository.FollowingRepository;
+import _cw_6.marketbuzz.repository.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.FluentQuery;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.function.Function;
 
 @RestController
 public class PersonController {
@@ -18,15 +26,25 @@ public class PersonController {
     PersonRepository personRepository;
 
     @Autowired
+    StockRepository stockRepository;
+
+    @Autowired
     FollowingRepository followingRepository;
 
     @Autowired
     OwnsRepository ownsRepository;
 
+
     @GetMapping("people")
     List<Person> GetAllPeople(){
-        return personRepository.findAll();
+        List<Person> pi = personRepository.findAll();
+        System.out.println("yo");
+        return pi;
     }
+
+    @GetMapping("owns")
+    List<Owns> GetAllOwns(){return ownsRepository.findAll();}
+
     @GetMapping("following")
     List<Following> getAllTypeFollowers() {
         List<Following> currentlyFollowing = followingRepository.findAll();
@@ -37,12 +55,23 @@ public class PersonController {
         return currentlyFollowing;
     }
 
-    @GetMapping("personInfo")
-    Person getPersonInformation(@RequestBody String username){
+    @PostMapping("person/data")
+    public Person getPersonInformation(@RequestBody Person person){
         List<Person> currentUsers = personRepository.findAll();
         for (Person t: currentUsers){
-            if (t.getUsername().equals(username) && t.getPassword().equals(username)){
+            if (t.getUsername().equals(person.getUsername())){
                 return t;
+            }
+        }
+        return null;
+    }
+
+    @PostMapping("stock/data")
+    public Stock getStockInformation(@RequestBody Stock ticker){
+        List<Stock> currentStocks = stockRepository.findAll();
+        for (Stock s: currentStocks){
+            if (s.getTicker().equals(ticker.getTicker())){
+                return s;
             }
         }
         return null;
@@ -55,10 +84,63 @@ public class PersonController {
         return newFollowing;
     }
 
-    @PostMapping("buying/post")
-    Owns PostBuyingStockByBody(@RequestBody Owns stock){
-        ownsRepository.save(stock);
-        return stock;
+//    @PostMapping("people/stocks/buy")
+//    Owns PostBuyingStockByBody(@RequestBody String ticker, @RequestBody String username, @RequestBody String quantity){
+    @PostMapping("people/stocks/buy")
+    Owns PostBuyingStockByBody(@RequestBody Owns request){
+        Person user = getPersonInformation(request.getOwner());
+        Stock stock = getStockInformation(request.getStock());
+        List<Owns> ownsList = ownsRepository.findAll();
+        for(Owns o : ownsList) {
+            Person p = o.getOwner();
+            Stock s = o.getStock();
+            if(p.getUsername().equals(user.getUsername()) && s.getTicker().equals(stock.getTicker())) {
+                if (p.getCashValue() >= (s.getCurrVal() * Integer.valueOf(request.getQuantity()))) {
+                    o.setQuantity(Integer.valueOf(request.getQuantity()));
+                    p.setCashValue(p.getCashValue() - (s.getCurrVal() * Integer.valueOf(request.getQuantity())));
+                    user.addStock(o);
+                    return o;
+                } else {
+                    return null;
+                }
+            }
+        }
+        request.setOwner(user);
+        request.setOwnedStock(stock);
+        user.addStock(request);
+        personRepository.save(user);
+        ownsRepository.save(request);
+
+        return request;
+    }
+
+    @PostMapping("people/stocks/sell")
+    Owns PostSellStockByBody(@RequestBody Owns request){
+        Person user = getPersonInformation(request.getOwner());
+        Stock stock = getStockInformation(request.getStock());
+        List<Owns> ownsList = ownsRepository.findAll();
+        for(Owns o : ownsList) {
+            Person p = o.getOwner();
+            Stock s = o.getStock();
+
+            if(p.getUsername().equals(user.getUsername()) && s.getTicker().equals(stock.getTicker())) {
+                if ((o.getQuantity() - Integer.valueOf(request.getQuantity())) >= 0){
+                    o.setQuantity(o.getQuantity() - Integer.valueOf(request.getQuantity()));
+                    p.setCashValue(p.getCashValue() + (s.getCurrVal()*Integer.valueOf(request.getQuantity())));
+                    user.addStock(o);
+                    return o;
+                }
+                else{
+                    return null;
+                }
+            }
+        }
+        request.setOwner(user);
+        request.setOwnedStock(stock);
+        user.addStock(request);
+        personRepository.save(user);
+        ownsRepository.save(request);
+        return null;
     }
 
     @PostMapping("people/post")
@@ -66,7 +148,7 @@ public class PersonController {
         List<Following> list = new ArrayList<Following>();
         newPerson.setFollowingList(list);
         personRepository.save(newPerson);
-        return newPerson; //Response("success");
+        return newPerson;
     }
     @PostMapping("people/authenticate")
     public Message AuthenticateLogin(@RequestBody Person p){
@@ -92,10 +174,13 @@ public class PersonController {
         List<Person> currentUsers = personRepository.findAll();
         //check if the password in the user is equal
         for (Person t: currentUsers){
-            if (t.getUsername().equals(username) && t.getPassword().equals(username)){
+            if (t.getUsername().equals(username)){
                 return new Message("failure");
             }
         }
         return new Message("success");
     }
+
+//    @PostMapping("people/stocks/buy/authenticate")
+//    public Message AuthenticateBuy(@RequestBody St)
 }
