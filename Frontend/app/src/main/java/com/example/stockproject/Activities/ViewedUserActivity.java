@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import app.server.Const;
+import app.server.CustomRequest;
 
 public class ViewedUserActivity extends AppCompatActivity implements recyclerView_interface{
     private Button HomeButton;
@@ -60,9 +61,7 @@ public class ViewedUserActivity extends AppCompatActivity implements recyclerVie
         Map<String, String> map = new HashMap<>();
         map.put("username", viewedUser);
         JSONObject obj = new JSONObject(map);
-        JSONArray arr = new JSONArray();
-        arr.put(obj);
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, Const.URL + "/people/stocks", arr,
+        CustomRequest request = new CustomRequest(Request.Method.POST, Const.URL + "/person/stocks", obj,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -72,10 +71,14 @@ public class ViewedUserActivity extends AppCompatActivity implements recyclerVie
                                 System.out.println("JSON object received");
 
                                 int rank = i + 1;
-                                String ticker = holding.getString("ticker");
-                                int price = holding.getInt("price");
+                                String ticker = holding.getString("stockTicker");
+                                int price = holding.getJSONObject("stock").getInt("currVal");
                                 int quantity = holding.getInt("quantity");
                                 int total = quantity * price;
+
+                                TextView valuation = findViewById(R.id.text_valuation);
+                                int currentCash = Integer.valueOf(valuation.getText().toString().substring(1));
+                                valuation.setText("$" + String.valueOf(currentCash - total));
 
                                 HoldingsModel newHolding = new HoldingsModel(rank, ticker, price, quantity, total);
                                 currentHoldings.add(newHolding);
