@@ -48,7 +48,7 @@ public class fol_recyclerView_adapter extends RecyclerView.Adapter<fol_recyclerV
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imageView);
-            userName = itemView.findViewById(R.id.userName);
+            userName = itemView.findViewById(R.id.rank);
         }
     }
 }
