@@ -32,7 +32,7 @@ import org.json.JSONObject;
 public class FollowersActivity  extends AppCompatActivity{
     private SearchView search_bar;
     private ArrayList<FollowersModel> availableUsers = new ArrayList<>();
-    private  RecyclerView recyclerView;
+    private RecyclerView recyclerView;
     private String currentUser;
     private RequestQueue volleyQueue;
 
@@ -41,8 +41,7 @@ public class FollowersActivity  extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_followers);
 
-        //currentUser = getIntent().getStringExtra("username");
-        currentUser = "Tst";
+        currentUser = getIntent().getStringExtra("username");
         recyclerView = findViewById(R.id.recycle_followers);
         volleyQueue = Volley.newRequestQueue(FollowersActivity.this);
 
