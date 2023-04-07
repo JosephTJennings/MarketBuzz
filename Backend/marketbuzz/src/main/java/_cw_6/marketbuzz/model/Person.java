@@ -5,7 +5,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.FetchType;
 
 
 @Entity
@@ -16,7 +23,9 @@ public class Person {
     private int pid;
     private String username;
     private String password;
-    @OneToMany(mappedBy = "following")
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "username")
     private List<Following> followingList;
 
     public List<Following> getFollowingList() {
@@ -28,6 +37,9 @@ public class Person {
     }
 
     public Person() {
+    }
+    public Person(String username) {
+        this.username = username;
     }
 
     public int getPid() {
@@ -46,7 +58,6 @@ public class Person {
         this.username = username;
     }
 
-
     public String getPassword() {
         return password;
     }
@@ -55,8 +66,10 @@ public class Person {
         this.password = password;
     }
 
-    public void addFollowing(String userToFollow) {
-        Following newFollowing = new Following(this, userToFollow);
-        this.followingList.add(newFollowing);
+    public void addFollowing(Following userToFollow) {
+        this.followingList.add(userToFollow);
+    }
+    public Person findPerson(String username) {
+        return new Person();
     }
 }

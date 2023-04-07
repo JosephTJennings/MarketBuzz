@@ -1,5 +1,8 @@
 package _cw_6.marketbuzz.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,28 +18,33 @@ public class Following {
     private int fid;
 
     @Column
-    private String following;
+    private String followingUser;
 
+    @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "pid")
+    @JoinColumn(name = "username")
     private Person username;
 
     public Following(Person currUser, String followUser){
         this.username = currUser;
-        this.following = followUser;
+        this.followingUser = followUser;
     }
 
     public Following(){}
 
-    public void setUser(Person user) {
+    public void setUsername(Person user) {
         this.username = user;
     }
 
-    public void setFollowingUsername(String userToFollow) {
-        this.following = userToFollow;
+    public void setFollowingUser(String userToFollow) {
+        this.followingUser = userToFollow;
     }
 
-    public String getFollowing() {
-        return following;
+    public Person getUsername() {
+        return this.username;
+    }
+
+    public String getFollowingUser() {
+        return followingUser;
     }
 }
