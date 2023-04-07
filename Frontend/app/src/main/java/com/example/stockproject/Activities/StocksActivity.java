@@ -24,6 +24,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import app.server.Const;
+
 public class StocksActivity extends AppCompatActivity implements recyclerView_interface {
     private Button HomeButton;
     private ImageButton RefreshButton;
@@ -61,7 +63,7 @@ public class StocksActivity extends AppCompatActivity implements recyclerView_in
 
     public void setStocksModels() {
         stocks.clear();
-        String url = "https://0589b6d4-7542-4459-abc5-12f5174f55ee.mock.pstmn.io/stocks"; //"http://coms-309-019.class.las.iastate.edu:8080/people";
+        String url = Const.URL + "/stock";
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -70,9 +72,9 @@ public class StocksActivity extends AppCompatActivity implements recyclerView_in
                             try {
                                 JSONObject user = response.getJSONObject(i);
                                 System.out.println("JSON object received");
-                                String stockName = user.getString("Name");
-                                double value = user.getDouble("Value");
-                                int difference = user.getInt("Difference");
+                                String stockName = user.getString("ticker");
+                                double value = user.getDouble("currVal");
+                                int difference = user.getInt("diff");
                                 StocksModel stockMod; //= new StocksModel(stockName, String.format("$%.2f", value));
                                 //TODO: Add the symbols to indicate level of change...
                                 if (difference > 0) stockMod = new StocksModel(stockName, String.format("$%.2f", value), R.drawable.baseline_arrow_upward_24);

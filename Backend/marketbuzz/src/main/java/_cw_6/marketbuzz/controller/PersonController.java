@@ -9,15 +9,9 @@ import _cw_6.marketbuzz.repository.PersonRepository;
 import _cw_6.marketbuzz.repository.FollowingRepository;
 import _cw_6.marketbuzz.repository.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.query.FluentQuery;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.function.Function;
 
 @RestController
 public class PersonController {
@@ -38,12 +32,23 @@ public class PersonController {
     @GetMapping("people")
     List<Person> GetAllPeople(){
         List<Person> pi = personRepository.findAll();
-        System.out.println("yo");
         return pi;
     }
 
     @GetMapping("owns")
     List<Owns> GetAllOwns(){return ownsRepository.findAll();}
+
+    @PostMapping("following/people")
+    List<Following> getCurrentFollowing(@RequestBody Person person) {
+        List<Following> activeFollowing = new ArrayList<>();
+        List<Following> allFollowing = followingRepository.findAll();
+        for(Following follower : allFollowing) {
+            if(person.getUsername().equals(follower.getUsername().getUsername())) {
+                activeFollowing.add(follower);
+            }
+        }
+        return activeFollowing;
+    }
 
     @GetMapping("following")
     List<Following> getAllTypeFollowers() {
@@ -83,7 +88,7 @@ public class PersonController {
         for(Person people : allPeople) {
             if(people.getUsername().equals(newFollowing.getUsername().getUsername())) {
                 Following tmp = new Following(people, newFollowing.getFollowingUser());
-                people.addFollowing(newFollowing);
+                people.addFollowing(tmp);
                 followingRepository.save(tmp);
                 return tmp;
             }
