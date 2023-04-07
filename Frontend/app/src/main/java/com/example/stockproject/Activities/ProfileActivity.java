@@ -28,7 +28,7 @@ import java.util.Map;
 
 import app.server.Const;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements recyclerView_interface{
     private Button HomeButton;
     private RequestQueue volleyQueue;
     private RecyclerView recyclerView;
@@ -39,12 +39,9 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         TextView userName = findViewById(R.id.text_username);
         recyclerView = findViewById(R.id.holdingRecycler);
-        //userName.setText(getIntent().getStringExtra("username"));
-        userName.setText("TEMP");
-        currentUser = "TEMP";
+        currentUser = getIntent().getStringExtra("username");
+        userName.setText(currentUser);
         volleyQueue = Volley.newRequestQueue(ProfileActivity.this);
-        Button optionsButton = findViewById(R.id.button_options);
-        Button followingButton = findViewById(R.id.button_following);
         HomeButton = (Button) findViewById(R.id.home_button01);
         HomeButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -54,25 +51,7 @@ public class ProfileActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        optionsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), OptionsActivity.class);
-                //System.out.println("received and passing back: " + currentUser);
-                startActivity(intent);
-            }
-        });
-        followingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), FollowersActivity.class);
-                //System.out.println("received and passing back: " + currentUser);
-                startActivity(intent);
-            }
-        });
-
         setCurrentHoldings();
-        System.out.println("fml");
     }
 
     public void setCurrentHoldings() {
@@ -124,8 +103,17 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void refreshRecyclerView() {
-        holdings_recyclerView_adapter adapter = new holdings_recyclerView_adapter(ProfileActivity.this, currentHoldings);
+        holdings_recyclerView_adapter adapter = new holdings_recyclerView_adapter(ProfileActivity.this, currentHoldings, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(ProfileActivity.this));
+    }
+    @Override
+    public void onItemClick(int position) {
+        Intent stock;
+        stock = new Intent(getApplicationContext(), ManageStockActivity.class);
+        stock.putExtra("stockName", currentHoldings.get(position).getTicker());
+        stock.putExtra("username", currentUser);
+        stock.putExtra("value", Integer.toString(currentHoldings.get(position).getPrice()));
+        startActivity(stock);
     }
 }

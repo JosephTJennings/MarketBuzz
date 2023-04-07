@@ -14,12 +14,14 @@ import com.example.stockproject.R;
 import java.util.ArrayList;
 
 public class holdings_recyclerView_adapter extends RecyclerView.Adapter<holdings_recyclerView_adapter.MyViewHolder> {
+    private final recyclerView_interface holdingsRecViewInterface;
     Context context;
     ArrayList<HoldingsModel> holdings;
 
-    public holdings_recyclerView_adapter(Context context, ArrayList<HoldingsModel> holdings) {
+    public holdings_recyclerView_adapter(Context context, ArrayList<HoldingsModel> holdings, recyclerView_interface holdingsRecViewInterface) {
         this.context = context;
         this.holdings = holdings;
+        this.holdingsRecViewInterface = holdingsRecViewInterface;
     }
 
     @NonNull
@@ -27,7 +29,7 @@ public class holdings_recyclerView_adapter extends RecyclerView.Adapter<holdings
     public holdings_recyclerView_adapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.holding_row, parent, false);
-        return new holdings_recyclerView_adapter.MyViewHolder(view);
+        return new holdings_recyclerView_adapter.MyViewHolder(view, holdingsRecViewInterface);
     }
 
     @Override
@@ -50,15 +52,24 @@ public class holdings_recyclerView_adapter extends RecyclerView.Adapter<holdings
         TextView price;
         TextView quantity;
         TextView total;
-        public MyViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull View itemView, recyclerView_interface holdingsRecViewInterface) {
             super(itemView);
-            System.out.println("Setting shit...");
             rank = itemView.findViewById(R.id.rank);
             ticker = itemView.findViewById(R.id.ticker);
             price = itemView.findViewById(R.id.price);
             quantity = itemView.findViewById(R.id.quantity);
             total = itemView.findViewById(R.id.total);
-            System.out.println("finished" + total);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (holdingsRecViewInterface != null) {
+                        int pos = getAdapterPosition();
+                        if (pos != RecyclerView.NO_POSITION) {
+                            holdingsRecViewInterface.onItemClick(pos);
+                        }
+                    }
+                }
+            });
         }
     }
 }

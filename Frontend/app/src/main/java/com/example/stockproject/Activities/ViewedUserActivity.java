@@ -15,6 +15,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.stockproject.R;
 
 import org.json.JSONArray;
@@ -22,19 +23,26 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-public class ViewedUserActivity extends AppCompatActivity {
+import app.server.Const;
+
+public class ViewedUserActivity extends AppCompatActivity implements recyclerView_interface{
     private Button HomeButton;
     private RequestQueue volleyQueue;
     private RecyclerView recyclerView;
     private ArrayList<HoldingsModel> currentHoldings = new ArrayList<>();
+    private String currentUser, viewedUser;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vieweduser);
         TextView userName = findViewById(R.id.text_username);
-        //userName.setText(getIntent().getStringExtra("username"));
-        userName.setText("TEMP");
-
+        recyclerView = findViewById(R.id.holdingRecycler);
+        currentUser = getIntent().getStringExtra("username");
+        viewedUser = getIntent().getStringExtra("viewedUser");
+        volleyQueue = Volley.newRequestQueue(ViewedUserActivity.this);
+        userName.setText(viewedUser);
         HomeButton = (Button) findViewById(R.id.home_button01);
         HomeButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -44,11 +52,16 @@ public class ViewedUserActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        setCurrentHoldings();
     }
 
     public void setCurrentHoldings() {
-        String url = "http://coms-309-019.class.las.iastate.edu:8080/people/stocks";
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+        Map<String, String> map = new HashMap<>();
+        map.put("username", viewedUser);
+        JSONObject obj = new JSONObject(map);
+        JSONArray arr = new JSONArray();
+        arr.put(obj);
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, Const.TEMP_URL + "/people/stocks", arr,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -57,10 +70,10 @@ public class ViewedUserActivity extends AppCompatActivity {
                                 JSONObject holding = response.getJSONObject(i);
                                 System.out.println("JSON object received");
 
-                                int rank = 1;
+                                int rank = i + 1;
                                 String ticker = holding.getString("ticker");
-                                int price = Integer.valueOf(holding.getString("price"));
-                                int quantity = Integer.valueOf(holding.getString("quantity"));
+                                int price = holding.getInt("price");
+                                int quantity = holding.getInt("quantity");
                                 int total = quantity * price;
 
                                 HoldingsModel newHolding = new HoldingsModel(rank, ticker, price, quantity, total);
@@ -69,6 +82,7 @@ public class ViewedUserActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                         }
+                        refreshRecyclerView();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -78,6 +92,19 @@ public class ViewedUserActivity extends AppCompatActivity {
         });
         volleyQueue.add(request);
     }
-
+    public void refreshRecyclerView() {
+        holdings_recyclerView_adapter adapter = new holdings_recyclerView_adapter(ViewedUserActivity.this, currentHoldings, this);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(ViewedUserActivity.this));
+    }
+    @Override
+    public void onItemClick(int position) {
+        Intent stock;
+        stock = new Intent(getApplicationContext(), ManageStockActivity.class);
+        stock.putExtra("stockName", currentHoldings.get(position).getTicker());
+        stock.putExtra("username", currentUser);
+        stock.putExtra("value", Integer.toString(currentHoldings.get(position).getPrice()));
+        startActivity(stock);
+    }
 }
 
