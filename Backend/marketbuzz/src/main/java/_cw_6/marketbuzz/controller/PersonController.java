@@ -27,28 +27,24 @@ public class PersonController {
         List<Following> currentlyFollowing = followingRepository.findAll();
         List<String> followingString = new ArrayList<>();
         for(int i = 0; i < currentlyFollowing.size(); i++) {
-            followingString.add(currentlyFollowing.get(i).getFollowing());
+            followingString.add(currentlyFollowing.get(i).getFollowingUser());
         }
         return currentlyFollowing;
     }
+
     @PostMapping("following/post")
     Following PostFollowingByBody(@RequestBody Following newFollowing) {
-
-        followingRepository.save(newFollowing);
-        return newFollowing;
+        List<Person> allPeople = personRepository.findAll();
+        for(Person people : allPeople) {
+            if(people.getUsername().equals(newFollowing.getUsername().getUsername())) {
+                Following tmp = new Following(people, newFollowing.getFollowingUser());
+                people.addFollowing(newFollowing);
+                followingRepository.save(tmp);
+                return tmp;
+            }
+        }
+        return null;
     }
-
-//    @PostMapping("people/post/{un}/{ln}/{fn}/{p}")
-//    Person PostPersonByPath(@PathVariable String un, @PathVariable String ln, @PathVariable String fn, @PathVariable String p){
-//        Person newPerson = new Person();
-//        newPerson.setUsername(un);
-//        newPerson.setLastName(ln);
-//        newPerson.setFirstName(fn);
-//        newPerson.setPassword(p);
-//        //newPerson.setFollowingList(p);
-//        personRepository.save(newPerson);
-//        return newPerson;
-//    }
 
     @PostMapping("people/post")
     Person PostUserByBody(@RequestBody Person newPerson){
