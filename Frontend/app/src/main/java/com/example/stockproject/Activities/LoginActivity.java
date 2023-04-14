@@ -32,8 +32,8 @@ import app.utils.BasicUtils;
 
 public class LoginActivity extends AppCompatActivity {
     private String type, user, password;
-    private Button regButton, loginButton;
-    private TextView registerText, usernameText, passwordText, errorText;
+    private Button regButton, loginButton, loginButton2;
+    private TextView registerText, usernameText, passwordText, errorText, guestText;
     private RequestQueue volleyQueue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +44,10 @@ public class LoginActivity extends AppCompatActivity {
         regButton = (Button) findViewById(R.id.RegisterButton);
         registerText = (TextView) findViewById(R.id.RegisterText);
         loginButton = (Button) findViewById(R.id.LoginButton);
+        loginButton2 = (Button) findViewById(R.id.LoginButton2);
         loginButton.setOnClickListener(this::attemptLogin);
         registerText = (TextView) findViewById(R.id.RegisterText);
+        guestText = (TextView) findViewById(R.id.guestText);
         usernameText = (EditText) findViewById(R.id.UsernameInput);
         passwordText = (EditText) findViewById(R.id.PasswordInput);
         errorText = (TextView) findViewById(R.id.ErrorText);
@@ -57,6 +59,16 @@ public class LoginActivity extends AppCompatActivity {
             {
                 startActivity(new Intent(LoginActivity.this,
                         RegisterActivity.class));
+            }
+        });
+        loginButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                Intent user = new Intent(LoginActivity.this, MainActivity.class);
+                user.putExtra("username", "Guest");
+                user.putExtra("type", "Guest");
+                startActivity(user);
             }
         });
     }

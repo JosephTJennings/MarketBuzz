@@ -6,18 +6,32 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.stockproject.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
     private Button leaderboard, logout, stocks, profile, followers, options;
     private TextView user, money;
-    private String currentUser, currentMoney;
+    private String currentUser, currentMoney, currentType;
+    private JSONObject person;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        currentUser = getIntent().getStringExtra("username");
+        try {
+            currentUser = getIntent().getStringExtra("username");
+//            currentMoney = person.getString("money");
+            currentType = getIntent().getStringExtra("type");
+            if (currentType == null) currentType = person.getString("type");
+        }
+        catch (JSONException e) {
+            currentMoney = "-";
+            currentType = "Guest";
+        }
 //        System.out.println(currentUser);
         leaderboard = (Button) findViewById(R.id.leaderboard_page);
         followers = (Button) findViewById(R.id.followers_page);
@@ -36,10 +50,16 @@ public class MainActivity extends AppCompatActivity {
         followers.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), FollowersActivity.class);
-                intent.putExtra("username", currentUser);
-                //System.out.println("received and passing back: " + currentUser);
-                startActivity(intent);
+                if (checkType(currentType) == true) {
+                    Intent intent = new Intent(getApplicationContext(), FollowersActivity.class);
+                    intent.putExtra("username", currentUser);
+                    intent.putExtra("type", currentType);
+                    //System.out.println("received and passing back: " + currentUser);
+                    startActivity(intent);
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), currentUser + " is of type " + currentType + ".", Toast.LENGTH_LONG);
+                }
             }
         });
         leaderboard.setOnClickListener(new View.OnClickListener(){
@@ -47,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), LeaderboardActivity.class);
                 intent.putExtra("username", currentUser);
+                intent.putExtra("type", currentType);
                 startActivity(intent);
             }
         });
@@ -57,11 +78,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        options.setOnClickListener(new View.OnClickListener(){
+        options.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), OptionsActivity.class);
                 intent.putExtra("username", currentUser);
+                intent.putExtra("type", currentType);
                 //System.out.println("received and passing back: " + currentUser);
                 startActivity(intent);
             }
@@ -69,10 +91,16 @@ public class MainActivity extends AppCompatActivity {
         profile.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                intent.putExtra("username", currentUser);
-                //System.out.println("received and passing back: " + currentUser);
-                startActivity(intent);
+                if (checkType(currentType) == true) {
+                    Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                    intent.putExtra("username", currentUser);
+                    intent.putExtra("type", currentType);
+                    //System.out.println("received and passing back: " + currentUser);
+                    startActivity(intent);
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), currentUser + " is of type " + currentType + ".", Toast.LENGTH_LONG);
+                }
             }
         });
         stocks.setOnClickListener(new View.OnClickListener(){
@@ -80,9 +108,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), StocksActivity.class);
                 intent.putExtra("username", currentUser);
+                intent.putExtra("type", currentType);
                 //System.out.println("received and passing back: " + currentUser);
                 startActivity(intent);
             }
         });
+    }
+    //Checks if the user is of type Guest
+    public boolean checkType(String currentType) {
+        if (currentType.equals("Guest")) return false;
+        else return true;
     }
 }
