@@ -9,9 +9,21 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.stockproject.R;
 
+/**
+ * This is the Options Activity. This activity is meant for changing settings or logging out.
+ */
 public class OptionsActivity extends AppCompatActivity {
     private Button HomeButton;
     private String currentUser;
+
+    /**
+     * This method will create all the buttons, textViews, and Strings for the current Activity and set
+     * each button to navigate to their corresponding activities.
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_options);

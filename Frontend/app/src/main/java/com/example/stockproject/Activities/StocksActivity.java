@@ -16,6 +16,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.stockproject.Activities.adapter.recyclerView_interface;
+import com.example.stockproject.Activities.adapter.stk_recyclerView_adapter;
+import com.example.stockproject.Activities.model.StocksModel;
 import com.example.stockproject.R;
 
 import org.json.JSONArray;
@@ -26,6 +29,9 @@ import java.util.ArrayList;
 
 import app.server.Const;
 
+/**
+ * This activity is the Stocks Activity. This activity presents a list of stocks the user can choose from.
+ */
 public class StocksActivity extends AppCompatActivity implements recyclerView_interface {
     private Button HomeButton;
     private ImageButton RefreshButton;
@@ -33,6 +39,14 @@ public class StocksActivity extends AppCompatActivity implements recyclerView_in
     private RecyclerView recyclerView;
     private RequestQueue volleyQueue;
     private String currentUser;
+
+    /**
+     * This method will create all the buttons, textViews, and Strings for the current Activity and set
+     * each button to navigate to their corresponding activities.
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stocks);
@@ -61,6 +75,9 @@ public class StocksActivity extends AppCompatActivity implements recyclerView_in
         });
     }
 
+    /**
+     * This method will produce a GET Request and produce a list of stocks. This method is called in onCreate.
+     */
     public void setStocksModels() {
         stocks.clear();
         String url = Const.URL + "/stock";
@@ -95,12 +112,20 @@ public class StocksActivity extends AppCompatActivity implements recyclerView_in
         });
         volleyQueue.add(request);
     }
+
+    /**
+     * This method will refresh the recyclerView.
+     */
     public void refreshRecyclerView() {
         stk_recyclerView_adapter adapter = new stk_recyclerView_adapter(StocksActivity.this, stocks, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(StocksActivity.this));
     }
 
+    /**
+     * This method will navigate the user to the designated ManageStockActivity for the selected stock in the list.
+     * @param position The position of the stock on the list.
+     */
     @Override
     public void onItemClick(int position) {
         Intent stock = new Intent(getApplicationContext(), ManageStockActivity.class);

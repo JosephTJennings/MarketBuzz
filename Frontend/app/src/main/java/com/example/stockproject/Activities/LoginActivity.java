@@ -27,15 +27,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 import app.server.Const;
-import app.server.Request;
 import app.utils.BasicUtils;
-
+/**
+ * This activity is the Login Activity. This activity will be the first activity the user will start.
+ */
 public class LoginActivity extends AppCompatActivity {
     private String type, user, password;
     private Button regButton, loginButton;
     private TextView registerText, usernameText, passwordText, errorText;
     private RequestQueue volleyQueue;
     @Override
+    /**
+     * This method will create all the buttons, textViews, and Strings for the current Activity and set
+     * each button to navigate to their corresponding activities.
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -60,6 +65,11 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * This method will attempt a login and send a JSON Object to login if successful
+     * @param v - The current view
+     */
     private void attemptLogin(View v) {
 //        Intent main = new Intent(this, MainActivity.class);
 //        startActivity(main);
@@ -105,6 +115,10 @@ public class LoginActivity extends AppCompatActivity {
 //        Request.post("/people/authenticate", obj, this::login, null);
     }
 
+    /**
+     * This method will read the JSON Object from method attemptLogin
+     * @param response - A JSON Object from method attemptLogin
+     */
     private void login(JSONObject response) {
             String resp;
         try {

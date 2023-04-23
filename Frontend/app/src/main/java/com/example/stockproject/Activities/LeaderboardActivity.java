@@ -17,6 +17,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.stockproject.Activities.adapter.recyclerView_interface;
+import com.example.stockproject.Activities.adapter.usr_recyclerView_adapter;
+import com.example.stockproject.Activities.model.UsersModel;
 import com.example.stockproject.R;
 
 import org.json.JSONArray;
@@ -24,7 +27,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-
+/**
+ * This activity is the Leaderboard Activity. This activity presents a list of users the user can choose from.
+ */
 public class LeaderboardActivity extends AppCompatActivity implements recyclerView_interface {
     private TextView stats;
     ArrayList<UsersModel> users = new ArrayList<>();
@@ -34,6 +39,13 @@ public class LeaderboardActivity extends AppCompatActivity implements recyclerVi
     private RequestQueue volleyQueue;
     private ImageButton RefreshButton;
     private String currentUser;
+    /**
+     * This method will create all the buttons, textViews, and Strings for the current Activity and set
+     * each button to navigate to their corresponding activities.
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaderboard);
@@ -63,7 +75,9 @@ public class LeaderboardActivity extends AppCompatActivity implements recyclerVi
             }
         });
     }
-
+    /**
+     * This method will produce a GET Request and produce a list of users. This method is called in onCreate.
+     */
     public void setUsersModels() {
         users.clear();
         //volleyQueue = Volley.newRequestQueue(FollowersActivity.this);
@@ -99,12 +113,18 @@ public class LeaderboardActivity extends AppCompatActivity implements recyclerVi
         });
         volleyQueue.add(request);
     }
+    /**
+     * This method will refresh the recyclerView.
+     */
     public void refreshRecyclerView() {
         usr_recyclerView_adapter adapter = new usr_recyclerView_adapter(LeaderboardActivity.this, users, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(LeaderboardActivity.this));
     }
-
+    /**
+     * This method will navigate the user to the designated ManageStockActivity for the selected stock in the list.
+     * @param position The position of the stock on the list.
+     */
     @Override
     public void onItemClick(int position) {
         Intent user;

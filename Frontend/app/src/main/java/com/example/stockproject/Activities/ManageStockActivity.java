@@ -29,7 +29,9 @@ import java.util.Map;
 
 import app.server.Const;
 import app.utils.BasicUtils;
-
+/**
+ * This activity is the ManageStock Activity. This activity presents a stock with several buttons to increase or decrease the number of the selected stock.
+ */
 public class ManageStockActivity extends AppCompatActivity {
     private Button homeButton, stocksButton, buyStocks, sellStocks;
     private TextView stockName, stockPrice, currentMoney, currentNumStock;
@@ -38,6 +40,13 @@ public class ManageStockActivity extends AppCompatActivity {
     private int currentChange;
     private EditText numStks;
     private RequestQueue volleyQueue;
+    /**
+     * This method will create all the buttons, textViews, and Strings for the current Activity and set
+     * each button to navigate to their corresponding activities.
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_managestock);
@@ -99,7 +108,9 @@ public class ManageStockActivity extends AppCompatActivity {
             }
         });
     }
-
+    /**
+     * This method will produce a POST Request and generate all the data for the page. This method is called in onCreate.
+     */
     private void getPersonInformation() {
         Map<String, String> map = new HashMap<>();
         map.put("username", currentUser);
@@ -149,6 +160,10 @@ public class ManageStockActivity extends AppCompatActivity {
         };
         volleyQueue.add(request);
     }
+
+    /**
+     * This method is for buying stocks.
+     */
     private void attemptBuyStocks() {
         ArrayList<String> person = new ArrayList<String>();
 //        .add();
@@ -196,6 +211,9 @@ public class ManageStockActivity extends AppCompatActivity {
             //TODO: Add an error message for value being less than 0...
         }
     }
+    /**
+     * This method is for selling stocks.
+     */
     private void attemptSellStocks() {
         ArrayList<String> person = new ArrayList<String>();
 //        .add();
