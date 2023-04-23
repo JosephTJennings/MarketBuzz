@@ -1,18 +1,7 @@
 package _cw_6.marketbuzz.model;
 
-import _cw_6.marketbuzz.repository.OwnsRepository;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import _cw_6.marketbuzz.controller.PersonController;
-import _cw_6.marketbuzz.repository.PersonRepository;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.CascadeType;
-import java.util.HashSet;
-import java.util.Set;
-
-import java.util.List;
-
 @Entity
 public class Owns {
 
