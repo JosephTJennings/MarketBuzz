@@ -1,0 +1,6 @@
+app.server
+app.utils
+com.example.stockproject
+com.example.stockproject.Activities
+com.example.stockproject.Activities.adapter
+com.example.stockproject.Activities.model

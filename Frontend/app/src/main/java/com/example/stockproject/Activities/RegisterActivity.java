@@ -11,8 +11,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import app.server.Request;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -28,13 +26,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import app.AppController;
-import app.User;
-import app.UserController;
 import app.server.Const;
 import app.utils.BasicUtils;
-
+/**
+ * This activity is the Login Activity. This activity can only be activated from LoginActivity.
+ * This activity attempts to create a user from the information provided by the user.
+ */
 public class RegisterActivity extends AppCompatActivity {
     private String TAG = RegisterActivity.class.getSimpleName();
     private Button rButton;
@@ -43,6 +40,10 @@ public class RegisterActivity extends AppCompatActivity {
     private String user, password, checkPassword, firstName, lastName;
     private RequestQueue volleyQueue;
     @Override
+    /**
+     * This method will create all the buttons, textViews, and Strings for the current Activity and set
+     * each button to navigate to their corresponding activities.
+     */
     protected void onCreate(Bundle savedInstanceState) {
         volleyQueue = Volley.newRequestQueue(RegisterActivity.this);
         super.onCreate(savedInstanceState);
@@ -58,7 +59,11 @@ public class RegisterActivity extends AppCompatActivity {
         errorRegister = (TextView) findViewById(R.id.RegisterError);
 
     }
-
+    /**
+     * This method will check if the username the user provided exists. If it does, it prompts the user
+     * to change their username.
+     * @param v a View
+     */
     private void attemptCheckUsername(View v) {
         user = String.valueOf(usernameInput.getText());
         Map<String, String> map = new HashMap<>();
@@ -103,6 +108,10 @@ public class RegisterActivity extends AppCompatActivity {
         volleyQueue.add(request);
 
     }
+    /**
+     * This method will send a POST Request to create the user in the database.
+     * @param v a View
+     */
     private void attemptCreateUser(View v) {
         user = String.valueOf(usernameInput.getText());
         password = String.valueOf(passwordInput.getText());
@@ -148,7 +157,10 @@ public class RegisterActivity extends AppCompatActivity {
 
 //        Request.post("/people/authenticate", obj, this::login, null);
     }
-
+    /**
+     * This method will login based off of the JSON Object in the parameters
+     * @param response A JSON Object sent from AttemptCreateUser
+     */
     private void login(JSONObject response) {
         try {
             if (response.get("pid") == null) {
