@@ -99,7 +99,7 @@ public class FollowersActivity  extends AppCompatActivity{
         refreshRecyclerView();
     }
     /**
-     * This method will produce a POST Request add a user to the followingList if the user exists.
+     * This method will produce a POST Request, which adds the users to the recyler view.
      */
     public void setFollowersModels() {
         //volleyQueue = Volley.newRequestQueue(FollowersActivity.this);
@@ -142,7 +142,7 @@ public class FollowersActivity  extends AppCompatActivity{
     }
 
     /**
-     * This method checks if the user exists and if the relationship between you and the user exists.
+     * This method sends a POST request to follow another person, then adds them to the RecyclerView.
      * @param usernameToFollow The name of the user
      * @return 0 if successful, 1 if the requested user does not exist, and 2 if user already follows them
      */
