@@ -15,13 +15,13 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 
 /**
- * This class creates a custom JSON Request.
+ * This class creates a custom JSON Request. Mostly used for when trying to send an object and receive back an array.
  */
 public class CustomRequest extends JsonRequest<JSONArray> {
     protected static final String PROTOCOL_CHARSET = "utf-8";
 
     /**
-     * This constructor creates a JSON Request with these parameters
+     * This constructor creates a JSON Request with:
      * @param method the method
      * @param url the link to connect to
      * @param requestBody the data being sent to the url
@@ -32,7 +32,7 @@ public class CustomRequest extends JsonRequest<JSONArray> {
         super(method, url, requestBody, listener, errorListener);
     }
     /**
-     * This constructor creates a JSON Request with these parameters
+     * This constructor creates a JSON "Object" Request, and can receive a JSON Array back
      * @param method the method
      * @param url the link to connect to
      * @param jsonRequest the data being sent to the url
@@ -44,7 +44,7 @@ public class CustomRequest extends JsonRequest<JSONArray> {
     }
 
     /**
-     * This class parses the Network Response.
+     * This class parses the Network Response for the JSON Object or Array.
      * @param response Response from the network
      * @return success or error
      */
