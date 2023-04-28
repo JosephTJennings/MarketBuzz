@@ -13,17 +13,17 @@ public class Person {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int pid;
 
-    public void setCashValue(int cashValue) {
+    public void setCashValue(float cashValue) {
         this.cashValue = cashValue;
     }
 
-    public void setTotalValue(int totalValue) {
+    public void setTotalValue(float totalValue) {
         this.totalValue = totalValue;
     }
 
-    private int cashValue;
+    private float cashValue;
 
-    private int totalValue;
+    private float totalValue;
 
     private String username;
     private String password;
@@ -44,11 +44,11 @@ public class Person {
     @OneToMany(mappedBy = "owner")
     private List<Owns> ownsList;
 
-    public int getCashValue() {
+    public float getCashValue() {
         return cashValue;
     }
 
-    public int getTotalValue() {
+    public float getTotalValue() {
         return totalValue;
     }
 

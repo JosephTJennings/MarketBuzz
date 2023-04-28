@@ -1,17 +1,7 @@
 package _cw_6.marketbuzz.model;
 
-import _cw_6.marketbuzz.repository.OwnsRepository;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import _cw_6.marketbuzz.controller.PersonController;
-import _cw_6.marketbuzz.repository.PersonRepository;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.CascadeType;
-import java.util.HashSet;
-import java.util.Set;
-
-import java.util.List;
 
 @Entity
 public class Owns {
@@ -31,12 +21,12 @@ public class Owns {
 
     @ManyToOne
     @JoinColumn(name = "ticker")
-    private Stock stock;
+    private StaticStock staticStock;
 
 
-    public Owns(Person owner, Stock stock, String quantity){
+    public Owns(Person owner, StaticStock staticStock, String quantity){
         this.owner = owner;
-        this.stock = stock;
+        this.staticStock = staticStock;
         this.quantity = Integer.valueOf(quantity);
     }
 
@@ -44,13 +34,13 @@ public class Owns {
 
     public void setOwner(Person owner){this.owner = owner;}
 
-    public void setOwnedStock(Stock stock) {this.stock = stock;}
+    public void setOwnedStock(StaticStock staticStock) {this.staticStock = staticStock;}
 
     public void setQuantity(int quantity) {this.quantity = quantity;}
 
-    public Stock getStock() {return this.stock;}
+    public StaticStock getStock() {return this.staticStock;}
 
-    public String getStockTicker() {return this.stock.getTicker();}
+    public String getStockTicker() {return this.staticStock.getTicker();}
 
     public Person getOwner() {return this.owner;}
 
