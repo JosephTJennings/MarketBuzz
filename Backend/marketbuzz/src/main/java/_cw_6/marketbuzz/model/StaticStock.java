@@ -6,27 +6,27 @@ import java.util.List;
 
 
 @Entity
-public class Stock {
+public class StaticStock {
 
     @Id
     @GeneratedValue
     private int sid;
     private String ticker;
-    private int currVal;
+    private float currVal;
 
-    private int diff;
+    private float diff;
 
-    @OneToMany(mappedBy = "stock")
+    @OneToMany(mappedBy = "staticStock")
     private List<Owns> stocksOwnedList;
 
-    public Stock() {
+    public StaticStock() {
     }
 
-    public Stock(String s){
+    public StaticStock(String s){
         this.ticker = s;
     }
 
-    public int getDiff() {
+    public float getDiff() {
         return diff;
     }
 
@@ -50,7 +50,7 @@ public class Stock {
         this.ticker = ticker;
     }
 
-    public int getCurrVal() {
+    public float getCurrVal() {
         return currVal;
     }
 

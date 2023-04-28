@@ -1,6 +1,6 @@
 package _cw_6.marketbuzz.controller;
 
-import _cw_6.marketbuzz.model.Stock;
+import _cw_6.marketbuzz.model.StaticStock;
 import _cw_6.marketbuzz.repository.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,15 +18,15 @@ public class StockController {
 
 
     @GetMapping("stock")
-    List<Stock> GetAllStock() {return stockRepository.findAll();}
+    List<StaticStock> GetAllStock() {return stockRepository.findAll();}
 
     @PostMapping("stock/post/{ticker}/{currVal}")
-    Stock PostStockByPath(@PathVariable String ticker, @PathVariable int currVal){
-        Stock newStock = new Stock();
-        newStock.setTicker(ticker);
-        newStock.setCurrVal(currVal);
-        stockRepository.save(newStock);
-        return newStock;
+    StaticStock PostStockByPath(@PathVariable String ticker, @PathVariable int currVal){
+        StaticStock newStaticStock = new StaticStock();
+        newStaticStock.setTicker(ticker);
+        newStaticStock.setCurrVal(currVal);
+        stockRepository.save(newStaticStock);
+        return newStaticStock;
     }
 
 }

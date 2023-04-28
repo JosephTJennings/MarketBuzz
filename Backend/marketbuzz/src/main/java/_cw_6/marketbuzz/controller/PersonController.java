@@ -3,7 +3,7 @@ package _cw_6.marketbuzz.controller;
 import _cw_6.marketbuzz.model.Owns;
 import _cw_6.marketbuzz.model.Person;
 import _cw_6.marketbuzz.model.Following;
-import _cw_6.marketbuzz.model.Stock;
+import _cw_6.marketbuzz.model.StaticStock;
 import _cw_6.marketbuzz.repository.OwnsRepository;
 import _cw_6.marketbuzz.repository.PersonRepository;
 import _cw_6.marketbuzz.repository.FollowingRepository;
@@ -84,9 +84,9 @@ public class PersonController {
     }
 
     @PostMapping("stock/data")
-    public Stock getStockInformation(@RequestBody Stock ticker){
-        List<Stock> currentStocks = stockRepository.findAll();
-        for (Stock s: currentStocks){
+    public StaticStock getStockInformation(@RequestBody StaticStock ticker){
+        List<StaticStock> currentStaticStocks = stockRepository.findAll();
+        for (StaticStock s: currentStaticStocks){
             if (s.getTicker().equals(ticker.getTicker())){
                 return s;
             }
@@ -113,12 +113,12 @@ public class PersonController {
     @PostMapping("people/stocks/buy")
     Owns PostBuyingStockByBody(@RequestBody Owns request){
         Person user = getPersonInformation(request.getOwner());
-        Stock stock = getStockInformation(request.getStock());
+        StaticStock staticStock = getStockInformation(request.getStock());
         List<Owns> ownsList = ownsRepository.findAll();
         for(Owns o : ownsList) {
             Person p = o.getOwner();
-            Stock s = o.getStock();
-            if(p.getUsername().equals(user.getUsername()) && s.getTicker().equals(stock.getTicker())) {
+            StaticStock s = o.getStock();
+            if(p.getUsername().equals(user.getUsername()) && s.getTicker().equals(staticStock.getTicker())) {
                 if (p.getCashValue() >= (s.getCurrVal() * Integer.valueOf(request.getQuantity()))) {
                     o.setQuantity(Integer.valueOf(request.getQuantity()));
                     p.setCashValue(p.getCashValue() - (s.getCurrVal() * Integer.valueOf(request.getQuantity())));
@@ -130,7 +130,7 @@ public class PersonController {
             }
         }
         request.setOwner(user);
-        request.setOwnedStock(stock);
+        request.setOwnedStock(staticStock);
         user.addStock(request);
         personRepository.save(user);
         ownsRepository.save(request);
@@ -141,16 +141,16 @@ public class PersonController {
     @PostMapping("people/stocks/sell")
     Owns PostSellStockByBody(@RequestBody Owns request){
         Person user = getPersonInformation(request.getOwner());
-        Stock stock = getStockInformation(request.getStock());
+        StaticStock staticStock = getStockInformation(request.getStock());
         List<Owns> ownsList = ownsRepository.findAll();
         for(Owns o : ownsList) {
             Person p = o.getOwner();
-            Stock s = o.getStock();
+            StaticStock s = o.getStock();
 
-            if(p.getUsername().equals(user.getUsername()) && s.getTicker().equals(stock.getTicker())) {
+            if(p.getUsername().equals(user.getUsername()) && s.getTicker().equals(staticStock.getTicker())) {
                 if ((o.getQuantity() - Integer.valueOf(request.getQuantity())) >= 0){
                     o.setQuantity(o.getQuantity() - Integer.valueOf(request.getQuantity()));
-                    p.setCashValue(p.getCashValue() + (s.getCurrVal()*Integer.valueOf(request.getQuantity())));
+                    p.setCashValue(p.getCashValue() + (s.getCurrVal()*Float.valueOf(request.getQuantity())));
                     user.addStock(o);
                     return o;
                 }
@@ -160,7 +160,7 @@ public class PersonController {
             }
         }
         request.setOwner(user);
-        request.setOwnedStock(stock);
+        request.setOwnedStock(staticStock);
         user.addStock(request);
         personRepository.save(user);
         ownsRepository.save(request);
