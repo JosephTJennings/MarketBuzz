@@ -2,9 +2,11 @@ package com.example.stockproject.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,9 +27,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import app.server.Const;
+import tech.gusavila92.websocketclient.WebSocketClient;
 
 /**
  * This activity is the Stocks Activity. This activity presents a list of stocks the user can choose from.
@@ -39,6 +44,7 @@ public class StocksActivity extends AppCompatActivity implements recyclerView_in
     private RecyclerView recyclerView;
     private RequestQueue volleyQueue;
     private String currentUser;
+    private WebSocketClient webSocketClient;
 
     /**
      * This method will create all the buttons, textViews, and Strings for the current Activity and set
@@ -70,11 +76,75 @@ public class StocksActivity extends AppCompatActivity implements recyclerView_in
         RefreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setStocksModels();
+                //createWebSocketClient();//setStocksModels();
             }
         });
-    }
 
+    }
+    private void createWebSocketClient() {
+        URI uri;
+        try {
+            // Connect to local host
+            uri = new URI("ws://10.0.2.2:8080/websocket");
+        }
+        catch (URISyntaxException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        webSocketClient = new WebSocketClient(uri) {
+            @Override
+            public void onOpen() {
+                Log.i("WebSocket", "Session is starting");
+                webSocketClient.send("Hello World!");
+            }
+
+            @Override
+            public void onTextReceived(String s) {
+                Log.i("WebSocket", "Message received");
+                final String message = s;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try{
+                            TextView textView = findViewById(R.id.animalSound);
+                            textView.setText(message);
+                        } catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onBinaryReceived(byte[] data) {
+            }
+
+            @Override
+            public void onPingReceived(byte[] data) {
+            }
+
+            @Override
+            public void onPongReceived(byte[] data) {
+            }
+
+            @Override
+            public void onException(Exception e) {
+                System.out.println(e.getMessage());
+            }
+
+            @Override
+            public void onCloseReceived() {
+                Log.i("WebSocket", "Closed ");
+                System.out.println("onCloseReceived");
+            }
+        };
+
+        webSocketClient.setConnectTimeout(10000);
+        webSocketClient.setReadTimeout(60000);
+        webSocketClient.enableAutomaticReconnection(5000);
+        webSocketClient.connect();
+    }
     /**
      * This method will produce a GET Request and produce a list of stocks. This method is called in onCreate.
      */
