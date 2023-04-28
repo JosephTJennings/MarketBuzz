@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.stockproject.Activities.model.StocksModel;
 import com.example.stockproject.R;
+import com.jjoe64.graphview.GraphView;
 
 import java.util.ArrayList;
 /**
@@ -53,6 +54,7 @@ public class stk_recyclerView_adapter extends RecyclerView.Adapter<stk_recyclerV
         holder.stockName.setText(stocks.get(position).getStockName());
         holder.value.setText(stocks.get(position).getValue());
         holder.changeImage.setImageResource(stocks.get(position).getChange());
+        holder.graph = new GraphView(this.context);
     }
 
     @Override
@@ -68,6 +70,7 @@ public class stk_recyclerView_adapter extends RecyclerView.Adapter<stk_recyclerV
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView stockName, value;
         ImageView changeImage;
+        GraphView graph;
         /**
          * This constructor creates a view holder.
          * @param itemView The view of the item
@@ -77,7 +80,8 @@ public class stk_recyclerView_adapter extends RecyclerView.Adapter<stk_recyclerV
             super(itemView);
             value = itemView.findViewById(R.id.value);
             stockName = itemView.findViewById(R.id.stockName);
-            changeImage = itemView.findViewById(R.id.valuationImage);
+            changeImage = itemView.findViewById(R.id.changeImage);
+            graph = itemView.findViewById(R.id.idGraphView);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

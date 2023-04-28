@@ -1,8 +1,12 @@
 package com.example.stockproject.Activities.model;
+
+import com.jjoe64.graphview.GraphView;
+
 /**
  * This class is a model for the RecyclerView to use.
  */
 public class StocksModel {
+    private GraphView graph;
     private String stockName, value;
     private int change;
 

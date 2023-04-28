@@ -22,6 +22,7 @@ import com.example.stockproject.Activities.adapter.recyclerView_interface;
 import com.example.stockproject.Activities.adapter.stk_recyclerView_adapter;
 import com.example.stockproject.Activities.model.StocksModel;
 import com.example.stockproject.R;
+import com.jjoe64.graphview.GraphView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -76,7 +77,7 @@ public class StocksActivity extends AppCompatActivity implements recyclerView_in
         RefreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //createWebSocketClient();//setStocksModels();
+                setStocksModels();//createWebSocketClient();
             }
         });
 
@@ -107,7 +108,7 @@ public class StocksActivity extends AppCompatActivity implements recyclerView_in
                     @Override
                     public void run() {
                         try{
-                            TextView textView = findViewById(R.id.animalSound);
+                            TextView textView = findViewById(R.id.StocksText);
                             textView.setText(message);
                         } catch (Exception e){
                             e.printStackTrace();
@@ -162,8 +163,8 @@ public class StocksActivity extends AppCompatActivity implements recyclerView_in
                                 String stockName = user.getString("ticker");
                                 double value = user.getDouble("currVal");
                                 int difference = user.getInt("diff");
+                                GraphView graphView;
                                 StocksModel stockMod; //= new StocksModel(stockName, String.format("$%.2f", value));
-                                //TODO: Add the symbols to indicate level of change...
                                 if (difference > 0) stockMod = new StocksModel(stockName, String.format("$%.2f", value), R.drawable.baseline_arrow_upward_24);
                                 else if (difference < 0) stockMod = new StocksModel(stockName, String.format("$%.2f", value), R.drawable.baseline_arrow_downward_24);
                                 else stockMod = new StocksModel(stockName, String.format("$%.2f", value), R.drawable.baseline_neutral_24);
