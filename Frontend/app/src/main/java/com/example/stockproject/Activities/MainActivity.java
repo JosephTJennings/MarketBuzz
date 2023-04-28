@@ -8,11 +8,22 @@ import android.widget.Button;
 import android.widget.TextView;
 import com.example.stockproject.R;
 
+/**
+ * This is the Main Activity class. This class will help us navigate to whatever activity you want to do.
+ */
 public class MainActivity extends AppCompatActivity {
 
     private Button leaderboard, logout, stocks, profile, followers, options;
     private TextView user, money;
     private String currentUser, currentMoney;
+
+    /**
+     * This method will create all the buttons, textViews, and Strings for the current Activity and set
+     * each button to navigate to their corresponding activities.
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

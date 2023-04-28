@@ -14,8 +14,10 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.stockproject.Activities.adapter.holdings_recyclerView_adapter;
+import com.example.stockproject.Activities.adapter.recyclerView_interface;
+import com.example.stockproject.Activities.model.HoldingsModel;
 import com.example.stockproject.R;
 
 import org.json.JSONArray;
@@ -29,7 +31,7 @@ import java.util.Map;
 import app.server.Const;
 import app.server.CustomRequest;
 
-public class ViewedUserActivity extends AppCompatActivity implements recyclerView_interface{
+public class ViewedUserActivity extends AppCompatActivity implements recyclerView_interface {
     private Button HomeButton;
     private RequestQueue volleyQueue;
     private RecyclerView recyclerView;
