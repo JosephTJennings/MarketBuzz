@@ -33,7 +33,7 @@ public class LeaderboardActivity extends AppCompatActivity implements recyclerVi
     private TextView Leaderboard;
     private RequestQueue volleyQueue;
     private ImageButton RefreshButton;
-    private String currentUser;
+    private String currentUser, currentType, currentMoney;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaderboard);
@@ -45,12 +45,16 @@ public class LeaderboardActivity extends AppCompatActivity implements recyclerVi
         volleyQueue = Volley.newRequestQueue(LeaderboardActivity.this);
         currentUser = getIntent().getStringExtra("username");
         if (currentUser == null) currentUser = "srhusted";
+        currentType = getIntent().getStringExtra("type");
+        currentMoney = getIntent().getStringExtra("money");
         HomeButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 //System.out.println("received and passing back: " + currentUser);
                 intent.putExtra("username", currentUser);
+                intent.putExtra("type", currentType);
+                intent.putExtra("money", currentMoney);
                 startActivity(intent);
             }
         });
@@ -116,6 +120,8 @@ public class LeaderboardActivity extends AppCompatActivity implements recyclerVi
             user.putExtra("viewedUser", users.get(position).getUsername());
         }
         user.putExtra("username", currentUser);
+        user.putExtra("type", currentType);
+        user.putExtra("money", currentMoney);
         startActivity(user);
     }
 }

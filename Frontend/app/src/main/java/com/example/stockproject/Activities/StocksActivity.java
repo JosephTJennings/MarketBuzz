@@ -32,7 +32,7 @@ public class StocksActivity extends AppCompatActivity implements recyclerView_in
     ArrayList<StocksModel> stocks = new ArrayList<>();
     private RecyclerView recyclerView;
     private RequestQueue volleyQueue;
-    private String currentUser;
+    private String currentUser, currentType, currentMoney;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stocks);
@@ -42,11 +42,15 @@ public class StocksActivity extends AppCompatActivity implements recyclerView_in
         recyclerView = (RecyclerView) findViewById(R.id.stocksRecycler);
         volleyQueue = Volley.newRequestQueue(StocksActivity.this);
         currentUser = getIntent().getStringExtra("username");
+        currentType = getIntent().getStringExtra("type");
+        currentMoney = getIntent().getStringExtra("money");
         HomeButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.putExtra("username", currentUser);
+                intent.putExtra("type", currentType);
+                intent.putExtra("money", currentMoney);
                 //System.out.println("received and passing back: " + currentUser);
                 startActivity(intent);
             }
@@ -107,6 +111,8 @@ public class StocksActivity extends AppCompatActivity implements recyclerView_in
         stock.putExtra("stockName", stocks.get(position).getStockName());
         stock.putExtra("value", stocks.get(position).getValue());
         stock.putExtra("username", currentUser);
+        stock.putExtra("type", currentType);
+        stock.putExtra("money", currentMoney);
         stock.putExtra("change", stocks.get(position).getChange());
         startActivity(stock);
     }

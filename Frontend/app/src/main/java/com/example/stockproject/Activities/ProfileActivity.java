@@ -35,7 +35,7 @@ public class ProfileActivity extends AppCompatActivity implements recyclerView_i
     private RequestQueue volleyQueue;
     private RecyclerView recyclerView;
     private ArrayList<HoldingsModel> currentHoldings = new ArrayList<>();
-    private String currentUser;
+    private String currentUser, currentType, currentMoney;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
@@ -43,6 +43,8 @@ public class ProfileActivity extends AppCompatActivity implements recyclerView_i
         TextView valuation = findViewById(R.id.text_valuation);
         recyclerView = findViewById(R.id.holdingRecycler);
         currentUser = getIntent().getStringExtra("username");
+        currentType = getIntent().getStringExtra("type");
+        currentMoney = getIntent().getStringExtra("money");
         userName.setText(currentUser);
         valuation.setText("$10000");
         volleyQueue = Volley.newRequestQueue(ProfileActivity.this);
@@ -64,6 +66,8 @@ public class ProfileActivity extends AppCompatActivity implements recyclerView_i
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), OptionsActivity.class);
                 intent.putExtra("username", currentUser);
+                intent.putExtra("type", currentType);
+                intent.putExtra("money", currentMoney);
                 //System.out.println("received and passing back: " + currentUser);
                 startActivity(intent);
             }
@@ -73,6 +77,8 @@ public class ProfileActivity extends AppCompatActivity implements recyclerView_i
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), FollowersActivity.class);
                 intent.putExtra("username", currentUser);
+                intent.putExtra("type", currentType);
+                intent.putExtra("money", currentMoney);
                 //System.out.println("received and passing back: " + currentUser);
                 startActivity(intent);
             }

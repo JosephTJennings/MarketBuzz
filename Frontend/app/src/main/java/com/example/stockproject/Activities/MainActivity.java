@@ -1,10 +1,12 @@
 package com.example.stockproject.Activities;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +17,13 @@ import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
+    //These are for the alert that occurs when the guest tries to press on a button that requires a user...
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
+    private TextView guestMessage;
+    private Button returnToLogin, returnToRegister;
+    private ImageView returnToMain;
+
     private Button leaderboard, logout, stocks, profile, followers, options;
     private TextView user, money;
     private String currentUser, currentMoney, currentType;
@@ -22,16 +31,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        try {
-            currentUser = getIntent().getStringExtra("username");
-//            currentMoney = person.getString("money");
-            currentType = getIntent().getStringExtra("type");
-            if (currentType == null) currentType = person.getString("type");
-        }
-        catch (JSONException e) {
-            currentMoney = "-";
-            currentType = "Guest";
-        }
+        currentUser = getIntent().getStringExtra("username");
+        currentMoney = getIntent().getStringExtra("money");
+        currentType = getIntent().getStringExtra("type");
 //        System.out.println(currentUser);
         leaderboard = (Button) findViewById(R.id.leaderboard_page);
         followers = (Button) findViewById(R.id.followers_page);
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
                 else {
+                    createNewContactDialog("Followers");
                     Toast.makeText(getApplicationContext(), currentUser + " is of type " + currentType + ".", Toast.LENGTH_LONG);
                 }
             }
@@ -68,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), LeaderboardActivity.class);
                 intent.putExtra("username", currentUser);
                 intent.putExtra("type", currentType);
+                intent.putExtra("money", currentMoney);
                 startActivity(intent);
             }
         });
@@ -84,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), OptionsActivity.class);
                 intent.putExtra("username", currentUser);
                 intent.putExtra("type", currentType);
+                intent.putExtra("money", currentMoney);
                 //System.out.println("received and passing back: " + currentUser);
                 startActivity(intent);
             }
@@ -95,11 +100,12 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
                     intent.putExtra("username", currentUser);
                     intent.putExtra("type", currentType);
+                    intent.putExtra("money", currentMoney);
                     //System.out.println("received and passing back: " + currentUser);
                     startActivity(intent);
                 }
                 else {
-                    Toast.makeText(getApplicationContext(), currentUser + " is of type " + currentType + ".", Toast.LENGTH_LONG);
+                    createNewContactDialog("Profile");
                 }
             }
         });
@@ -109,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), StocksActivity.class);
                 intent.putExtra("username", currentUser);
                 intent.putExtra("type", currentType);
+                intent.putExtra("money", currentMoney);
                 //System.out.println("received and passing back: " + currentUser);
                 startActivity(intent);
             }
@@ -118,5 +125,46 @@ public class MainActivity extends AppCompatActivity {
     public boolean checkType(String currentType) {
         if (currentType.equals("Guest")) return false;
         else return true;
+    }
+    public void createNewContactDialog(String name) {
+        dialogBuilder = new AlertDialog.Builder(this);
+        final View contactPopup = getLayoutInflater().inflate(R.layout.popup, null);
+        guestMessage = (TextView) contactPopup.findViewById(R.id.GuestMessage);
+        guestMessage.setText("Cannot access " + name + " due to Guest Access. To access " + name + ", create a new account or login.");
+        returnToLogin = (Button) contactPopup.findViewById(R.id.toLogin);
+        returnToRegister = (Button) contactPopup.findViewById(R.id.toRegister);
+        returnToMain = (ImageView) contactPopup.findViewById(R.id.toMain);
+
+        dialogBuilder.setView(contactPopup);
+        dialog = dialogBuilder.create();
+        dialog.show();
+
+        returnToLogin.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                //System.out.println("received and passing back: " + currentUser);
+                startActivity(intent);
+            }
+        });
+        returnToRegister.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+                //System.out.println("received and passing back: " + currentUser);
+                startActivity(intent);
+            }
+        });
+        returnToMain.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.putExtra("username", currentUser);
+                intent.putExtra("type", currentType);
+                intent.putExtra("money", currentMoney);
+                //System.out.println("received and passing back: " + currentUser);
+                startActivity(intent);
+            }
+        });
     }
 }

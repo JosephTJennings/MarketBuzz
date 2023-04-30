@@ -34,13 +34,15 @@ public class ViewedUserActivity extends AppCompatActivity implements recyclerVie
     private RequestQueue volleyQueue;
     private RecyclerView recyclerView;
     private ArrayList<HoldingsModel> currentHoldings = new ArrayList<>();
-    private String currentUser, viewedUser;
+    private String currentUser, viewedUser, currentMoney, currentType;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vieweduser);
         TextView userName = findViewById(R.id.text_username);
         recyclerView = findViewById(R.id.holdingRecycler);
         currentUser = getIntent().getStringExtra("username");
+        currentType = getIntent().getStringExtra("type");
+        currentMoney = getIntent().getStringExtra("money");
         viewedUser = getIntent().getStringExtra("viewedUser");
         volleyQueue = Volley.newRequestQueue(ViewedUserActivity.this);
         userName.setText(viewedUser);
@@ -50,6 +52,8 @@ public class ViewedUserActivity extends AppCompatActivity implements recyclerVie
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.putExtra("username", currentUser);
+                intent.putExtra("type", currentType);
+                intent.putExtra("money", currentMoney);
                 //System.out.println("received and passing back: " + currentUser);
                 startActivity(intent);
             }
@@ -107,6 +111,8 @@ public class ViewedUserActivity extends AppCompatActivity implements recyclerVie
         stock = new Intent(getApplicationContext(), ManageStockActivity.class);
         stock.putExtra("stockName", currentHoldings.get(position).getTicker());
         stock.putExtra("username", currentUser);
+        stock.putExtra("type", currentType);
+        stock.putExtra("money", currentMoney);
         stock.putExtra("value", Integer.toString(currentHoldings.get(position).getPrice()));
         startActivity(stock);
     }
