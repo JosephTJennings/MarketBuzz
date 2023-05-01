@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,10 +39,12 @@ import app.utils.BasicUtils;
 public class RegisterActivity extends AppCompatActivity {
     private String TAG = RegisterActivity.class.getSimpleName();
     private Button rButton;
-    private EditText usernameInput, passwordInput, passwordCheckInput, firstNameInput, lastNameInput;
+    private EditText usernameInput, passwordInput;
     private TextView errorRegister;
-    private String user, password, checkPassword, firstName, lastName;
+    private String user, password, userType;
     private RequestQueue volleyQueue;
+    private Boolean isAdmin;
+    private Switch userSwitch;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         volleyQueue = Volley.newRequestQueue(RegisterActivity.this);
@@ -52,10 +55,8 @@ public class RegisterActivity extends AppCompatActivity {
         rButton.setOnClickListener(this::attemptCreateUser);
         usernameInput = (EditText) findViewById(R.id.usernameInput);
         passwordInput = (EditText) findViewById(R.id.passwordInput);
-        firstNameInput = (EditText) findViewById(R.id.firstNameInput);
-        lastNameInput = (EditText) findViewById(R.id.lastNameInput);
-        passwordCheckInput = (EditText) findViewById(R.id.passwordCheckInput);
         errorRegister = (TextView) findViewById(R.id.RegisterError);
+        userSwitch = (Switch) findViewById(R.id.userOrAdmin);
 
     }
 
@@ -106,10 +107,8 @@ public class RegisterActivity extends AppCompatActivity {
     private void attemptCreateUser(View v) {
         user = String.valueOf(usernameInput.getText());
         password = String.valueOf(passwordInput.getText());
-        checkPassword = String.valueOf(passwordCheckInput.getText());
-        firstName = String.valueOf(firstNameInput.getText());
-        lastName = String.valueOf(lastNameInput.getText());
-        if (!password.equals(checkPassword)) {}
+        isAdmin = userSwitch.isChecked();
+        userType = (isAdmin ? "Admin" : "User");
         ArrayList<String> credentials = new ArrayList<String>();
         credentials.add(user);
         credentials.add(password);
@@ -117,8 +116,7 @@ public class RegisterActivity extends AppCompatActivity {
         Map<String, String> map = new HashMap<>();
         map.put("username", user);
         map.put("password", password);
-        map.put("firstName", firstName);
-        map.put("lastName", lastName);
+        map.put("type", userType);
         JSONObject obj = new JSONObject(map);
         JsonObjectRequest request = new JsonObjectRequest(com.android.volley.Request.Method.POST, Const.URL + "/people/post", obj, new com.android.volley.Response.Listener<JSONObject>() {
             @Override

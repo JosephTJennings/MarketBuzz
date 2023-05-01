@@ -16,6 +16,8 @@ public class OptionsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_options);
         currentUser = getIntent().getStringExtra("username");
+        currentType = getIntent().getStringExtra("type");
+        currentMoney = getIntent().getStringExtra("money");
 
         HomeButton = (Button) findViewById(R.id.home_button5);
         HomeButton.setOnClickListener(new View.OnClickListener(){

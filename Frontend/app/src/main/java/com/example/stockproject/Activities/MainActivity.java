@@ -24,6 +24,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import app.server.Const;
 
 public class MainActivity extends AppCompatActivity {
@@ -142,14 +145,17 @@ public class MainActivity extends AppCompatActivity {
     }
     public void getUserInfo(String user)
     {
-        String url = Const.URL + "people/data/" + user;
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+        Map<String, String> map = new HashMap<>();
+        map.put("username", user);
+        JSONObject obj = new JSONObject(map);
+        String url = Const.URL + "/username/string/data";
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, obj,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
                             currentType = (String) response.get("type");
-                            currentMoney = (String) response.get("money");
+                            currentMoney = (String) response.get("cashValue");
                         }
                         catch(Exception e) {
                             Log.d("debug", e.toString());
