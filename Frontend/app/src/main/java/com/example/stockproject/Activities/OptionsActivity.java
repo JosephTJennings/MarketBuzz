@@ -11,7 +11,7 @@ import com.example.stockproject.R;
 
 public class OptionsActivity extends AppCompatActivity {
     private Button HomeButton;
-    private String currentUser;
+    private String currentUser, currentType, currentMoney;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_options);
@@ -23,6 +23,8 @@ public class OptionsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.putExtra("username", currentUser);
+                intent.putExtra("type", currentType);
+                intent.putExtra("money", currentMoney);
                 //System.out.println("received and passing back: " + currentUser);
                 startActivity(intent);
             }
