@@ -28,6 +28,8 @@ public class Person {
     private String username;
     private String password;
 
+    private String type;
+
     @JsonManagedReference
     @OneToMany(mappedBy = "username")
     private List<Following> followingList;
