@@ -83,6 +83,17 @@ public class PersonController {
         return null;
     }
 
+    @PostMapping("username/string/data")
+    public Person getPersonInformationByString(@RequestBody String username){
+        List<Person> currentUsers = personRepository.findAll();
+        for (Person t: currentUsers){
+            if (t.getUsername().equals(username)){
+                return t;
+            }
+        }
+        return null;
+    }
+
     @PostMapping("stock/data")
     public StaticStock getStockInformation(@RequestBody StaticStock ticker){
         List<StaticStock> currentStaticStocks = stockRepository.findAll();

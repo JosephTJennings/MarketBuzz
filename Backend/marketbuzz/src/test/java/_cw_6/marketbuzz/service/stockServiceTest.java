@@ -16,7 +16,7 @@ class stockServiceTest {
 
     @Test
     void invoke(){
-        final StockWrapper stock = stockService.findStock("AAPL");
+        final StockWrapper stock = stockService.findStock("AMZN");
         System.out.println(stock.getStock());
 
         try{
