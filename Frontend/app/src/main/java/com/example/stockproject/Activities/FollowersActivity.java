@@ -16,21 +16,23 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.stockproject.Activities.adapter.fol_recyclerView_adapter;
+import com.example.stockproject.Activities.model.FollowersModel;
 import com.example.stockproject.R;
 
 import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import org.json.JSONArray;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import app.server.CustomRequest;
-
+/**
+ * This activity is the Followers Activity. This activity presents a list of users the user can choose from.
+ */
 public class FollowersActivity  extends AppCompatActivity{
     private SearchView search_bar;
     private ArrayList<FollowersModel> availableUsers = new ArrayList<>();
@@ -38,6 +40,13 @@ public class FollowersActivity  extends AppCompatActivity{
     private String currentUser;
     private RequestQueue volleyQueue;
 
+    /**
+     * This method will create all the buttons, textViews, and Strings for the current Activity and set
+     * each button to navigate to their corresponding activities.
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +98,9 @@ public class FollowersActivity  extends AppCompatActivity{
         });
         refreshRecyclerView();
     }
+    /**
+     * This method will produce a POST Request, which adds the users to the recyler view.
+     */
     public void setFollowersModels() {
         //volleyQueue = Volley.newRequestQueue(FollowersActivity.this);
         String url = "http://coms-309-019.class.las.iastate.edu:8080/following/people";
@@ -120,14 +132,21 @@ public class FollowersActivity  extends AppCompatActivity{
         });
         volleyQueue.add(request);
     }
-
+    /**
+     * This method will refresh the recyclerView.
+     */
     public void refreshRecyclerView() {
         fol_recyclerView_adapter adapter = new fol_recyclerView_adapter(FollowersActivity.this, availableUsers);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(FollowersActivity.this));
     }
+
+    /**
+     * This method sends a POST request to follow another person, then adds them to the RecyclerView.
+     * @param usernameToFollow The name of the user
+     * @return 0 if successful, 1 if the requested user does not exist, and 2 if user already follows them
+     */
     public int addFollowers(String usernameToFollow) {
-        // returns 0 if successful, 1 if the requested user does not exist, and 2 if user already follows them
         String url = "http://coms-309-019.class.las.iastate.edu:8080/following/post";
         HashMap<String, String> params = new HashMap<>();
         params.put("username", currentUser);

@@ -14,16 +14,40 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 
+/**
+ * This class creates a custom JSON Request. Mostly used for when trying to send an object and receive back an array.
+ */
 public class CustomRequest extends JsonRequest<JSONArray> {
     protected static final String PROTOCOL_CHARSET = "utf-8";
 
+    /**
+     * This constructor creates a JSON Request with:
+     * @param method the method
+     * @param url the link to connect to
+     * @param requestBody the data being sent to the url
+     * @param listener the object that awaits a response
+     * @param errorListener the object that awaits an error
+     */
     public CustomRequest(int method, String url, @Nullable String requestBody, Response.Listener<JSONArray> listener, @Nullable Response.ErrorListener errorListener) {
         super(method, url, requestBody, listener, errorListener);
     }
+    /**
+     * This constructor creates a JSON "Object" Request, and can receive a JSON Array back
+     * @param method the method
+     * @param url the link to connect to
+     * @param jsonRequest the data being sent to the url
+     * @param listener the object that awaits a response
+     * @param errorListener the object that awaits an error
+     */
     public CustomRequest(int method, String url, JSONObject jsonRequest, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
         super(method, url, (jsonRequest == null) ? null : jsonRequest.toString(), listener, errorListener);
     }
 
+    /**
+     * This class parses the Network Response for the JSON Object or Array.
+     * @param response Response from the network
+     * @return success or error
+     */
     @Override
     protected Response<JSONArray> parseNetworkResponse(NetworkResponse response) {
         try {
