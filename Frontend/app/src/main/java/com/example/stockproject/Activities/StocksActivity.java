@@ -44,7 +44,7 @@ public class StocksActivity extends AppCompatActivity implements recyclerView_in
     ArrayList<StocksModel> stocks = new ArrayList<>();
     private RecyclerView recyclerView;
     private RequestQueue volleyQueue;
-    private String currentUser;
+    private String currentUser, currentType, currentMoney;
     private WebSocketClient webSocketClient;
 
     /**
@@ -63,17 +63,21 @@ public class StocksActivity extends AppCompatActivity implements recyclerView_in
         recyclerView = (RecyclerView) findViewById(R.id.stocksRecycler);
         volleyQueue = Volley.newRequestQueue(StocksActivity.this);
         currentUser = getIntent().getStringExtra("username");
-        HomeButton.setOnClickListener(new View.OnClickListener(){
+        currentType = getIntent().getStringExtra("type");
+        currentMoney = getIntent().getStringExtra("money");
+        HomeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.putExtra("username", currentUser);
+                intent.putExtra("type", currentType);
+                intent.putExtra("money", currentMoney);
                 //System.out.println("received and passing back: " + currentUser);
                 startActivity(intent);
             }
         });
         setStocksModels();
-
+        createWebSocketClient();
         RefreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -151,7 +155,7 @@ public class StocksActivity extends AppCompatActivity implements recyclerView_in
      */
     public void setStocksModels() {
         stocks.clear();
-        String url = Const.URL + "/stock";
+        String url = Const.TEMP_URL + "/stock";
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
                     @Override
