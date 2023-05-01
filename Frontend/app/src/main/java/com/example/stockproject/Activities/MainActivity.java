@@ -4,16 +4,27 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.stockproject.R;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import app.server.Const;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView guestMessage;
     private Button returnToLogin, returnToRegister;
     private ImageView returnToMain;
+    private RequestQueue volleyQueue;
 
     private Button leaderboard, logout, stocks, profile, followers, options;
     private TextView user, money;
@@ -31,7 +43,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        volleyQueue = Volley.newRequestQueue(MainActivity.this);
         currentUser = getIntent().getStringExtra("username");
+        getUserInfo(currentUser);
         currentMoney = getIntent().getStringExtra("money");
         currentType = getIntent().getStringExtra("type");
 //        System.out.println(currentUser);
@@ -125,6 +139,30 @@ public class MainActivity extends AppCompatActivity {
     public boolean checkType(String currentType) {
         if (currentType.equals("Guest")) return false;
         else return true;
+    }
+    public void getUserInfo(String user)
+    {
+        String url = Const.URL + "people/data/" + user;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            currentType = (String) response.get("type");
+                            currentMoney = (String) response.get("money");
+                        }
+                        catch(Exception e) {
+                            Log.d("debug", e.toString());
+                            return;
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+        volleyQueue.add(request);
     }
     public void createNewContactDialog(String name) {
         dialogBuilder = new AlertDialog.Builder(this);
