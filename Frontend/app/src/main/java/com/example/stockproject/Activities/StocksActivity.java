@@ -82,7 +82,7 @@ public class StocksActivity extends AppCompatActivity implements recyclerView_in
             }
         });
         setStocksModels();
-//        createWebSocketClient();
+        createWebSocketClient();
         RefreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,7 +92,7 @@ public class StocksActivity extends AppCompatActivity implements recyclerView_in
 
     }
     private void createWebSocketClient() {
-        String serverUrl = "ws://10.0.2.2:8080/websocket/AMZN";
+        String serverUrl = "ws://10.0.2.2:8080/websocket/allStocks";
         WebSocketManager.getInstance().connect(serverUrl);
         WebSocketManager.getInstance().setWebSocketListener(StocksActivity.this);
     }
