@@ -1,7 +1,8 @@
 package com.example.stockproject;
 import android.content.Intent;
-import androidx.test.ext.rule.ActivityTestRule;
-import androidx.test.ext.runner.AndroidJUnit4;
+import android.support.test.rule.ActivityTestRule;
+
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -11,8 +12,9 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-@RunWith(AndroidJUnit4.class)
+@RunWith(AndroidJUnit4ClassRunner.class)
 public class FollowersActivityTest {
 
     @Rule
