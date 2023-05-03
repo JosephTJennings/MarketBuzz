@@ -86,6 +86,10 @@ public class PersonController {
     @PostMapping("username/string/data")
     public Person getPersonInformationByString(@RequestBody String username){
         List<Person> currentUsers = personRepository.findAll();
+        username = username.split(":")[1];
+        username = username.replaceAll("\"", "");  // String result = input.replaceAll("\"", "");
+        username = username.replaceAll("}", "");
+        username = username.trim();
         for (Person t: currentUsers){
             if (t.getUsername().equals(username)){
                 return t;
@@ -206,9 +210,17 @@ public class PersonController {
     @PostMapping("people/authenticate/register")
     public Message AuthenticateRegistration(@RequestBody String username){
         //find if the user exists in the server
+
         List<Person> currentUsers = personRepository.findAll();
+        username = username.split(":")[1];
+        username = username.replaceAll("\"", "");  // String result = input.replaceAll("\"", "");
+        username = username.replaceAll("}", "");
+        username = username.trim();
+        //System.out.println("given username: " + username + " length: " + username.length());
         //check if the password in the user is equal
         for (Person t: currentUsers){
+//            System.out.println("t.getUsername(): " + t.getUsername() + " length: " + t.getUsername().length());
+//            System.out.println(t.getUsername().equals(username));
             if (t.getUsername().equals(username)){
                 return new Message("failure");
             }
