@@ -1,6 +1,6 @@
 package _cw_6.marketbuzz.model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 import java.util.List;
 

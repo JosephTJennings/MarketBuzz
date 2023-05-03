@@ -60,22 +60,6 @@ public class PersonController {
         return currentlyFollowing;
     }
 
-    @DeleteMapping("person/delete/{username}")
-    public Map<String, Boolean> deletePerson(@PathVariable(value = "username") String username){
-        List<Person> currentUsers = personRepository.findAll();
-        for (Person t: currentUsers){
-            if (t.getUsername().equals(username)){
-                personRepository.delete(t);
-                Map<String, Boolean> response = new HashMap<>();
-                response.put("deleted", Boolean.TRUE);
-                return response;
-            }
-        }
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.FALSE);
-        return response;
-    }
-
     @PostMapping("person/stocks")
     public List<Owns> getOwnedStocks(@RequestBody Person person) {
         List<Owns> currentOwns = ownsRepository.findAll();
