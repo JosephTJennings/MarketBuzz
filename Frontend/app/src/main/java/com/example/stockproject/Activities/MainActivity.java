@@ -41,16 +41,16 @@ public class MainActivity extends AppCompatActivity {
 
     private Button leaderboard, logout, stocks, profile, followers, options;
     private TextView user, money;
-    private String currentUser, currentMoney, currentType;
-    private JSONObject person;
+    private String currentUser, currentMoney, currentType, currentValuation;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         volleyQueue = Volley.newRequestQueue(MainActivity.this);
         currentUser = getIntent().getStringExtra("username");
-        getUserInfo(currentUser);
         currentMoney = getIntent().getStringExtra("money");
         currentType = getIntent().getStringExtra("type");
+        currentValuation = getIntent().getStringExtra("valuation");
+        if (currentMoney == null || currentType == null || currentValuation == null) { getUserInfo(currentUser); }
 //        System.out.println(currentUser);
         leaderboard = (Button) findViewById(R.id.leaderboard_page);
         followers = (Button) findViewById(R.id.followers_page);
@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), FollowersActivity.class);
                     intent.putExtra("username", currentUser);
                     intent.putExtra("type", currentType);
+                    intent.putExtra("valuation", currentValuation);
                     //System.out.println("received and passing back: " + currentUser);
                     startActivity(intent);
                 }
@@ -89,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("username", currentUser);
                 intent.putExtra("type", currentType);
                 intent.putExtra("money", currentMoney);
+                intent.putExtra("valuation", currentValuation);
                 startActivity(intent);
             }
         });
@@ -106,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("username", currentUser);
                 intent.putExtra("type", currentType);
                 intent.putExtra("money", currentMoney);
+                intent.putExtra("valuation", currentValuation);
                 //System.out.println("received and passing back: " + currentUser);
                 startActivity(intent);
             }
@@ -118,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
                     intent.putExtra("username", currentUser);
                     intent.putExtra("type", currentType);
                     intent.putExtra("money", currentMoney);
+                    intent.putExtra("valuation", currentValuation);
                     //System.out.println("received and passing back: " + currentUser);
                     startActivity(intent);
                 }
@@ -133,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("username", currentUser);
                 intent.putExtra("type", currentType);
                 intent.putExtra("money", currentMoney);
+                intent.putExtra("valuation", currentValuation);
                 //System.out.println("received and passing back: " + currentUser);
                 startActivity(intent);
             }
@@ -156,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             currentType = (String) response.get("type");
                             currentMoney = (String) response.get("cashValue");
+                            currentValuation = (String) response.get("totalValue");
                         }
                         catch(Exception e) {
                             Log.d("debug", e.toString());
@@ -206,6 +212,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("username", currentUser);
                 intent.putExtra("type", currentType);
                 intent.putExtra("money", currentMoney);
+                intent.putExtra("valuation", currentValuation);
                 //System.out.println("received and passing back: " + currentUser);
                 startActivity(intent);
             }

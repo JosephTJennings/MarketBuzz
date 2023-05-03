@@ -35,7 +35,7 @@ public class ProfileActivity extends AppCompatActivity implements recyclerView_i
     private RequestQueue volleyQueue;
     private RecyclerView recyclerView;
     private ArrayList<HoldingsModel> currentHoldings = new ArrayList<>();
-    private String currentUser, currentType, currentMoney;
+    private String currentUser, currentType, currentMoney, currentValuation;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
@@ -45,8 +45,20 @@ public class ProfileActivity extends AppCompatActivity implements recyclerView_i
         currentUser = getIntent().getStringExtra("username");
         currentType = getIntent().getStringExtra("type");
         currentMoney = getIntent().getStringExtra("money");
+        if (currentUser == null) {
+            currentUser = "srhusted";
+        }
+        if (currentMoney == null) {
+            currentMoney = "$1000.00";
+        }
+        if (currentType == null) {
+            currentType = "Admin";
+        }
+        if (currentValuation == null) {
+            currentValuation = "$1000.00";
+        }
         userName.setText(currentUser);
-        valuation.setText("$10000");
+        valuation.setText(currentValuation); //TODO: VALUATION FOR THE USER
         volleyQueue = Volley.newRequestQueue(ProfileActivity.this);
 
         Button options = findViewById(R.id.button_options);
@@ -57,6 +69,9 @@ public class ProfileActivity extends AppCompatActivity implements recyclerView_i
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.putExtra("username", currentUser);
+                intent.putExtra("type", currentType);
+                intent.putExtra("money", currentMoney);
+                intent.putExtra("valuation", currentValuation);
                 //System.out.println("received and passing back: " + currentUser);
                 startActivity(intent);
             }
@@ -68,6 +83,7 @@ public class ProfileActivity extends AppCompatActivity implements recyclerView_i
                 intent.putExtra("username", currentUser);
                 intent.putExtra("type", currentType);
                 intent.putExtra("money", currentMoney);
+                intent.putExtra("valuation", currentValuation);
                 //System.out.println("received and passing back: " + currentUser);
                 startActivity(intent);
             }
@@ -79,6 +95,7 @@ public class ProfileActivity extends AppCompatActivity implements recyclerView_i
                 intent.putExtra("username", currentUser);
                 intent.putExtra("type", currentType);
                 intent.putExtra("money", currentMoney);
+                intent.putExtra("valuation", currentValuation);
                 //System.out.println("received and passing back: " + currentUser);
                 startActivity(intent);
             }

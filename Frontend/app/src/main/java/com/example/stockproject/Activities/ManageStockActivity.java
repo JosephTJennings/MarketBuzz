@@ -40,7 +40,7 @@ public class ManageStockActivity extends AppCompatActivity {
     private Button homeButton, stocksButton, buyStocks, sellStocks;
     private TextView stockName, stockPrice, currMoney, currentNumStock;
     private ImageView change;
-    private String currentUser, currentStock, value, currentMoney, currentType;
+    private String currentUser, currentStock, value, currentMoney, currentType, currentValuation;
     private int currentChange;
     private EditText numStks;
     private RequestQueue volleyQueue;
@@ -49,12 +49,22 @@ public class ManageStockActivity extends AppCompatActivity {
         setContentView(R.layout.activity_managestock);
         volleyQueue = Volley.newRequestQueue(ManageStockActivity.this);
         currentUser = getIntent().getStringExtra("username");
-        if (currentUser == null) {
-            currentUser = "srhusted";
-        }
         //TODO: get value and change by using POST Request for stock
         currentMoney = getIntent().getStringExtra("money");
         currentType = getIntent().getStringExtra("type");
+        currentValuation = getIntent().getStringExtra("valuation");
+        if (currentUser == null) {
+            currentUser = "srhusted";
+        }
+        if (currentMoney == null) {
+            currentMoney = "$1000.00";
+        }
+        if (currentType == null) {
+            currentType = "Admin";
+        }
+        if (currentValuation == null) {
+            currentValuation = "$1000.00";
+        }
         value = getIntent().getStringExtra("value");
         currentChange = getIntent().getIntExtra("change", R.drawable.baseline_neutral_24);
         currentStock = getIntent().getStringExtra("stockName");
@@ -80,6 +90,7 @@ public class ManageStockActivity extends AppCompatActivity {
                 intent.putExtra("username", currentUser);
                 intent.putExtra("type", currentType);
                 intent.putExtra("money", currentMoney);
+                intent.putExtra("valuation", currentValuation);
                 startActivity(intent);
             }
         });
@@ -91,6 +102,7 @@ public class ManageStockActivity extends AppCompatActivity {
                 intent.putExtra("username", currentUser);
                 intent.putExtra("type", currentType);
                 intent.putExtra("money", currentMoney);
+                intent.putExtra("valuation", currentValuation);
                 startActivity(intent);
             }
         });

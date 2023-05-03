@@ -35,7 +35,7 @@ public class FollowersActivity  extends AppCompatActivity{
     private SearchView search_bar;
     private ArrayList<FollowersModel> availableUsers = new ArrayList<>();
     private RecyclerView recyclerView;
-    private String currentUser;
+    private String currentUser, currentType, currentMoney, currentValuation;
     private RequestQueue volleyQueue;
 
     @Override
@@ -44,6 +44,21 @@ public class FollowersActivity  extends AppCompatActivity{
         setContentView(R.layout.activity_followers);
 
         currentUser = getIntent().getStringExtra("username");
+        currentType = getIntent().getStringExtra("type");
+        currentMoney = getIntent().getStringExtra("money");
+        currentValuation = getIntent().getStringExtra("valuation");
+        if (currentUser == null) {
+            currentUser = "srhusted";
+        }
+        if (currentMoney == null) {
+            currentMoney = "$1000.00";
+        }
+        if (currentType == null) {
+            currentType = "Admin";
+        }
+        if (currentValuation == null) {
+            currentValuation = "$1000.00";
+        }
         recyclerView = findViewById(R.id.recycle_followers);
         volleyQueue = Volley.newRequestQueue(FollowersActivity.this);
 
@@ -54,6 +69,9 @@ public class FollowersActivity  extends AppCompatActivity{
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.putExtra("username", currentUser);
+                intent.putExtra("type", currentType);
+                intent.putExtra("money", currentMoney);
+                intent.putExtra("valuation", currentValuation);
                 startActivity(intent);
             }
         });

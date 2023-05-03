@@ -156,8 +156,6 @@ public class RegisterActivity extends AppCompatActivity {
             //TODO: Add a switch case for all the different types of users
             Intent main = new Intent(this, MainActivity.class);
             main.putExtra("username", user);
-//            main.putExtra("password", password);
-            main = new Intent(this, MainActivity.class);
             startActivity(main);
         }
         catch (Exception e) {
