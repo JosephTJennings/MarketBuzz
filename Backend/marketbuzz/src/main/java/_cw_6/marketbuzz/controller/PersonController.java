@@ -186,6 +186,8 @@ public class PersonController {
     Person PostUserByBody(@RequestBody Person newPerson){
         List<Following> list = new ArrayList<Following>();
         newPerson.setFollowingList(list);
+        newPerson.setCashValue(10000);
+        newPerson.setTotalValue(10000);
         personRepository.save(newPerson);
         return newPerson;
     }
