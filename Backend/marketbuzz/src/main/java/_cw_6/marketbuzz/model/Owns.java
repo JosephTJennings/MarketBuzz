@@ -1,7 +1,7 @@
 package _cw_6.marketbuzz.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
+import javax.persistence.*;
 @Entity
 public class Owns {
 
