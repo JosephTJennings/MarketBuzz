@@ -3,6 +3,8 @@ package _cw_6.marketbuzz.service;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import javax.websocket.OnClose;
@@ -28,17 +30,27 @@ public class stockEndpoint {
 
     @OnOpen
     public void onOpen(Session session, @PathParam("ticker") String ticker) throws IOException {
- 
+        System.out.println("made it into the socket");
         this.session = session;
         stockEndpoints.add(this);
 
         currentStock = stockService.findStock(ticker);
+        Timer timer = new Timer();
+        int begin = 0;
+        int timeInterval = 1000;
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                StockWrapper stock = stockService.findStock(ticker);
+                System.out.println(stock.getStock().getSymbol());
+            }
+        }, begin, timeInterval);
     }
 
-    @OnMessage
-    public void onMessage(Session session, StockWrapper stock) throws IOException {
-        // Handle new messages
-    }
+//    @OnMessage
+//    public void onMessage(Session session, StockWrapper stock) throws IOException {
+//        // Handle new messages
+//    }
 
     @OnClose
     public void onClose(Session session) throws IOException {
