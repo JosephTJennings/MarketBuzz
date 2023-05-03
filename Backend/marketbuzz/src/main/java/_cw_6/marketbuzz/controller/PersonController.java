@@ -10,8 +10,6 @@ import _cw_6.marketbuzz.repository.FollowingRepository;
 import _cw_6.marketbuzz.repository.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.domain.Sort;
 
 import java.util.*;
 
@@ -61,9 +59,6 @@ public class PersonController {
         }
         return currentlyFollowing;
     }
-
-    @GetMapping("leaderboard")
-    List<Person> getLeaderboard(){return personRepository.findAll(Sort.by(Direction.DESC, "totalValue"));}
 
     @DeleteMapping("person/delete/{username}")
     public Map<String, Boolean> deletePerson(@PathVariable(value = "username") String username){
