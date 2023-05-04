@@ -9,6 +9,8 @@ import _cw_6.marketbuzz.repository.PersonRepository;
 import _cw_6.marketbuzz.repository.FollowingRepository;
 import _cw_6.marketbuzz.repository.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -122,6 +124,26 @@ public class PersonController {
         }
         return null;
     }
+
+    @GetMapping("leaderboard")
+    List<Person> getLeaderboard(){return personRepository.findAll(Sort.by(Direction.DESC, "totalValue"));}
+
+    @DeleteMapping("person/delete/{username}")
+    public Map<String, Boolean> deletePerson(@PathVariable(value = "username") String username){
+        List<Person> currentUsers = personRepository.findAll();
+        for (Person t: currentUsers){
+            if (t.getUsername().equals(username)){
+                personRepository.delete(t);
+                Map<String, Boolean> response = new HashMap<>();
+                response.put("deleted", Boolean.TRUE);
+                return response;
+            }
+        }
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.FALSE);
+        return response;
+    }
+
 
 //    @PostMapping("people/stocks/buy")
 //    Owns PostBuyingStockByBody(@RequestBody String ticker, @RequestBody String username, @RequestBody String quantity){
