@@ -17,7 +17,7 @@ import java.util.*;
 
 @RestController
 public class PersonController {
-
+//Need more info 
     @Autowired
     PersonRepository personRepository;
 
@@ -213,7 +213,7 @@ public class PersonController {
         personRepository.save(newPerson);
         return newPerson;
     }
-    @PostMapping("people/authenticate")
+    @PostMapping("people/authenticate")//x
     public Message AuthenticateLogin(@RequestBody Person p){
         //find if the user exists in the server
         List<Person> currentUsers = personRepository.findAll();
