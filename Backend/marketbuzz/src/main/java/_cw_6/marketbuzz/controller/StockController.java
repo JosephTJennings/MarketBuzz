@@ -3,12 +3,11 @@ package _cw_6.marketbuzz.controller;
 import _cw_6.marketbuzz.model.StaticStock;
 import _cw_6.marketbuzz.repository.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class StockController {
@@ -27,6 +26,28 @@ public class StockController {
         newStaticStock.setCurrVal(currVal);
         stockRepository.save(newStaticStock);
         return newStaticStock;
+    }
+
+    @PostMapping("stock/post")
+    StaticStock PostStockByBody(@RequestBody StaticStock staticStock){
+        stockRepository.save(staticStock);
+        return staticStock;
+    }
+
+    @DeleteMapping("stock/delete/{ticker}")
+    public Map<String, Boolean> DeleteStockByTicker(@PathVariable(value = "ticker") String ticker){
+        List<StaticStock> currentStocks = stockRepository.findAll();
+        for (StaticStock s : currentStocks){
+            if (s.getTicker().equals(ticker)){
+                stockRepository.delete(s);
+                Map<String, Boolean> response = new HashMap<>();
+                response.put("deleted", Boolean.TRUE);
+                return response;
+            }
+        }
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.FALSE);
+        return response;
     }
 
 }
