@@ -31,7 +31,72 @@ public class PersonControllerTest {
 
     @Test
     public void followingTest(){
-        System.out.println("test");
+        JSONObject cre = new JSONObject();
+        try{
+            cre.put("username", "testRandom");
+            cre.put("type", "admin");
+            cre.put("password", "1");
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
+
+        JSONObject cre2 = new JSONObject();
+        try{
+            cre.put("username", "testRandom2");
+            cre.put("type", "admin");
+            cre.put("password", "1");
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
+
+        Response create = RestAssured.given().
+                header("Content-Type","application/json" ).
+                header("Accept","application/json" ).
+                body(cre.toString()).
+                when().
+                post("/people/post");
+        Response create2 = RestAssured.given().
+                header("Content-Type","application/json" ).
+                header("Accept","application/json" ).
+                body(cre2.toString()).
+                when().
+                post("/people/post");
+
+
+        JSONObject fol = new JSONObject();
+        try{
+            cre.put("username", "testRandom");
+            cre.put("followingUser", "testRandom2");
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
+        Response follow = RestAssured.given().
+                header("Content-Type","application/json" ).
+                header("Accept","application/json" ).
+                body(cre2.toString()).
+                when().
+                post("/following/post");
+
+        String returnString = follow.getBody().asString();
+         try {
+             JSONObject returnObj = new JSONObject(returnString);
+             assertEquals(returnObj.get("followingUser"), "testRandom2");
+         } catch (JSONException e) {
+             e.printStackTrace();
+         }
+
+        Response del = RestAssured.given().
+                header("Content-Type","application/json" ).
+                header("Accept","application/json" ).
+                body("").
+                when().
+                delete("/person/delete/{username}", "testRandom");
+        Response del2 = RestAssured.given().
+                header("Content-Type","application/json" ).
+                header("Accept","application/json" ).
+                body("").
+                when().
+                delete("/person/delete/{username}", "testRandom2");
     }
 
     // @Test
