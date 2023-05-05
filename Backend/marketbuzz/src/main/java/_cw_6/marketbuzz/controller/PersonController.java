@@ -191,7 +191,7 @@ public class PersonController {
     @PostMapping("people/stocks/sell")
     Owns PostSellStockByBody(@RequestBody Owns request){
         Person user = getPersonInformation(request.getOwner());
-        StaticStock staticStock = getStockInformation(request.getStock());
+        StaticStock staticStock = getStockInformation(getStockInformationByString(request.getTicker()));
         List<Owns> ownsList = ownsRepository.findAll();
         for(Owns o : ownsList) {
             Person p = o.getOwner();
