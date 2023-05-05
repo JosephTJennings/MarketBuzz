@@ -101,4 +101,17 @@ public class OwnsRelationshipTest {
                 when().
                 delete("/stock/delete/{ticker}", "AAPL");
     }
+
+    @Test
+    public void getOwns(){
+        Response testOwning = RestAssured.given().
+                header("Content-Type","application/json" ).
+                header("Accept","application/json" ).
+                body("").
+                when().
+                get("owns");
+
+        int tmpCode = testOwning.getStatusCode();
+        assertEquals(200, tmpCode);
+    }
 }
