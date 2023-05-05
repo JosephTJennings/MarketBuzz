@@ -47,11 +47,6 @@ public class stockEndpoint {
         }, begin, timeInterval);
     }
 
-//    @OnMessage
-//    public void onMessage(Session session, StockWrapper stock) throws IOException {
-//        // Handle new messages
-//    }
-
     @OnClose
     public void onClose(Session session) throws IOException {
         // WebSocket connection closes

@@ -12,6 +12,16 @@ public class Owns {
 
     private int quantity;
 
+    public String getTicker() {
+        return tick;
+    }
+
+    public void setTicker(String ticker) {
+        this.tick = ticker;
+    }
+
+    private String tick;
+
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "username")
@@ -24,6 +34,7 @@ public class Owns {
 
 
     public Owns(Person owner, StaticStock staticStock, String quantity){
+        System.out.println("trying to create an owns");
         this.owner = owner;
         this.staticStock = staticStock;
         this.quantity = Integer.valueOf(quantity);

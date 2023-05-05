@@ -17,7 +17,7 @@ import java.util.*;
 
 @RestController
 public class PersonController {
-
+//Need more info 
     @Autowired
     PersonRepository personRepository;
 
@@ -40,7 +40,7 @@ public class PersonController {
     @GetMapping("owns")
     List<Owns> GetAllOwns(){return ownsRepository.findAll();}
 
-    @PostMapping("following/people")
+    @PostMapping("following/people") //X
     List<Following> getCurrentFollowing(@RequestBody Person person) {
         List<Following> activeFollowing = new ArrayList<>();
         List<Following> allFollowing = followingRepository.findAll();
@@ -111,7 +111,18 @@ public class PersonController {
         return null;
     }
 
-    @PostMapping("following/post")
+    @PostMapping("stock/data/string")
+    public StaticStock getStockInformationByString(@RequestBody String ticker){
+        List<StaticStock> currentStaticStocks = stockRepository.findAll();
+        for (StaticStock s: currentStaticStocks){
+            if (s.getTicker().equals(ticker)){
+                return s;
+            }
+        }
+        return null;
+    }
+
+    @PostMapping("following/post") //X
     Following PostFollowingByBody(@RequestBody Following newFollowing) {
         List<Person> allPeople = personRepository.findAll();
         for(Person people : allPeople) {
@@ -128,7 +139,7 @@ public class PersonController {
     @GetMapping("leaderboard")
     List<Person> getLeaderboard(){return personRepository.findAll(Sort.by(Direction.DESC, "totalValue"));}
 
-    @DeleteMapping("person/delete/{username}")
+    @DeleteMapping("person/delete/{username}") //X
     public Map<String, Boolean> deletePerson(@PathVariable(value = "username") String username){
         List<Person> currentUsers = personRepository.findAll();
         for (Person t: currentUsers){
@@ -149,8 +160,10 @@ public class PersonController {
 //    Owns PostBuyingStockByBody(@RequestBody String ticker, @RequestBody String username, @RequestBody String quantity){
     @PostMapping("people/stocks/buy")
     Owns PostBuyingStockByBody(@RequestBody Owns request){
+
+        //System.out.println(request);
         Person user = getPersonInformation(request.getOwner());
-        StaticStock staticStock = getStockInformation(request.getStock());
+        StaticStock staticStock = getStockInformation(getStockInformationByString(request.getTicker()));
         List<Owns> ownsList = ownsRepository.findAll();
         for(Owns o : ownsList) {
             Person p = o.getOwner();
@@ -178,7 +191,7 @@ public class PersonController {
     @PostMapping("people/stocks/sell")
     Owns PostSellStockByBody(@RequestBody Owns request){
         Person user = getPersonInformation(request.getOwner());
-        StaticStock staticStock = getStockInformation(request.getStock());
+        StaticStock staticStock = getStockInformation(getStockInformationByString(request.getTicker()));
         List<Owns> ownsList = ownsRepository.findAll();
         for(Owns o : ownsList) {
             Person p = o.getOwner();
@@ -204,7 +217,7 @@ public class PersonController {
         return null;
     }
 
-    @PostMapping("people/post")
+    @PostMapping("people/post") //X
     Person PostUserByBody(@RequestBody Person newPerson){
         List<Following> list = new ArrayList<Following>();
         newPerson.setFollowingList(list);
@@ -213,7 +226,7 @@ public class PersonController {
         personRepository.save(newPerson);
         return newPerson;
     }
-    @PostMapping("people/authenticate")
+    @PostMapping("people/authenticate")//x
     public Message AuthenticateLogin(@RequestBody Person p){
         //find if the user exists in the server
         List<Person> currentUsers = personRepository.findAll();
@@ -231,7 +244,7 @@ public class PersonController {
         return new Message("failure");
     }
 
-    @PostMapping("people/authenticate/register")
+    @PostMapping("people/authenticate/register") //x
     public Message AuthenticateRegistration(@RequestBody String username){
         //find if the user exists in the server
 

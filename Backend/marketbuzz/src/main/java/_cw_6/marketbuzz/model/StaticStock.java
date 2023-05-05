@@ -1,5 +1,6 @@
 package _cw_6.marketbuzz.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -16,13 +17,16 @@ public class StaticStock {
 
     private float diff;
 
+
     @OneToMany(mappedBy = "staticStock")
     private List<Owns> stocksOwnedList;
 
     public StaticStock() {
+        System.out.println("Printing from the default static stock constructor");
     }
 
     public StaticStock(String s){
+        System.out.println("Printing " + s + " from the static stock constructor");
         this.ticker = s;
     }
 
