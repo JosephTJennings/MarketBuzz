@@ -161,7 +161,7 @@ public class PersonController {
     @PostMapping("people/stocks/buy")
     Owns PostBuyingStockByBody(@RequestBody Owns request){
 
-        //System.out.println(request);
+        System.out.println("buying a stock");
         Person user = getPersonInformation(request.getOwner());
         StaticStock staticStock = getStockInformation(getStockInformationByString(request.getTicker()));
         List<Owns> ownsList = ownsRepository.findAll();
@@ -172,8 +172,8 @@ public class PersonController {
                 if (p.getCashValue() >= (s.getCurrVal() * Integer.valueOf(request.getQuantity()))) {
                     System.out.println("o.getQuantity(): " + o.getQuantity());
                     System.out.println("request.getQuantity(): " + request.getQuantity());
-                    int diff = Integer.valueOf(request.getQuantity() + o.getQuantity());
-                    System.out.println("o.setQuantity(): " + diff);
+                    float diff = (p.getCashValue() - (s.getCurrVal() * (request.getQuantity())));
+                    System.out.println("p.setCashValue(): " + diff);
                     o.setQuantity(Integer.valueOf(request.getQuantity() + o.getQuantity()));
                     p.setCashValue(p.getCashValue() - (s.getCurrVal() * Integer.valueOf(request.getQuantity())));
                     user.addStock(o);
@@ -185,6 +185,9 @@ public class PersonController {
                 }
             }
         }
+        //request.setQuantity(Integer.valueOf(request.getQuantity() + o.getQuantity()));
+        user.setCashValue(user.getCashValue() - (staticStock.getCurrVal() * Integer.valueOf(request.getQuantity())));
+
         request.setOwner(user);
         request.setOwnedStock(staticStock);
         user.addStock(request);
@@ -210,7 +213,7 @@ public class PersonController {
 
                     //System.out.println("o.setQuantity(): " + diff);
                     o.setQuantity(Integer.valueOf(o.getQuantity()) - Integer.valueOf(request.getQuantity()));
-                    p.setCashValue(p.getCashValue() + (s.getCurrVal()*Float.valueOf(request.getQuantity())));
+                    p.setCashValue(p.getCashValue() + (s.getCurrVal()*Integer.valueOf(request.getQuantity())));
                     user.addStock(o);
                     personRepository.save(p);
                     ownsRepository.save(o);
@@ -233,8 +236,10 @@ public class PersonController {
     Person PostUserByBody(@RequestBody Person newPerson){
         List<Following> list = new ArrayList<Following>();
         newPerson.setFollowingList(list);
-        newPerson.setCashValue(10000);
-        newPerson.setTotalValue(10000);
+        int val = 10000;
+        if (newPerson.getType().equals("Admin")) val = 15000;
+        newPerson.setCashValue(val);
+        newPerson.setTotalValue(val);
         personRepository.save(newPerson);
         return newPerson;
     }
