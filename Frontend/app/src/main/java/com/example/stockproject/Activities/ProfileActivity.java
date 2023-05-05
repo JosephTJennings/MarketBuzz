@@ -119,11 +119,11 @@ public class ProfileActivity extends AppCompatActivity implements recyclerView_i
 
                                 int rank = i + 1;
                                 String ticker = holding.getString("stockTicker");
-                                int price = holding.getJSONObject("stock").getInt("currVal");
+                                double price = holding.getJSONObject("stock").getInt("currVal");
                                 int quantity = holding.getInt("quantity");
-                                int total = quantity * price;
+                                double total = quantity * price;
                                 TextView valuation = findViewById(R.id.text_valuation);
-                                int currentCash = Integer.valueOf(valuation.getText().toString().substring(1));
+                                double currentCash = Double.valueOf(valuation.getText().toString().substring(1));
                                 valuation.setText("$" + String.valueOf(currentCash - total));
 
                                 HoldingsModel newHolding = new HoldingsModel(rank, ticker, price, quantity, total);
@@ -154,7 +154,7 @@ public class ProfileActivity extends AppCompatActivity implements recyclerView_i
         stock = new Intent(getApplicationContext(), ManageStockActivity.class);
         stock.putExtra("stockName", currentHoldings.get(position).getTicker());
         stock.putExtra("username", currentUser);
-        stock.putExtra("value", Integer.toString(currentHoldings.get(position).getPrice()));
+        stock.putExtra("value", Double.toString(currentHoldings.get(position).getPrice()));
         startActivity(stock);
     }
 }

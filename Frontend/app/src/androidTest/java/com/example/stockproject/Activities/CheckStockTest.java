@@ -60,7 +60,7 @@ public class CheckStockTest {
             new ActivityScenarioRule<>(LoginActivity.class);
 
     @Test
-    public void checkStockTest() throws IOException {
+    public void checkStockTest() throws IOException, InterruptedException {
         BasicUtils.postMethod("http://coms-309-019.class.las.iastate.edu:8080/stock/post/TEMP/50");
 
         //Create first user
@@ -69,6 +69,7 @@ public class CheckStockTest {
         onView(withId(R.id.passwordInput)).perform(typeText(firstPassword), closeSoftKeyboard());
         onView(withId(R.id.userOrAdmin)).perform(click());
         onView(withId(R.id.registerButton)).perform(click());
+        Thread.sleep(2000);
 
         //Find Stock
         onView(withId(R.id.stocks_page)).perform(click());
@@ -83,7 +84,12 @@ public class CheckStockTest {
         onView(withId(R.id.sellStocks)).perform(click());
         onView(withId(R.id.home_button7)).perform(click());
         onView(withId(R.id.profile_page)).perform(click());
-
+        onView(withId(R.id.holdingRecycler))
+                .perform(RecyclerViewActions.actionOnItem(
+                        hasDescendant(withText("TEMP")),
+                        click()));
+        onView(withId(R.id.home_button7));
+        Thread.sleep(10000);
 //        BasicUtils.postMethod("http://coms-309-019.class.las.iastate.edu:8080/person/delete" + firstUser);
 
 

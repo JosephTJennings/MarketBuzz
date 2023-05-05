@@ -65,7 +65,7 @@ public class AddFollowerTest {
             new ActivityScenarioRule<>(LoginActivity.class);
 
     @Test
-    public void addFollowerTest() throws IOException {
+    public void addFollowerTest() throws IOException, InterruptedException {
 
         //Create first user
         onView(withId(R.id.RegisterButton)).perform(click());
@@ -73,6 +73,7 @@ public class AddFollowerTest {
         onView(withId(R.id.passwordInput)).perform(typeText(firstPassword), closeSoftKeyboard());
         onView(withId(R.id.userOrAdmin)).perform(click());
         onView(withId(R.id.registerButton)).perform(click());
+        Thread.sleep(4000);
 
         onView(withId(R.id.logout_page)).perform(click());
 
@@ -82,6 +83,7 @@ public class AddFollowerTest {
         onView(withId(R.id.passwordInput)).perform(typeText(secondPassword), closeSoftKeyboard());
         onView(withId(R.id.userOrAdmin)).perform(click());
         onView(withId(R.id.registerButton)).perform(click());
+        Thread.sleep(4000);
 
         //Follow the second user with the first user
         onView(withId(R.id.followers_page)).perform(click());
@@ -89,8 +91,9 @@ public class AddFollowerTest {
         onView(withId(R.id.refresh_button)).perform(click());
         onView(withId(R.id.home_button)).perform(click());
         onView(withId(R.id.followers_page)).perform(click());
-        BasicUtils.deleteMethod("http://coms-309-019.class.las.iastate.edu:8080/person/delete" + firstUser);
-        BasicUtils.deleteMethod("http://coms-309-019.class.las.iastate.edu:8080/person/delete" + secondUser);
+        Thread.sleep(10000);
+//        BasicUtils.deleteMethod("http://coms-309-019.class.las.iastate.edu:8080/person/delete" + firstUser);
+//        BasicUtils.deleteMethod("http://coms-309-019.class.las.iastate.edu:8080/person/delete" + secondUser);
 //        onView(ViewMatchers.withId(R.id.recycle_followers))
 //                .perform(RecyclerViewActions.scrollTo(
 //                hasDescendant(withText(firstUser))));

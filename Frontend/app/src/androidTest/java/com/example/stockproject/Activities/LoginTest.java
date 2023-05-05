@@ -30,13 +30,14 @@ public class LoginTest {
     public ActivityScenarioRule<LoginActivity> mActivityScenarioRule =
             new ActivityScenarioRule<>(LoginActivity.class);
     @Test
-    public void loginTest() throws IOException {
+    public void loginTest() throws IOException, InterruptedException {
         //Create first user
         onView(withId(R.id.RegisterButton)).perform(click());
         onView(withId(R.id.usernameInput)).perform(typeText(firstUser), closeSoftKeyboard());
         onView(withId(R.id.passwordInput)).perform(typeText(firstPassword), closeSoftKeyboard());
         onView(withId(R.id.userOrAdmin)).perform(click());
         onView(withId(R.id.registerButton)).perform(click());
+        Thread.sleep(2000);
         onView(withId(R.id.logout_page)).perform(click());
         onView(withId(R.id.UsernameInput)).perform(typeText(firstUser), closeSoftKeyboard());
         onView(withId(R.id.PasswordInput)).perform(typeText(firstPassword), closeSoftKeyboard());

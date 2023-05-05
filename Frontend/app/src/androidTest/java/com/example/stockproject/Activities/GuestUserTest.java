@@ -74,7 +74,7 @@ public class GuestUserTest {
         onView(withId(R.id.stocks_page)).perform(click());
         onView(withId(R.id.stocksRecycler))
                 .perform(RecyclerViewActions.actionOnItem(
-                        hasDescendant(withText("WERP")),
+                        hasDescendant(withText("TEMP")),
                         click()));
         onView(withId(R.id.numStocks)).perform(typeText("1"), closeSoftKeyboard());
         onView(withId(R.id.buyStocks)).perform(click());

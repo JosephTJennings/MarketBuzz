@@ -113,7 +113,7 @@ public class ViewedUserActivity extends AppCompatActivity implements recyclerVie
         stock.putExtra("username", currentUser);
         stock.putExtra("type", currentType);
         stock.putExtra("money", currentMoney);
-        stock.putExtra("value", Integer.toString(currentHoldings.get(position).getPrice()));
+        stock.putExtra("value", Double.toString(currentHoldings.get(position).getPrice()));
         startActivity(stock);
     }
 }

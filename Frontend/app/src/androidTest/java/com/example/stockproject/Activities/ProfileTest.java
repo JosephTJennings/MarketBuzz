@@ -38,6 +38,6 @@ public class ProfileTest {
         onView(withId(R.id.userOrAdmin)).perform(click());
         onView(withId(R.id.registerButton)).perform(click());
         onView(withId(R.id.profile_page)).perform(click());
-        BasicUtils.postMethod("http://coms-309-019.class.las.iastate.edu:8080/person/delete" + firstUser);
+//        BasicUtils.postMethod("http://coms-309-019.class.las.iastate.edu:8080/person/delete" + firstUser);
     }
 }

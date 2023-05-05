@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             currentType = (String) response.get("type");
-                            currentMoney = (String) response.get("cashValue");
+                            currentMoney = response.get("cashValue") + "";
                             currentValuation = (String) response.get("totalValue");
                         }
                         catch(Exception e) {

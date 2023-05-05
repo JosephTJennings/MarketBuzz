@@ -2,13 +2,13 @@ package com.example.stockproject.Activities;
 
 public class HoldingsModel {
     String ticker;
-    int price;
+    double price;
     int quantity;
 
     int rank;
-    int total;
+    double total;
 
-    public HoldingsModel(int rank, String ticker, int price, int quantity, int total) {
+    public HoldingsModel(int rank, String ticker, double price, int quantity, double total) {
         this.ticker = ticker;
         this.price = price;
         this.quantity = quantity;
@@ -24,7 +24,7 @@ public class HoldingsModel {
         this.rank = rank;
     }
 
-    public int getTotal() {
+    public double getTotal() {
         return total;
     }
 
@@ -40,7 +40,7 @@ public class HoldingsModel {
         this.ticker = ticker;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
