@@ -3,6 +3,7 @@ package _cw_6.marketbuzz.controller;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -89,7 +90,24 @@ public class PersonControllerTest {
              e.printStackTrace();
          }
 
-        Response del = RestAssured.given().
+        Response followVerif =RestAssured.given().
+                header("Content-Type","application/json" ).
+                header("Accept","application/json" ).
+                body(fol.toString()).
+                when().
+                post("/following/people");
+         assertEquals(200, followVerif.getStatusCode());
+        String verifFol = followVerif.getBody().asString();
+        System.out.println("VERIFY" + verifFol);
+        try {
+            JSONArray returnArr = new JSONArray(verifFol);
+            JSONObject testObj = (JSONObject) returnArr.get(0);
+            assertEquals(testObj.get("followingUser"), "testRandom2");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+         Response del = RestAssured.given().
                 header("Content-Type","application/json" ).
                 header("Accept","application/json" ).
                 body("").
@@ -209,6 +227,45 @@ public class PersonControllerTest {
     }
 
     @Test
+    public void getPeople(){
+        Response testPeople = RestAssured.given().
+                header("Content-Type","application/json" ).
+                header("Accept","application/json" ).
+                body("").
+                when().
+                get("people");
+
+        int tmpCode = testPeople.getStatusCode();
+        assertEquals(200, tmpCode);
+    }
+
+    @Test
+    public void getFollowing(){
+        Response testFollowing = RestAssured.given().
+                header("Content-Type","application/json" ).
+                header("Accept","application/json" ).
+                body("").
+                when().
+                get("following");
+
+        int tmpCode = testFollowing.getStatusCode();
+        assertEquals(200, tmpCode);
+    }
+
+    @Test
+    public void getLeaderboard(){
+        Response testLeaderboard = RestAssured.given().
+                header("Content-Type","application/json" ).
+                header("Accept","application/json" ).
+                body("").
+                when().
+                get("leaderboard");
+
+        int tmpCode = testLeaderboard.getStatusCode();
+        assertEquals(200, tmpCode);
+    }
+
+    @Test
     public void testVerification(){
         JSONObject tmp = new JSONObject();
         try{
@@ -256,6 +313,25 @@ public class PersonControllerTest {
                 when().
                 post("/people/post");
 
+        //people/authenticate
+        Response verify =RestAssured.given().
+                header("Content-Type","application/json" ).
+                header("Accept","application/json" ).
+                body(cre.toString()).
+                when().
+                post("/people/authenticate");
+        String findUser = verify.getBody().asString();
+        System.out.println("verify: " + findUser);
+        try {
+            JSONObject verObj = new JSONObject(findUser);
+            //assertEquals("failed", returnObj.get("username"));
+            assertEquals(verObj.get("message"), "success");
+            assertEquals(verObj.get("error"), "");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
         Response failRegister = RestAssured.given().
                 header("Content-Type","application/json" ).
                 header("Accept","application/json" ).
@@ -277,6 +353,9 @@ public class PersonControllerTest {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+
+
         Response del = RestAssured.given().
             header("Content-Type","application/json" ).
             header("Accept","application/json" ).
@@ -322,6 +401,27 @@ public class PersonControllerTest {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        Response checkData = RestAssured.given().
+            header("Content-Type","application/json" ).
+            header("Accept","application/json" ).
+            body(requestParams.toString()).
+            when().
+            post("/person/data");
+        assertEquals(200, checkData.getStatusCode());
+        String returnData = checkData.getBody().asString();
+        try {
+            JSONObject returnObj = new JSONObject(returnData);
+            //assertEquals("failed", returnObj.get("username"));
+            assertEquals(requestParams.get("username"), returnObj.get("username"));
+            assertEquals(requestParams.get("password"), returnObj.get("password"));
+            assertEquals( 10000.0, returnObj.get("cashValue"));
+            assertEquals(10000.0, returnObj.get("totalValue"));
+            assertEquals("admin", returnObj.get("type"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         Response del = RestAssured.given().
             header("Content-Type","application/json" ).
             header("Accept","application/json" ).
