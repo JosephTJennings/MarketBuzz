@@ -19,6 +19,7 @@ public class Message {
 	 * @param message Specifies message information
 	 */
 	public Message(String message) {
+		//Resetting server
 		this.message = message;
 		this.error = "";
 	}
