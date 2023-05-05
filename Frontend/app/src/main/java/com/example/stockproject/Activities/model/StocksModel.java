@@ -1,4 +1,9 @@
 package com.example.stockproject.Activities.model;
+
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
 /**
  * This class is a model for the RecyclerView to use.
  */
@@ -30,9 +35,11 @@ public class StocksModel {
      * @return a String value
      */
     public String getValue() { return value; }
+    public void setValue(String value) { this.value = value; }
     /**
      * This methods returns the change of the stock in this model.
      * @return an int change
      */
     public int getChange() { return change; }
+    public void setChange(int change) { this.change = change; }
 }

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.stockproject.Activities.model.StocksModel;
 import com.example.stockproject.R;
+import com.jjoe64.graphview.GraphView;
 
 import java.util.ArrayList;
 /**
@@ -77,7 +78,7 @@ public class stk_recyclerView_adapter extends RecyclerView.Adapter<stk_recyclerV
             super(itemView);
             value = itemView.findViewById(R.id.value);
             stockName = itemView.findViewById(R.id.stockName);
-            changeImage = itemView.findViewById(R.id.valuationImage);
+            changeImage = itemView.findViewById(R.id.changeImage);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

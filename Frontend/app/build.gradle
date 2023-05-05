@@ -40,6 +40,8 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.4.0'
     androidTestImplementation 'androidx.test:rules:1.6.0-alpha01'
     implementation 'com.android.volley:volley:1.2.1'
+    implementation 'com.jjoe64:graphview:4.2.2'
+    implementation 'org.java-websocket:Java-WebSocket:1.5.1'
     androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.6.0-alpha01'
     implementation 'androidx.tracing:tracing:1.1.0'
 }
