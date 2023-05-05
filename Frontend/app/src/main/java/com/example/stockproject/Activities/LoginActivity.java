@@ -98,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
         }, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(LoginActivity.this, "Error, unable to follow user.", Toast.LENGTH_SHORT + 1).show();
+                Toast.makeText(LoginActivity.this, "Error, cannot login.", Toast.LENGTH_SHORT + 1).show();
             }
         }) {
              /**

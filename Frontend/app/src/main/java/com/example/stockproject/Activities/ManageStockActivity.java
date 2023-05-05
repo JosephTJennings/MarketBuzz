@@ -184,7 +184,7 @@ public class ManageStockActivity extends AppCompatActivity {
         int quantity = Integer.parseInt(numStks.getText().toString());
         if (quantity > 0) {
             map.put("owner", currentUser);
-            map.put("stock", currentStock);
+            map.put("ticker", currentStock);
             map.put("quantity", String.valueOf(quantity));
             JSONObject obj = new JSONObject(map);
             JsonObjectRequest request = new JsonObjectRequest(com.android.volley.Request.Method.POST, Const.URL + "/people/stocks/buy", obj, new com.android.volley.Response.Listener<JSONObject>() {
@@ -231,7 +231,7 @@ public class ManageStockActivity extends AppCompatActivity {
         int quantity = Integer.parseInt(numStks.getText().toString());
         if (quantity > 0) {
             map.put("owner", currentUser);
-            map.put("stock", currentStock);
+            map.put("ticker", currentStock);
             map.put("quantity", String.valueOf(quantity));
             JSONObject obj = new JSONObject(map);
             System.out.println("sell attempt");
@@ -305,10 +305,14 @@ public class ManageStockActivity extends AppCompatActivity {
         returnToMain.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ManageStockActivity.class);
+                intent.putExtra("stockName", currentStock);
+                intent.putExtra("change", currentChange);
+                intent.putExtra("valuation", currentValuation);
                 intent.putExtra("username", currentUser);
                 intent.putExtra("type", currentType);
                 intent.putExtra("money", currentMoney);
+                intent.putExtra("value", value);
                 //System.out.println("received and passing back: " + currentUser);
                 startActivity(intent);
             }

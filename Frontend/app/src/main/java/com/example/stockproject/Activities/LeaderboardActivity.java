@@ -83,7 +83,7 @@ public class LeaderboardActivity extends AppCompatActivity implements recyclerVi
     public void setUsersModels() {
         users.clear();
         //volleyQueue = Volley.newRequestQueue(FollowersActivity.this);
-        String url = "http://coms-309-019.class.las.iastate.edu:8080/people";
+        String url = "http://coms-309-019.class.las.iastate.edu:8080/leaderboard";
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
                     @Override
