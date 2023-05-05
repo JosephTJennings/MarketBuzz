@@ -121,65 +121,6 @@ public class PersonControllerTest {
                 delete("/person/delete/{username}", "testRandom2");
     }
 
-    // @Test
-    // public void checkCurrentUsers(){
-    //     JSONObject requestParams = new JSONObject(); 
-    //     try{
-    //         requestParams.put("username", "testRandom");
-    //         requestParams.put("type", "admin");
-    //         requestParams.put("password", "1");
-    //     }catch(JSONException e){
-    //         e.printStackTrace();
-    //     }
-    //     // Send request and receive response
-    //     Response response = RestAssured.given().
-    //             header("Content-Type","application/json" ).
-    //             header("Accept","application/json" ).
-    //             body(requestParams.toString()).
-    //             when().
-    //             post("/people/post");
-
-    //     // Check status code
-    //     assertEquals(200, response.getStatusCode());
-
-    //     RestAssured.given().contentType(ContentType.JSON).
-    //         when().get("/people/").then()
-    //         .body("$.size()", greaterThan(0));
-
-
-    //     // Check response body for correct response
-    //     String returnString = response.getBody().asString();
-    //     try {
-    //         JSONObject returnObj = new JSONObject(returnString); 
-    //         assertEquals(requestParams.get("username"), returnObj.get("username"));
-    //         assertEquals(requestParams.get("password"), returnObj.get("password"));
-    //         assertEquals( 10000.0, returnObj.get("cashValue"));
-    //         assertEquals(10000.0, returnObj.get("totalValue"));
-    //         assertEquals("admin", returnObj.get("type"));
-    //     } catch (JSONException e) {
-    //         e.printStackTrace();
-    //     }
-    //     //delete the user
-    //     Response del = RestAssured.given().
-    //         header("Content-Type","application/json" ).
-    //         header("Accept","application/json" ).
-    //         body("").
-    //         when().
-    //         delete("/person/delete/{username}", "testRandom");
-
-    //     assertEquals(200, del.getStatusCode());
-
-    //     String delReturn = del.getBody().asString();
-    //     System.out.println(delReturn);
-    //     try{
-    //         JSONObject retObject = new JSONObject(delReturn);
-    //         assertEquals(true, retObject.get("deleted"));
-    //     }catch (JSONException e){
-    //         e.printStackTrace();
-    //     }
-        
-    // }
-
     @Test
     public void testUserData(){
         //username/string/data
