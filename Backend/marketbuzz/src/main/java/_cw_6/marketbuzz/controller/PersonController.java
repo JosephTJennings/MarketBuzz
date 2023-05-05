@@ -170,9 +170,15 @@ public class PersonController {
             StaticStock s = o.getStock();
             if(p.getUsername().equals(user.getUsername()) && s.getTicker().equals(staticStock.getTicker())) {
                 if (p.getCashValue() >= (s.getCurrVal() * Integer.valueOf(request.getQuantity()))) {
-                    o.setQuantity(Integer.valueOf(request.getQuantity()));
+                    System.out.println("o.getQuantity(): " + o.getQuantity());
+                    System.out.println("request.getQuantity(): " + request.getQuantity());
+                    int diff = Integer.valueOf(request.getQuantity() + o.getQuantity());
+                    System.out.println("o.setQuantity(): " + diff);
+                    o.setQuantity(Integer.valueOf(request.getQuantity() + o.getQuantity()));
                     p.setCashValue(p.getCashValue() - (s.getCurrVal() * Integer.valueOf(request.getQuantity())));
                     user.addStock(o);
+                    personRepository.save(p);
+                    ownsRepository.save(o);
                     return o;
                 } else {
                     return null;
@@ -199,9 +205,15 @@ public class PersonController {
 
             if(p.getUsername().equals(user.getUsername()) && s.getTicker().equals(staticStock.getTicker())) {
                 if ((o.getQuantity() - Integer.valueOf(request.getQuantity())) >= 0){
-                    o.setQuantity(o.getQuantity() - Integer.valueOf(request.getQuantity()));
+                    System.out.println("o.getQuantity(): " + o.getQuantity());
+                    System.out.println("request.getQuantity(): " + request.getQuantity());
+
+                    //System.out.println("o.setQuantity(): " + diff);
+                    o.setQuantity(Integer.valueOf(o.getQuantity()) - Integer.valueOf(request.getQuantity()));
                     p.setCashValue(p.getCashValue() + (s.getCurrVal()*Float.valueOf(request.getQuantity())));
                     user.addStock(o);
+                    personRepository.save(p);
+                    ownsRepository.save(o);
                     return o;
                 }
                 else{
