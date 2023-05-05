@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
                 else {
-                    createNewContactDialog("Followers");
+                    createNewContactDialog("Cannot access Followers due to Guest Access. To access Followers, create a new account or login.");
                     Toast.makeText(getApplicationContext(), currentUser + " is of type " + currentType + ".", Toast.LENGTH_LONG);
                 }
             }
@@ -104,13 +104,19 @@ public class MainActivity extends AppCompatActivity {
         options.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), OptionsActivity.class);
-                intent.putExtra("username", currentUser);
-                intent.putExtra("type", currentType);
-                intent.putExtra("money", currentMoney);
-                intent.putExtra("valuation", currentValuation);
-                //System.out.println("received and passing back: " + currentUser);
-                startActivity(intent);
+                if (currentType.equals("Admin")) {
+                    Intent intent = new Intent(getApplicationContext(), OptionsActivity.class);
+                    intent.putExtra("username", currentUser);
+                    intent.putExtra("type", currentType);
+                    intent.putExtra("money", currentMoney);
+                    intent.putExtra("valuation", currentValuation);
+                    //System.out.println("received and passing back: " + currentUser);
+                    startActivity(intent);
+                }
+                else {
+                    createNewContactDialog("Cannot access Managing Users due to Guest or User Access. To access Managing Users, create a new Admin account or login.");
+                    Toast.makeText(getApplicationContext(), currentUser + " is of type " + currentType + ".", Toast.LENGTH_LONG);
+                }
             }
         });
         profile.setOnClickListener(new View.OnClickListener(){
@@ -161,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             currentType = (String) response.get("type");
                             currentMoney = response.get("cashValue") + "";
-                            currentValuation = (String) response.get("totalValue");
+                            currentValuation = response.get("totalValue") + "";
                         }
                         catch(Exception e) {
                             Log.d("debug", e.toString());
@@ -180,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
         dialogBuilder = new AlertDialog.Builder(this);
         final View contactPopup = getLayoutInflater().inflate(R.layout.popup, null);
         guestMessage = (TextView) contactPopup.findViewById(R.id.GuestMessage);
-        guestMessage.setText("Cannot access " + name + " due to Guest Access. To access " + name + ", create a new account or login.");
+        guestMessage.setText(name);
         returnToLogin = (Button) contactPopup.findViewById(R.id.toLogin);
         returnToRegister = (Button) contactPopup.findViewById(R.id.toRegister);
         returnToMain = (ImageView) contactPopup.findViewById(R.id.toMain);
