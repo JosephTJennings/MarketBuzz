@@ -22,7 +22,6 @@ import com.example.stockproject.Activities.adapter.recyclerView_interface;
 import com.example.stockproject.Activities.adapter.stk_recyclerView_adapter;
 import com.example.stockproject.Activities.model.StocksModel;
 import com.example.stockproject.R;
-import com.jjoe64.graphview.GraphView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,10 +33,10 @@ import java.util.ArrayList;
 
 import app.AppController;
 import app.server.Const;
-import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.drafts.Draft;
-import org.java_websocket.drafts.Draft_6455;
-import org.java_websocket.handshake.ServerHandshake;
+//import org.java_websocket.client.WebSocketClient;
+//import org.java_websocket.drafts.Draft;
+//import org.java_websocket.drafts.Draft_6455;
+//import org.java_websocket.handshake.ServerHandshake;
 
 
 
@@ -86,7 +85,8 @@ public class StocksActivity extends AppCompatActivity implements recyclerView_in
         RefreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setStocksModels();//createWebSocketClient();
+                setStocksModels();
+                //createWebSocketClient();
             }
         });
 
@@ -101,7 +101,7 @@ public class StocksActivity extends AppCompatActivity implements recyclerView_in
      */
     public void setStocksModels() {
         stocks.clear();
-        String url = Const.TEMP_URL + "/stock";
+        String url = Const.URL + "/stock";
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
                     @Override

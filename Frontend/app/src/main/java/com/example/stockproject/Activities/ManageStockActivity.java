@@ -17,9 +17,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.stockproject.R;
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,8 +40,8 @@ public class ManageStockActivity extends AppCompatActivity {
     private int currentChange;
     private EditText numStks;
     private RequestQueue volleyQueue;
-    private LineGraphSeries series;
-    private GraphView graphView;
+//    private LineGraphSeries series;
+//    private GraphView graphView;
     /**
      * This method will create all the buttons, textViews, and Strings for the current Activity and set
      * each button to navigate to their corresponding activities.
@@ -76,9 +73,9 @@ public class ManageStockActivity extends AppCompatActivity {
         currentNumStock = (TextView) findViewById(R.id.textView3);
         currentMoney = (TextView) findViewById(R.id.textView);
         change = (ImageView) findViewById(R.id.changeInPrice);
-        series = new LineGraphSeries<DataPoint>(new DataPoint[] {(new DataPoint(0, Double.parseDouble(this.value.substring(1))))});
-        graphView = (GraphView) findViewById(R.id.idGraphView);
-        graphView.addSeries(series);
+//        series = new LineGraphSeries<DataPoint>(new DataPoint[] {(new DataPoint(0, Double.parseDouble(this.value.substring(1))))});
+//        graphView = (GraphView) findViewById(R.id.idGraphView);
+//        graphView.addSeries(series);
         stockName.setText(currentStock);
         stockPrice.setText(value);
         change.setImageResource(currentChange);
@@ -270,7 +267,7 @@ public class ManageStockActivity extends AppCompatActivity {
             //TODO: Add an error message for value being less than 0...
         }
     }
-    public void addDataPoint() {
-        series.appendData(new DataPoint(((int) series.getHighestValueX() + 1), Double.parseDouble(this.value)), false, 10);
-    }
+//    public void addDataPoint() {
+//        series.appendData(new DataPoint(((int) series.getHighestValueX() + 1), Double.parseDouble(this.value)), false, 10);
+//    }
 }
