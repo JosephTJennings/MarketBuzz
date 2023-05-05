@@ -131,7 +131,7 @@ public class ProfileActivity extends AppCompatActivity implements recyclerView_i
                                 double currentCash = Double.valueOf(valuation.getText().toString().substring(1));
                                 valuation.setText("$" + String.valueOf(currentCash - total));
 
-                                HoldingsModel newHolding = new HoldingsModel(rank, ticker, price, quantity, total);
+                                HoldingsModel newHolding = new HoldingsModel(rank, ticker, (int) price, quantity, total);
                                 currentHoldings.add(newHolding);
                             } catch (JSONException e) {
                                 e.printStackTrace();

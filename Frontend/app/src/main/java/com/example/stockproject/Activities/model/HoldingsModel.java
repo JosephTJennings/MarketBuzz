@@ -4,11 +4,11 @@ package com.example.stockproject.Activities.model;
  */
 public class HoldingsModel {
     String ticker;
-    int price;
+    double price;
     int quantity;
 
     int rank;
-    int total;
+    double total;
 
     /**
      * This constructor simply assigns the values of the user.
@@ -18,7 +18,7 @@ public class HoldingsModel {
      * @param quantity The number of stocks
      * @param total The valuation of the stock
      */
-    public HoldingsModel(int rank, String ticker, int price, int quantity, int total) {
+    public HoldingsModel(int rank, String ticker, double price, int quantity, double total) {
         this.ticker = ticker;
         this.price = price;
         this.quantity = quantity;
@@ -43,14 +43,14 @@ public class HoldingsModel {
      * This methods returns the total in this model.
      * @return an int total
      */
-    public int getTotal() {
+    public double getTotal() {
         return total;
     }
     /**
      * This methods sets the total in this model.
      * @param total the total for the item
      */
-    public void setTotal(int total) {
+    public void setTotal(double total) {
         this.total = total;
     }
     /**
@@ -71,14 +71,14 @@ public class HoldingsModel {
      * This methods returns the price of one stock in this model.
      * @return an int price
      */
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
     /**
      * This methods sets the price of one stock in this model.
      * @param price the price of the item
      */
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
     /**
