@@ -38,14 +38,7 @@ public class LeaderboardActivity extends AppCompatActivity implements recyclerVi
     private TextView Leaderboard;
     private RequestQueue volleyQueue;
     private ImageButton RefreshButton;
-    private String currentUser;
-    /**
-     * This method will create all the buttons, textViews, and Strings for the current Activity and set
-     * each button to navigate to their corresponding activities.
-     * @param savedInstanceState If the activity is being re-initialized after
-     *     previously being shut down then this Bundle contains the data it most
-     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
-     */
+    private String currentUser, currentType, currentMoney, currentValuation;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaderboard);
@@ -56,13 +49,29 @@ public class LeaderboardActivity extends AppCompatActivity implements recyclerVi
         Leaderboard = (TextView) findViewById(R.id.LeaderboardText);
         volleyQueue = Volley.newRequestQueue(LeaderboardActivity.this);
         currentUser = getIntent().getStringExtra("username");
-        if (currentUser == null) currentUser = "srhusted";
+        currentType = getIntent().getStringExtra("type");
+        currentMoney = getIntent().getStringExtra("money");
+        currentValuation = getIntent().getStringExtra("valuation");
+        if (currentUser == null) {
+            currentUser = "srhusted";
+        }
+        if (currentMoney == null) {
+            currentMoney = "$1000.00";
+        }
+        if (currentType == null) {
+            currentType = "Admin";
+        }
+        if (currentValuation == null) {
+            currentValuation = "$1000.00";
+        }
         HomeButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 //System.out.println("received and passing back: " + currentUser);
                 intent.putExtra("username", currentUser);
+                intent.putExtra("type", currentType);
+                intent.putExtra("money", currentMoney);
                 startActivity(intent);
             }
         });
@@ -81,7 +90,7 @@ public class LeaderboardActivity extends AppCompatActivity implements recyclerVi
     public void setUsersModels() {
         users.clear();
         //volleyQueue = Volley.newRequestQueue(FollowersActivity.this);
-        String url = "http://coms-309-019.class.las.iastate.edu:8080/people";
+        String url = "http://coms-309-019.class.las.iastate.edu:8080/leaderboard";
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -136,6 +145,9 @@ public class LeaderboardActivity extends AppCompatActivity implements recyclerVi
             user.putExtra("viewedUser", users.get(position).getUsername());
         }
         user.putExtra("username", currentUser);
+        user.putExtra("type", currentType);
+        user.putExtra("money", currentMoney);
+        user.putExtra("valuation", currentValuation);
         startActivity(user);
     }
 }
