@@ -38,14 +38,7 @@ public class ProfileActivity extends AppCompatActivity implements recyclerView_i
     private RequestQueue volleyQueue;
     private RecyclerView recyclerView;
     private ArrayList<HoldingsModel> currentHoldings = new ArrayList<>();
-    private String currentUser;
-    /**
-     * This method will create all the buttons, textViews, and Strings for the current Activity and set
-     * each button to navigate to their corresponding activities.
-     * @param savedInstanceState If the activity is being re-initialized after
-     *     previously being shut down then this Bundle contains the data it most
-     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
-     */
+    private String currentUser, currentType, currentMoney, currentValuation;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
@@ -53,8 +46,22 @@ public class ProfileActivity extends AppCompatActivity implements recyclerView_i
         TextView valuation = findViewById(R.id.text_valuation);
         recyclerView = findViewById(R.id.holdingRecycler);
         currentUser = getIntent().getStringExtra("username");
+        currentType = getIntent().getStringExtra("type");
+        currentMoney = getIntent().getStringExtra("money");
+        if (currentUser == null) {
+            currentUser = "srhusted";
+        }
+        if (currentMoney == null) {
+            currentMoney = "$1000.00";
+        }
+        if (currentType == null) {
+            currentType = "Admin";
+        }
+        if (currentValuation == null) {
+            currentValuation = "$1000.00";
+        }
         userName.setText(currentUser);
-        valuation.setText("$10000");
+        valuation.setText(currentValuation); //TODO: VALUATION FOR THE USER
         volleyQueue = Volley.newRequestQueue(ProfileActivity.this);
 
         Button options = findViewById(R.id.button_options);
@@ -65,6 +72,9 @@ public class ProfileActivity extends AppCompatActivity implements recyclerView_i
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.putExtra("username", currentUser);
+                intent.putExtra("type", currentType);
+                intent.putExtra("money", currentMoney);
+                intent.putExtra("valuation", currentValuation);
                 //System.out.println("received and passing back: " + currentUser);
                 startActivity(intent);
             }
@@ -74,6 +84,9 @@ public class ProfileActivity extends AppCompatActivity implements recyclerView_i
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), OptionsActivity.class);
                 intent.putExtra("username", currentUser);
+                intent.putExtra("type", currentType);
+                intent.putExtra("money", currentMoney);
+                intent.putExtra("valuation", currentValuation);
                 //System.out.println("received and passing back: " + currentUser);
                 startActivity(intent);
             }
@@ -83,6 +96,9 @@ public class ProfileActivity extends AppCompatActivity implements recyclerView_i
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), FollowersActivity.class);
                 intent.putExtra("username", currentUser);
+                intent.putExtra("type", currentType);
+                intent.putExtra("money", currentMoney);
+                intent.putExtra("valuation", currentValuation);
                 //System.out.println("received and passing back: " + currentUser);
                 startActivity(intent);
             }
@@ -108,14 +124,14 @@ public class ProfileActivity extends AppCompatActivity implements recyclerView_i
 
                                 int rank = i + 1;
                                 String ticker = holding.getString("stockTicker");
-                                int price = holding.getJSONObject("stock").getInt("currVal");
+                                double price = holding.getJSONObject("stock").getInt("currVal");
                                 int quantity = holding.getInt("quantity");
-                                int total = quantity * price;
+                                double total = quantity * price;
                                 TextView valuation = findViewById(R.id.text_valuation);
-                                int currentCash = Integer.valueOf(valuation.getText().toString().substring(1));
+                                double currentCash = Double.valueOf(valuation.getText().toString().substring(1));
                                 valuation.setText("$" + String.valueOf(currentCash - total));
 
-                                HoldingsModel newHolding = new HoldingsModel(rank, ticker, price, quantity, total);
+                                HoldingsModel newHolding = new HoldingsModel(rank, ticker, (int) price, quantity, total);
                                 currentHoldings.add(newHolding);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -149,7 +165,7 @@ public class ProfileActivity extends AppCompatActivity implements recyclerView_i
         stock = new Intent(getApplicationContext(), ManageStockActivity.class);
         stock.putExtra("stockName", currentHoldings.get(position).getTicker());
         stock.putExtra("username", currentUser);
-        stock.putExtra("value", Integer.toString(currentHoldings.get(position).getPrice()));
+        stock.putExtra("value", Double.toString(currentHoldings.get(position).getPrice()));
         startActivity(stock);
     }
 }

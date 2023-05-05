@@ -153,6 +153,8 @@ public class StocksActivity extends AppCompatActivity implements recyclerView_in
         stock.putExtra("stockName", stocks.get(position).getStockName());
         stock.putExtra("value", stocks.get(position).getValue());
         stock.putExtra("username", currentUser);
+        stock.putExtra("type", currentType);
+        stock.putExtra("money", currentMoney);
         stock.putExtra("change", stocks.get(position).getChange());
         WebSocketManager.getInstance().disconnect();
         startActivity(stock);

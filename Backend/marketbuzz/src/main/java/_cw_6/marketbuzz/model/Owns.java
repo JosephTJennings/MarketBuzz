@@ -12,6 +12,16 @@ public class Owns {
 
     private int quantity;
 
+    public String getTicker() {
+        return tick;
+    }
+
+    public void setTicker(String ticker) {
+        this.tick = ticker;
+    }
+
+    private String tick;
+
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "username")
@@ -20,12 +30,13 @@ public class Owns {
 
     @ManyToOne
     @JoinColumn(name = "ticker")
-    private Stock stock;
+    private StaticStock staticStock;
 
 
-    public Owns(Person owner, Stock stock, String quantity){
+    public Owns(Person owner, StaticStock staticStock, String quantity){
+        System.out.println("trying to create an owns");
         this.owner = owner;
-        this.stock = stock;
+        this.staticStock = staticStock;
         this.quantity = Integer.valueOf(quantity);
     }
 
@@ -33,13 +44,13 @@ public class Owns {
 
     public void setOwner(Person owner){this.owner = owner;}
 
-    public void setOwnedStock(Stock stock) {this.stock = stock;}
+    public void setOwnedStock(StaticStock staticStock) {this.staticStock = staticStock;}
 
     public void setQuantity(int quantity) {this.quantity = quantity;}
 
-    public Stock getStock() {return this.stock;}
+    public StaticStock getStock() {return this.staticStock;}
 
-    public String getStockTicker() {return this.stock.getTicker();}
+    public String getStockTicker() {return this.staticStock.getTicker();}
 
     public Person getOwner() {return this.owner;}
 

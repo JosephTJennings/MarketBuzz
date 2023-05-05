@@ -1,32 +1,36 @@
 package _cw_6.marketbuzz.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.List;
 
 
 @Entity
-public class Stock {
+public class StaticStock {
 
     @Id
     @GeneratedValue
     private int sid;
     private String ticker;
-    private int currVal;
+    private float currVal;
 
-    private int diff;
+    private float diff;
 
-    @OneToMany(mappedBy = "stock")
+
+    @OneToMany(mappedBy = "staticStock")
     private List<Owns> stocksOwnedList;
 
-    public Stock() {
+    public StaticStock() {
+        System.out.println("Printing from the default static stock constructor");
     }
 
-    public Stock(String s){
+    public StaticStock(String s){
+        System.out.println("Printing " + s + " from the static stock constructor");
         this.ticker = s;
     }
 
-    public int getDiff() {
+    public float getDiff() {
         return diff;
     }
 
@@ -50,7 +54,7 @@ public class Stock {
         this.ticker = ticker;
     }
 
-    public int getCurrVal() {
+    public float getCurrVal() {
         return currVal;
     }
 

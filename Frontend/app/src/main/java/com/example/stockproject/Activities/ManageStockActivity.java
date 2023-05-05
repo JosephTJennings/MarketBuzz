@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.AuthFailureError;
@@ -33,10 +34,15 @@ import app.utils.BasicUtils;
  * This activity is the ManageStock Activity. This activity presents a stock with several buttons to increase or decrease the number of the selected stock.
  */
 public class ManageStockActivity extends AppCompatActivity {
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
+    private TextView guestMessage;
+    private Button returnToLogin, returnToRegister;
+    private ImageView returnToMain;
     private Button homeButton, stocksButton, buyStocks, sellStocks;
-    private TextView stockName, stockPrice, currentMoney, currentNumStock;
+    private TextView stockName, stockPrice, currMoney, currentNumStock;
     private ImageView change;
-    private String currentUser, currentStock, value;
+    private String currentUser, currentStock, value, currentMoney, currentType, currentValuation;
     private int currentChange;
     private EditText numStks;
     private RequestQueue volleyQueue;
@@ -54,14 +60,24 @@ public class ManageStockActivity extends AppCompatActivity {
         setContentView(R.layout.activity_managestock);
         volleyQueue = Volley.newRequestQueue(ManageStockActivity.this);
         currentUser = getIntent().getStringExtra("username");
+        //TODO: get value and change by using POST Request for stock
+        currentMoney = getIntent().getStringExtra("money");
+        currentType = getIntent().getStringExtra("type");
+        currentValuation = getIntent().getStringExtra("valuation");
         if (currentUser == null) {
             currentUser = "srhusted";
         }
-        //TODO: get value and change by using POST Request for stock
+        if (currentMoney == null) {
+            currentMoney = "$1000.00";
+        }
+        if (currentType == null) {
+            currentType = "Admin";
+        }
+        if (currentValuation == null) {
+            currentValuation = "$1000.00";
+        }
         value = getIntent().getStringExtra("value");
         currentChange = getIntent().getIntExtra("change", R.drawable.baseline_neutral_24);
-
-
         currentStock = getIntent().getStringExtra("stockName");
         homeButton = (Button) findViewById(R.id.home_button7);
         stocksButton = (Button) findViewById(R.id.stocks_button);
@@ -71,7 +87,7 @@ public class ManageStockActivity extends AppCompatActivity {
         numStks = (EditText) findViewById(R.id.numStocks);
         stockPrice = (TextView) findViewById(R.id.price);
         currentNumStock = (TextView) findViewById(R.id.textView3);
-        currentMoney = (TextView) findViewById(R.id.textView);
+        currMoney = (TextView) findViewById(R.id.textView);
         change = (ImageView) findViewById(R.id.changeInPrice);
 //        series = new LineGraphSeries<DataPoint>(new DataPoint[] {(new DataPoint(0, Double.parseDouble(this.value.substring(1))))});
 //        graphView = (GraphView) findViewById(R.id.idGraphView);
@@ -85,6 +101,9 @@ public class ManageStockActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.putExtra("username", currentUser);
+                intent.putExtra("type", currentType);
+                intent.putExtra("money", currentMoney);
+                intent.putExtra("valuation", currentValuation);
                 startActivity(intent);
             }
         });
@@ -94,6 +113,9 @@ public class ManageStockActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), StocksActivity.class);
                 intent.putExtra("username", currentUser);
+                intent.putExtra("type", currentType);
+                intent.putExtra("money", currentMoney);
+                intent.putExtra("valuation", currentValuation);
                 startActivity(intent);
             }
         });
@@ -101,6 +123,9 @@ public class ManageStockActivity extends AppCompatActivity {
         buyStocks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (currentType.equals("Guest")) {
+                    createNewContactDialog("buying stocks");
+                }
                 attemptBuyStocks();
             }
         });
@@ -108,6 +133,9 @@ public class ManageStockActivity extends AppCompatActivity {
         sellStocks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (currentType.equals("Guest")) {
+                    createNewContactDialog("selling stocks");
+                }
                 attemptSellStocks();
             }
         });
@@ -128,7 +156,7 @@ public class ManageStockActivity extends AppCompatActivity {
                 Toast.makeText(ManageStockActivity.this, successMessage, Toast.LENGTH_SHORT + 1).show();
                 try {
                     String nm = "You currently have $" + Integer.toString(response.getInt("cashValue")) + ".";
-                    currentMoney.setText(nm);
+                    currMoney.setText(nm);
                     String ns = "";
                     JSONArray stocks = (JSONArray) response.get("ownsList");
                     for (int i = 0; i < stocks.length(); i++) {
@@ -175,7 +203,7 @@ public class ManageStockActivity extends AppCompatActivity {
         int quantity = Integer.parseInt(numStks.getText().toString());
         if (quantity > 0) {
             map.put("owner", currentUser);
-            map.put("stock", currentStock);
+            map.put("ticker", currentStock);
             map.put("quantity", String.valueOf(quantity));
             JSONObject obj = new JSONObject(map);
             JsonObjectRequest request = new JsonObjectRequest(com.android.volley.Request.Method.POST, Const.URL + "/people/stocks/buy", obj, new com.android.volley.Response.Listener<JSONObject>() {
@@ -225,7 +253,7 @@ public class ManageStockActivity extends AppCompatActivity {
         int quantity = Integer.parseInt(numStks.getText().toString());
         if (quantity > 0) {
             map.put("owner", currentUser);
-            map.put("stock", currentStock);
+            map.put("ticker", currentStock);
             map.put("quantity", String.valueOf(quantity));
             JSONObject obj = new JSONObject(map);
             System.out.println("sell attempt");
@@ -270,4 +298,49 @@ public class ManageStockActivity extends AppCompatActivity {
 //    public void addDataPoint() {
 //        series.appendData(new DataPoint(((int) series.getHighestValueX() + 1), Double.parseDouble(this.value)), false, 10);
 //    }
+    public void createNewContactDialog(String name) {
+        dialogBuilder = new AlertDialog.Builder(this);
+        final View contactPopup = getLayoutInflater().inflate(R.layout.popup, null);
+        guestMessage = (TextView) contactPopup.findViewById(R.id.GuestMessage);
+        guestMessage.setText("Cannot access " + name + " due to Guest Access. To access " + name + ", create a new account or login.");
+        returnToLogin = (Button) contactPopup.findViewById(R.id.toLogin);
+        returnToRegister = (Button) contactPopup.findViewById(R.id.toRegister);
+        returnToMain = (ImageView) contactPopup.findViewById(R.id.toMain);
+
+        dialogBuilder.setView(contactPopup);
+        dialog = dialogBuilder.create();
+        dialog.show();
+
+        returnToLogin.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                //System.out.println("received and passing back: " + currentUser);
+                startActivity(intent);
+            }
+        });
+        returnToRegister.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+                //System.out.println("received and passing back: " + currentUser);
+                startActivity(intent);
+            }
+        });
+        returnToMain.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ManageStockActivity.class);
+                intent.putExtra("stockName", currentStock);
+                intent.putExtra("change", currentChange);
+                intent.putExtra("valuation", currentValuation);
+                intent.putExtra("username", currentUser);
+                intent.putExtra("type", currentType);
+                intent.putExtra("money", currentMoney);
+                intent.putExtra("value", value);
+                //System.out.println("received and passing back: " + currentUser);
+                startActivity(intent);
+            }
+        });
+    }
 }

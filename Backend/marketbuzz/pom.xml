@@ -21,7 +21,15 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.websocket</groupId>
+			<artifactId>javax.websocket-api</artifactId>
+			<version>1.1</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -30,6 +38,22 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.yahoofinance-api</groupId>
+			<artifactId>YahooFinanceAPI</artifactId>
+			<version>3.17.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.26</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.integration</groupId>
+			<artifactId>spring-integration-stream</artifactId>
+			<version>6.0.5</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -53,6 +77,16 @@
 		<dependency>
 			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>5.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.vintage</groupId>
+			<artifactId>junit-vintage-engine</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
