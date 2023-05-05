@@ -111,6 +111,17 @@ public class PersonController {
         return null;
     }
 
+    @PostMapping("stock/data/string")
+    public StaticStock getStockInformationByString(@RequestBody String ticker){
+        List<StaticStock> currentStaticStocks = stockRepository.findAll();
+        for (StaticStock s: currentStaticStocks){
+            if (s.getTicker().equals(ticker)){
+                return s;
+            }
+        }
+        return null;
+    }
+
     @PostMapping("following/post") //X
     Following PostFollowingByBody(@RequestBody Following newFollowing) {
         List<Person> allPeople = personRepository.findAll();
@@ -149,8 +160,10 @@ public class PersonController {
 //    Owns PostBuyingStockByBody(@RequestBody String ticker, @RequestBody String username, @RequestBody String quantity){
     @PostMapping("people/stocks/buy")
     Owns PostBuyingStockByBody(@RequestBody Owns request){
+
+        //System.out.println(request);
         Person user = getPersonInformation(request.getOwner());
-        StaticStock staticStock = getStockInformation(request.getStock());
+        StaticStock staticStock = getStockInformation(getStockInformationByString(request.getTicker()));
         List<Owns> ownsList = ownsRepository.findAll();
         for(Owns o : ownsList) {
             Person p = o.getOwner();
