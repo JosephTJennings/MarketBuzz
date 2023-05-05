@@ -42,9 +42,9 @@ public class PersonControllerTest {
 
         JSONObject cre2 = new JSONObject();
         try{
-            cre.put("username", "testRandom2");
-            cre.put("type", "admin");
-            cre.put("password", "1");
+            cre2.put("username", "testRandom2");
+            cre2.put("type", "admin");
+            cre2.put("password", "1");
         }catch(JSONException e){
             e.printStackTrace();
         }
@@ -63,21 +63,25 @@ public class PersonControllerTest {
                 post("/people/post");
 
 
+        System.out.println(cre.toString() + "----" + cre2.toString());
+
+
         JSONObject fol = new JSONObject();
         try{
-            cre.put("username", "testRandom");
-            cre.put("followingUser", "testRandom2");
+            fol.put("username", "testRandom");
+            fol.put("followingUser", "testRandom2");
         }catch(JSONException e){
             e.printStackTrace();
         }
         Response follow = RestAssured.given().
                 header("Content-Type","application/json" ).
                 header("Accept","application/json" ).
-                body(cre2.toString()).
+                body(fol.toString()).
                 when().
                 post("/following/post");
 
         String returnString = follow.getBody().asString();
+        System.out.println(returnString);
          try {
              JSONObject returnObj = new JSONObject(returnString);
              assertEquals(returnObj.get("followingUser"), "testRandom2");
@@ -157,6 +161,52 @@ public class PersonControllerTest {
     //     }
         
     // }
+
+    @Test
+    public void testUserData(){
+        //username/string/data
+        JSONObject cre = new JSONObject();
+        try{
+            cre.put("username", "testRandom");
+            cre.put("type", "admin");
+            cre.put("password", "1");
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
+
+        Response create = RestAssured.given().
+                header("Content-Type","application/json" ).
+                header("Accept","application/json" ).
+                body(cre.toString()).
+                when().
+                post("/people/post");
+
+        JSONObject veri = new JSONObject();
+        try{
+            veri.put("username", "testRandom");
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
+        Response verifyUser = RestAssured.given().
+                header("Content-Type","application/json" ).
+                header("Accept","application/json" ).
+                body(veri.toString()).
+                when().
+                post("/username/string/data");
+
+        System.out.println(verifyUser.toString());
+
+        
+        
+        Response del = RestAssured.given().
+            header("Content-Type","application/json" ).
+            header("Accept","application/json" ).
+            body("").
+            when().
+            delete("/person/delete/{username}", "testRandom");
+    
+
+    }
 
     @Test
     public void testVerification(){
